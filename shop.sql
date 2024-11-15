@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 
 INSERT INTO `users` (`UserID`, `Username`, `Password`, `Email`, `FullName`, `GroupID`, `TrustStatus`, `RegStatus`, `Date`, `avatar`) VALUES
-(1, 'Admin', '7af2d10b73ab7cd8f603937f7697cb5fe432c7ff', 'admin@example.com', 'Admin User', 1, 1, 1, '2023-01-01', 'admin.png'),
-(2, 'JohnDoe', 'e9d155e1e377fed9a68863896a49308449f5b5f9', 'johndoe@example.com', 'John Doe', 0, 0, 1, '2023-01-02', 'johndoe.png');
+(1, 'admin', 'f865b53623b121fd34ee5426c792e5c33af8c227', 'admin@example.com', 'Admin User', 1, 1, 1, '2023-01-01', 'admin.png'),
+(2, 'user', '95c946bf622ef93b0a211cd0fd028dfdfcf7e39e', 'jsmith@example.com', 'John Smith', 0, 0, 1, '2023-01-02', 'user.png');
 
 
 
