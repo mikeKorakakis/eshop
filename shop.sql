@@ -64,9 +64,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 INSERT INTO `categories` (`ID`, `Name`, `Description`, `parent`, `Ordering`, `Visibility`, `Allow_Comment`, `Allow_Ads`) VALUES
 (1, 'Accessories', 'Various accessories for devices', 0, 1, 1, 1, 1),
 (2, 'Laptops', 'Different types of laptops', 0, 2, 1, 1, 1),
-(3, 'Desktops', 'All-in-one and tower desktops', 0, 3, 1, 1, 1),
-(4, 'Smartphones', 'Latest smartphone models', 0, 4, 1, 1, 1),
-(5, 'Tablets', 'Portable tablets', 0, 5, 1, 1, 1);
+(3, 'Desktops', 'All-in-one and tower desktops', 0, 3, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -100,7 +98,7 @@ INSERT INTO `items` (`Item_ID`, `Name`, `Description`, `Price`, `Add_Date`, `Cou
 (1, 'Ergonomic Chair', 'Comfortable ergonomic chair', '200.00', '2023-01-10', 'USA', 'Available', 5, 1, 1, 1, 'chair.jpg', 'contact@example.com'),
 (2, 'Wireless Mouse', 'Smooth and precise wireless mouse', '25.99', '2023-01-12', 'Germany', 'Available', 4, 1, 1, 1, 'mouse.jpg', 'contact@example.com'),
 (3, 'Gaming Laptop', 'High-performance gaming laptop', '1500.00', '2023-01-14', 'Japan', 'Available', 5, 1, 2, 1, 'laptop.jpg', 'contact@example.com'),
-(4, 'Smartphone', 'Latest smartphone model', '999.00', '2023-01-16', 'South Korea', 'Available', 4, 1, 4, 1, 'smartphone.jpg', 'contact@example.com');
+(4, 'Personal Computer', 'High-performance Personal Computer', '999.00', '2023-01-16', 'South Korea', 'Available', 4, 1, 3, 1, 'pc.jpg', 'contact@example.com');
 
 
 -- Table structure for table `comments`

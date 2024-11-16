@@ -1,10 +1,5 @@
 <?php
 
-	/*
-	** Get All Function v2.0
-	** Function To Get All Records From Any Database Table
-	*/
-
 	function getAllFrom($field, $table, $where = NULL, $and = NULL, $orderfield = NULL, $ordering = "DESC") {
 
 		global $con;
@@ -19,11 +14,6 @@
 
 	}
 	
-	/*
-	** Check If User Is Not Activated
-	** Function To Check The RegStatus Of The User
-	*/
-
 	function checkUserStatus($user) {
 
 		global $con;
@@ -45,13 +35,6 @@
 
 	}
 
-	/*
-	** Check Items Function v1.0
-	** Function to Check Item In Database [ Function Accept Parameters ]
-	** $select = The Item To Select [ Example: user, item, category ]
-	** $from = The Table To Select From [ Example: users, items, categories ]
-	** $value = The Value Of Select [ Example: Osama, Box, Electronics ]
-	*/
 
 	function checkItem($select, $from, $value) {
 
@@ -69,30 +52,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
-	** Title Function v1.0
-	** Title Function That Echo The Page Title In Case The Page
-	** Has The Variable $pageTitle And Echo Defult Title For Other Pages
-	*/
-
 	function getTitle() {
 
 		global $pageTitle;
@@ -108,13 +67,21 @@
 		}
 	}
 
-	/*
-	** Home Redirect Function v2.0
-	** This Function Accept Parameters
-	** $theMsg = Echo The Message [ Error | Success | Warning ]
-	** $url = The Link You Want To Redirect To
-	** $seconds = Seconds Before Redirecting
-	*/
+	function getCssFile() {
+
+		global $cssFile;
+
+		if (isset($cssFile)) {
+
+			echo $cssFile;
+
+		} else {
+
+			echo 'index.css';
+
+		}
+	}
+
 
 	function redirectHome($theMsg, $url = null, $seconds = 3) {
 
@@ -152,13 +119,6 @@
 
 	}
 
-	/*
-	** Count Number Of Items Function v1.0
-	** Function To Count Number Of Items Rows
-	** $item = The Item To Count
-	** $table = The Table To Choose From
-	*/
-
 	function countItems($item, $table) {
 
 		global $con;
@@ -170,15 +130,6 @@
 		return $stmt2->fetchColumn();
 
 	}
-
-	/*
-	** Get Latest Records Function v1.0
-	** Function To Get Latest Items From Database [ Users, Items, Comments ]
-	** $select = Field To Select
-	** $table = The Table To Choose From
-	** $order = The Desc Ordering
-	** $limit = Number Of Records To Get
-	*/
 
 	function getLatest($select, $table, $order, $limit = 5) {
 

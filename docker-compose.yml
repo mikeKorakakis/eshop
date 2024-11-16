@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:80" 
     volumes:
-      - ./web:/var/www/html 
+      - ./php/web_new:/var/www/html 
     networks:
       - app-network
     environment:
