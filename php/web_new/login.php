@@ -190,7 +190,7 @@
 				placeholder="Password" 
 				required />
 		</div>
-		<input class="btn btn-primary btn-block" name="login" type="submit" value="Login" />
+		<div><input class="button w-100" name="login" type="submit" value="Login" /></div>
 	</form>
 	<!-- End Login Form -->
 	<!-- Start Signup Form -->
@@ -249,7 +249,7 @@
 				name="pictures" 
 				required />
 		</div>
-		<input class="btn btn-success btn-block" name="signup" type="submit" value="Signup" />
+		<input class="button w-100" name="signup" type="submit" value="Signup" />
 	</form>
 	<!-- End Signup Form -->
 	<div class="the-errors text-center">

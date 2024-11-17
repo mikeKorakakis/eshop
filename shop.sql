@@ -62,9 +62,9 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- Dumping data for table `categories`
 
 INSERT INTO `categories` (`ID`, `Name`, `Description`, `parent`, `Ordering`, `Visibility`, `Allow_Comment`, `Allow_Ads`) VALUES
-(1, 'Accessories', 'Various accessories for devices', 0, 1, 1, 1, 1),
-(2, 'Laptops', 'Different types of laptops', 0, 2, 1, 1, 1),
-(3, 'Desktops', 'All-in-one and tower desktops', 0, 3, 1, 1, 1);
+(1, 'ACCESSORIES', 'Various accessories for devices', 0, 1, 1, 1, 1),
+(2, 'LAPTOPS', 'Different types of laptops', 0, 2, 1, 1, 1),
+(3, 'DESKTOPS', 'All-in-one and tower desktops', 0, 3, 1, 1, 1);
 
 -- --------------------------------------------------------
 

@@ -2,6 +2,7 @@
 	ob_start();
 	session_start();
 	$pageTitle = 'Show Items';
+	$cssFile = 'contentDetails.css';
 	include 'init.php';
 
 	// Check If Get Request item Is Numeric & Get Its Integer Value
@@ -37,7 +38,36 @@
 	// Fetch The Data
 	$item = $stmt->fetch();
 ?>
-<h1 class="text-center"><?php echo $item['Name'] ?></h1>
+  <div id="containerD">
+            <div id="imageSection">
+                <img id="imgDetails" src="<?php echo $upload . $item['picture'] ?>" alt="Product Main Preview">
+            </div>
+            <div id="productDetails">
+                <h1><?php echo $item['Name'] ?></h1>
+                <h4><?php echo $item['category_name'] ?></h4>
+                <div id="details">
+                    <h3><?php echo $item['Price'] ?></h3>
+                    <h3>Description</h3>
+                    <p><?php echo $item['Description'] ?></p>
+					<h3>Made in</h3>
+                    <p><?php echo $item['Country_Made'] ?></p>
+					<h3>Added by</h3>
+                    <p><?php echo $item['Username'] ?></p>
+					<h3>Contact</h3>
+                    <p><?php echo $item['contact'] ?></p>
+                </div>
+                <!-- <div id="productPreview">
+                    <h3>Product Preview</h3>
+                    <img id="previewImg" src="preview-image-1.jpg" alt="Preview Image 1">
+                    <img id="previewImg" src="preview-image-2.jpg" alt="Preview Image 2">
+                    <img id="previewImg" src="preview-image-3.jpg" alt="Preview Image 3">
+                </div> -->
+                <div id="button">
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+        </div>
+<!-- <h1 class="text-center"><?php echo $item['Name'] ?></h1>
 <div class="container">
 	<div class="row">
 		<div class="col-md-3">
@@ -79,7 +109,7 @@
 				</li>
 			</ul>
 		</div>
-	</div>
+	</div> -->
 	<hr class="custom-hr">
 	<?php if (isset($_SESSION['user'])) { ?>
 	<!-- Start Add Comment -->
@@ -89,7 +119,7 @@
 				<h3>Add Your Feedback</h3>
 				<form action="<?php echo $_SERVER['PHP_SELF'] . '?itemid=' . $item['Item_ID'] ?>" method="POST">
 					<textarea name="comment" required></textarea>
-					<input class="btn btn-primary" type="submit" value="Add Comment">
+					<input class="button" type="submit" value="Add Comment">
 				</form>
 				<?php 
 					if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -131,7 +161,8 @@
 	</div>
 	<!-- End Add Comment -->
 	<?php } else {
-		echo '<a href="login.php">Login</a> or <a href="login.php">Register</a> To Add Comment';
+		
+		echo '<div class="row"><a href="login.php">Login</a>&nbsp or &nbsp <a href="login.php">Register</a> &nbsp To Add Comment</div>';
 	} ?>
 	<hr class="custom-hr">
 		<?php

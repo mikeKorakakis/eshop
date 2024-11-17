@@ -19,6 +19,7 @@
 
 	$tpl 	= 'includes/templates/'; // Template Directory
 	$lang 	= 'includes/languages/'; // Language Directory
+	$upload = 'admin/uploads/items/'; // Upload Directory
 	$func	= 'includes/functions/'; // Functions Directory
 	$css 	= 'layout/css/'; // Css Directory
 	$js 	= 'layout/js/'; // Js Directory
