@@ -60,6 +60,7 @@ body
     text-decoration: none;
 	padding-right: 8px;
     color: rgb(29, 29, 29);
+	padding-right: 30px;
 }
 
 
@@ -74,6 +75,8 @@ body
     text-decoration: none;
 	padding-right: 8px;
     color: rgb(29, 29, 29);
+	padding-right: 30px;
+
 }
 
 .search
@@ -128,10 +131,7 @@ body
 
 @media(max-width: 1300px)
 {
-    #collection
-    {
-        font-size: 13px;
-    }
+  
     #input 
     {
         width: 25em;
@@ -139,10 +139,7 @@ body
 }
 @media(max-width: 1212px)
 {
-    #collection
-    {
-        font-size: 13px;
-    }
+   
     #input 
     {
         width: 20em;
