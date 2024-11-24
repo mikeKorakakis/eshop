@@ -12,7 +12,7 @@
 
 	$pageTitle = '';
 
-	if (isset($_SESSION['Username'])) {
+	if (isset($_SESSION['admin'])) {
 
 		include 'init.php';
 

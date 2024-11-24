@@ -1,34 +1,33 @@
 <?php
-	ob_start();
-	session_start();
-	$pageTitle = 'Homepage';
-	include 'init.php';
+ob_start();
+session_start();
+$pageTitle = 'Homepage';
+$cssFile = "content.css";
+include 'init.php';
+include 'slider.html';
+
 ?>
-<div style="padding-top:50px;" class="container">
-	<div class="row">
+
+<body>
+
+	<div id="mainContainer">
 		<?php
-			$allItems = getAllFrom('*', 'items', 'where Approve = 1', '', 'Item_ID');
+		$allCats = getAllFrom("*", "categories", "where parent_id = 0", "", "category_id", "ASC");
+		foreach ($allCats as $cat) {
+			echo '<h1>' . $cat['name'] . '</h1>';
+			echo '<div id="categoryContainer">';
+			$allItems = getAllFrom('*', 'items', 'where is_approved = 1 and category_id=' . $cat['category_id'], '', 'item_id');
 			foreach ($allItems as $item) {
-				echo '<div class="col-sm-6 col-md-3">';
-					echo '<div class="thumbnail item-box">';
-						echo '<span class="price-tag">$' . $item['Price'] . '</span>';
-						if (empty($item['picture'])) {
-							echo "<img style='width:250px;height:300px' src='admin/uploads/default.png' alt='' />";
-						} else {
-							echo "<img style='width:250px;height:300px' src='admin/uploads/items/" . $item['picture'] . "' alt='' />";
-						}
-						echo '<div class="caption">';
-							echo '<h3><a href="items.php?itemid='. $item['Item_ID'] .'">' . $item['Name'] .'</a></h3>';
-							echo "<p style='overflow-wrap: normal;overflow: hidden;'>". $item['Description'] . '</p>';
-							echo '<div class="date">' . $item['Add_Date'] . '</div>';
-						echo '</div>';
-					echo '</div>';
-				echo '</div>';
+				printProductCard($item, $upload);
 			}
+			echo '</div>';
+		}
 		?>
 	</div>
-</div>
+
+</body>
 <?php
-	include $tpl . 'footer.php'; 
-	ob_end_flush();
+
+include $tpl . 'footer.php';
+ob_end_flush();
 ?>

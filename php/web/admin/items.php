@@ -12,7 +12,7 @@
 
 	$pageTitle = 'Items';
 
-	if (isset($_SESSION['Username'])) {
+	if (isset($_SESSION['admin'])) {
 
 		include 'init.php';
 
@@ -23,20 +23,20 @@
 
 			$stmt = $con->prepare("SELECT 
 										items.*, 
-										categories.Name AS category_name, 
-										users.Username 
+										categories.name AS category_name, 
+										users.username 
 									FROM 
 										items
 									INNER JOIN 
 										categories 
 									ON 
-										categories.ID = items.Cat_ID 
+										categories.category_id = items.category_id 
 									INNER JOIN 
 										users 
 									ON 
-										users.UserID = items.Member_ID
+										users.user_id = items.owner_id
 									ORDER BY 
-										Item_ID DESC");
+										item_id DESC");
 
 			// Execute The Statement
 
@@ -67,23 +67,23 @@
 							foreach($items as $item) {
 								echo "<tr>";
 									echo "<td>";
-									if (empty($item['picture'])) {
+									if (empty($item['image_url'])) {
 										echo "<img src='uploads/default.png' alt='' />";
 									} else {
-										echo "<img src='uploads/items/" . $item['picture'] . "' alt='' />";
+										echo "<img src='" . $upload . $item['image_url'] . "' alt='' />";
 									}
 									echo "</td>";
-									echo "<td>" . $item['Name'] . "</td>";
-									echo "<td>" . $item['Price'] . "</td>";
-									echo "<td>" . $item['Add_Date'] ."</td>";
+									echo "<td>" . $item['name'] . "</td>";
+									echo "<td>" . $item['price'] . "</td>";
+									echo "<td>" . $item['added_date'] ."</td>";
 									echo "<td>" . $item['category_name'] ."</td>";
-									echo "<td>" . $item['Username'] ."</td>";
+									echo "<td>" . $item['username'] ."</td>";
 									echo "<td>
-										<a href='items.php?do=Edit&itemid=" . $item['Item_ID'] . "' class='btn btn-success'><i class='fa fa-edit'></i> Edit</a>
-										<a href='items.php?do=Delete&itemid=" . $item['Item_ID'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
-										if ($item['Approve'] == 0) {
+										<a href='items.php?do=Edit&itemid=" . $item['item_id'] . "' class='btn btn-success'><i class='fa fa-edit'></i> Edit</a>
+										<a href='items.php?do=Delete&itemid=" . $item['item_id'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
+										if ($item['is_approved'] == 0) {
 											echo "<a 
-													href='items.php?do=Approve&itemid=" . $item['Item_ID'] . "' 
+													href='items.php?do=Approve&itemid=" . $item['item_id'] . "' 
 													class='btn btn-info activate'>
 													<i class='fa fa-check'></i> Approve</a>";
 										}
@@ -161,7 +161,7 @@
 						<label class="col-sm-2 control-label">Price</label>
 						<div class="col-sm-10 col-md-6">
 							<input 
-								type="text" 
+								type="number" 
 								name="price" 
 								class="form-control" 
 								required="required" 
@@ -203,9 +203,9 @@
 							<select name="member">
 								<option value="0">...</option>
 								<?php
-									$allMembers = getAllFrom("*", "users", "", "", "UserID");
+									$allMembers = getAllFrom("*", "users", "", "", "user_id");
 									foreach ($allMembers as $user) {
-										echo "<option value='" . $user['UserID'] . "'>" . $user['Username'] . "</option>";
+										echo "<option value='" . $user['user_id'] . "'>" . $user['username'] . "</option>";
 									}
 								?>
 							</select>
@@ -219,12 +219,12 @@
 							<select name="category">
 								<option value="0">...</option>
 								<?php
-									$allCats = getAllFrom("*", "categories", "where parent = 0", "", "ID");
+									$allCats = getAllFrom("*", "categories", "where parent_id = 0", "", "parent_id");
 									foreach ($allCats as $cat) {
-										echo "<option value='" . $cat['ID'] . "'>" . $cat['Name'] . "</option>";
-										$childCats = getAllFrom("*", "categories", "where parent = {$cat['ID']}", "", "ID");
+										echo "<option value='" . $cat['category_id'] . "'>" . $cat['name'] . "</option>";
+										$childCats = getAllFrom("*", "categories", "where parent_id = {$cat['category_id']}", "", "category_id");
 										foreach ($childCats as $child) {
-											echo "<option value='" . $child['ID'] . "'>--- " . $child['Name'] . "</option>";
+											echo "<option value='" . $child['category_id'] . "'>--- " . $child['name'] . "</option>";
 										}
 									}
 								?>
@@ -349,13 +349,13 @@
 
 					$avatar = rand(0, 10000000000) . '_' . $avatarName;
 
-					move_uploaded_file($avatarTmp, "uploads\items\\" . $avatar);
+					move_uploaded_file($avatarTmp, $upload . $avatar);
 
 					// Insert Userinfo In Database
 
 					$stmt = $con->prepare("INSERT INTO 
 
-						items(Name, Description, Price, Country_Made, Status, Add_Date, Cat_ID, Member_ID, picture, contact)
+						items(name, description, price, country_of_origin, status, added_date, category_id, owner_id, image_url, contact_info)
 
 						VALUES(:zname, :zdesc, :zprice, :zcountry, :zstatus, now(), :zcat, :zmember, :zpicture, :zcontact)");
 
@@ -367,7 +367,7 @@
 						'zcountry' 	=> $country,
 						'zstatus' 	=> $status,
 						'zcat'		=> $cat,
-						'zmember'	=> $member,
+						'zmember'	=> $_SESSION['admin_user_id'],
 						'zpicture'	=> $avatar,
 						'zcontact'	=> $contact
 
@@ -408,7 +408,7 @@
 
 			// Select All Data Depend On This ID
 
-			$stmt = $con->prepare("SELECT * FROM items WHERE Item_ID = ?");
+			$stmt = $con->prepare("SELECT * FROM items WHERE item_id = ?");
 
 			// Execute Query
 
@@ -440,7 +440,7 @@
 									class="form-control" 
 									required="required"  
 									placeholder="Name of The Item"
-									value="<?php echo $item['Name'] ?>" />
+									value="<?php echo $item['name'] ?>" />
 							</div>
 						</div>
 						<!-- End Name Field -->
@@ -454,7 +454,7 @@
 									class="form-control" 
 									required="required"  
 									placeholder="Description of The Item"
-									value="<?php echo $item['Description'] ?>" />
+									value="<?php echo $item['description'] ?>" />
 							</div>
 						</div>
 						<!-- End Description Field -->
@@ -468,7 +468,7 @@
 									class="form-control" 
 									required="required" 
 									placeholder="Phone Number of the Item owner"
-									value="<?php echo $item['contact'] ?>" />
+									value="<?php echo $item['contact_info'] ?>" />
 							</div>
 						</div>
 						<!-- End Contact Field -->
@@ -477,12 +477,12 @@
 							<label class="col-sm-2 control-label">Price</label>
 							<div class="col-sm-10 col-md-6">
 								<input 
-									type="text" 
+									type="number" 
 									name="price" 
 									class="form-control" 
 									required="required" 
 									placeholder="Price of The Item"
-									value="<?php echo $item['Price'] ?>" />
+									value="<?php echo $item['price'] ?>" />
 							</div>
 						</div>
 						<!-- End Price Field -->
@@ -496,7 +496,7 @@
 									class="form-control" 
 									required="required" 
 									placeholder="Country of Made"
-									value="<?php echo $item['Country_Made'] ?>" />
+									value="<?php echo $item['country_of_origin'] ?>" />
 							</div>
 						</div>
 						<!-- End Country Field -->
@@ -505,30 +505,30 @@
 							<label class="col-sm-2 control-label">Status</label>
 							<div class="col-sm-10 col-md-6">
 								<select name="status">
-									<option value="1" <?php if ($item['Status'] == 1) { echo 'selected'; } ?>>New</option>
-									<option value="2" <?php if ($item['Status'] == 2) { echo 'selected'; } ?>>Like New</option>
-									<option value="3" <?php if ($item['Status'] == 3) { echo 'selected'; } ?>>Used</option>
-									<option value="4" <?php if ($item['Status'] == 4) { echo 'selected'; } ?>>Very Old</option>
+									<option value="1" <?php if ($item['status'] == 1) { echo 'selected'; } ?>>New</option>
+									<option value="2" <?php if ($item['status'] == 2) { echo 'selected'; } ?>>Like New</option>
+									<option value="3" <?php if ($item['status'] == 3) { echo 'selected'; } ?>>Used</option>
+									<option value="4" <?php if ($item['status'] == 4) { echo 'selected'; } ?>>Very Old</option>
 								</select>
 							</div>
 						</div>
 						<!-- End Status Field -->
 						<!-- Start Members Field -->
-						<div class="form-group form-group-lg">
+						<!-- <div class="form-group form-group-lg">
 							<label class="col-sm-2 control-label">Member</label>
 							<div class="col-sm-10 col-md-6">
 								<select name="member">
 									<?php
-										$allMembers = getAllFrom("*", "users", "", "", "UserID");
+										$allMembers = getAllFrom("*", "users", "", "", "user_id");
 										foreach ($allMembers as $user) {
-											echo "<option value='" . $user['UserID'] . "'"; 
-											if ($item['Member_ID'] == $user['UserID']) { echo 'selected'; } 
-											echo ">" . $user['Username'] . "</option>";
+											echo "<option value='" . $user['user_id'] . "'"; 
+											if ($item['owner_id'] == $user['user_id']) { echo 'selected'; } 
+											echo ">" . $user['username'] . "</option>";
 										}
 									?>
 								</select>
 							</div>
-						</div>
+						</div> -->
 						<!-- End Members Field -->
 						<!-- Start Categories Field -->
 						<div class="form-group form-group-lg">
@@ -536,16 +536,16 @@
 							<div class="col-sm-10 col-md-6">
 								<select name="category">
 									<?php
-										$allCats = getAllFrom("*", "categories", "where parent = 0", "", "ID");
+										$allCats = getAllFrom("*", "categories", "where parent_id = 0", "", "category_id");
 										foreach ($allCats as $cat) {
-											echo "<option value='" . $cat['ID'] . "'";
-											if ($item['Cat_ID'] == $cat['ID']) { echo ' selected'; }
-											echo ">" . $cat['Name'] . "</option>";
-											$childCats = getAllFrom("*", "categories", "where parent = {$cat['ID']}", "", "ID");
+											echo "<option value='" . $cat['category_id'] . "'";
+											if ($item['category_id'] == $cat['category_id']) { echo ' selected'; }
+											echo ">" . $cat['name'] . "</option>";
+											$childCats = getAllFrom("*", "categories", "where parent_id = {$cat['category_id']}", "", "category_id");
 											foreach ($childCats as $child) {
-												echo "<option value='" . $child['ID'] . "'";
-												if ($item['Cat_ID'] == $child['ID']) { echo ' selected'; }
-												echo ">--- " . $child['Name'] . "</option>";
+												echo "<option value='" . $child['category_id'] . "'";
+												if ($item['category_id'] == $child['category_id']) { echo ' selected'; }
+												echo ">--- " . $child['name'] . "</option>";
 											}
 										}
 									?>
@@ -573,7 +573,7 @@
 											INNER JOIN 
 												users 
 											ON 
-												users.UserID = comments.user_id
+												users.user_id = comments.user_id
 											WHERE item_id = ?");
 
 					// Execute The Statement
@@ -603,11 +603,11 @@
 										echo "<td>" . $row['Member'] . "</td>";
 										echo "<td>" . $row['comment_date'] ."</td>";
 										echo "<td>
-											<a href='comments.php?do=Edit&comid=" . $row['c_id'] . "' class='btn btn-success'><i class='fa fa-edit'></i> Edit</a>
-											<a href='comments.php?do=Delete&comid=" . $row['c_id'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
+											<a href='comments.php?do=Edit&comid=" . $row['category_id'] . "' class='btn btn-success'><i class='fa fa-edit'></i> Edit</a>
+											<a href='comments.php?do=Delete&comid=" . $row['category_id'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
 											if ($row['status'] == 0) {
 												echo "<a href='comments.php?do=Approve&comid="
-														 . $row['c_id'] . "' 
+														 . $row['category_id'] . "' 
 														class='btn btn-info activate'>
 														<i class='fa fa-check'></i> Approve</a>";
 											}
@@ -653,7 +653,7 @@
 				$country	= $_POST['country'];
 				$status 	= $_POST['status'];
 				$cat 		= $_POST['category'];
-				$member 	= $_POST['member'];
+				// $member 	= $_POST['member'];
 				$contact 	= $_POST['contact'];
 
 				// Validate The Form
@@ -684,9 +684,9 @@
 					$formErrors[] = 'You Must Choose the <strong>Status</strong>';
 				}
 
-				if ($member == 0) {
-					$formErrors[] = 'You Must Choose the <strong>Member</strong>';
-				}
+				// if ($member == 0) {
+				// 	$formErrors[] = 'You Must Choose the <strong>Member</strong>';
+				// }
 
 				if ($cat == 0) {
 					$formErrors[] = 'You Must Choose the <strong>Category</strong>';
@@ -707,18 +707,17 @@
 					$stmt = $con->prepare("UPDATE 
 												items 
 											SET 
-												Name = ?, 
-												Description = ?, 
-												Price = ?, 
-												Country_Made = ?,
-												Status = ?,
-												Cat_ID = ?,
-												Member_ID = ?,
-												contact = ?
+												name = ?, 
+												description = ?, 
+												price = ?, 
+												country_of_origin = ?,
+												status = ?,
+												category_id = ?,
+												contact_info = ?
 											WHERE 
-												Item_ID = ?");
+												item_id = ?");
 
-					$stmt->execute(array($name, $desc, $price, $country, $status, $cat, $member, $contact, $id));
+					$stmt->execute(array($name, $desc, $price, $country, $status, $cat, $contact, $id));
 
 					// Echo Success Message
 
@@ -755,13 +754,13 @@
 
 				// Select All Data Depend On This ID
 
-				$check = checkItem('Item_ID', 'items', $itemid);
+				$check = checkItem('item_id', 'items', $itemid);
 
 				// If There's Such ID Show The Form
 
 				if ($check > 0) {
 
-					$stmt = $con->prepare("DELETE FROM items WHERE Item_ID = :zid");
+					$stmt = $con->prepare("DELETE FROM items WHERE item_id = :zid");
 
 					$stmt->bindParam(":zid", $itemid);
 
@@ -792,13 +791,13 @@
 
 				// Select All Data Depend On This ID
 
-				$check = checkItem('Item_ID', 'items', $itemid);
+				$check = checkItem('item_id', 'items', $itemid);
 
 				// If There's Such ID Show The Form
 
 				if ($check > 0) {
 
-					$stmt = $con->prepare("UPDATE items SET Approve = 1 WHERE Item_ID = ?");
+					$stmt = $con->prepare("UPDATE items SET is_approved = 1 WHERE item_id = ?");
 
 					$stmt->execute(array($itemid));
 

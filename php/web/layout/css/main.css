@@ -1,0 +1,981 @@
+
+.full-height-image {
+    height: 40px;             /* Set image height to fill the container */
+    width: auto;              /* Adjust width proportionally to maintain aspect ratio */
+    object-fit: cover;        /* Ensures the image fills the container without distortion */
+    display: block;           /* Avoid inline spacing issues */
+}
+
+button,
+.button {
+	padding: 10px 15px;
+	color: white;
+	background-color: rgb(3, 122, 122);
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 20px;
+}
+button a {
+	text-decoration: none;
+	font-size: 18px;
+}
+button:hover {
+	background-color: rgb(3, 94, 94);
+}
+button a:focus {
+	outline: none;
+}
+
+.img-responsive {
+	max-width: 100%; /* Ensure the image scales within its container */
+	height: auto; /* Maintain the aspect ratio */
+	display: block; /* Removes inline spacing below the image */
+}
+
+.img-thumbnail {
+	display: inline-block; /* Keeps it inline but allows styling */
+	max-width: 100%; /* Ensure responsiveness */
+	height: auto; /* Maintain aspect ratio */
+	padding: 0.25rem; /* Add padding */
+	background-color: #fff; /* White background */
+	border: 1px solid #dee2e6; /* Light gray border */
+	border-radius: 0.25rem; /* Slightly rounded corners */
+}
+
+.img-circle {
+	border-radius: 50%; /* Makes the image circular */
+	max-width: 100%; /* Ensure responsiveness */
+	height: auto; /* Maintain aspect ratio */
+}
+
+.center-block {
+	display: block; /* Ensures the image is treated as a block element */
+	margin-left: auto; /* Automatically adjust left margin */
+	margin-right: auto; /* Automatically adjust right margin */
+}
+
+.col-sm-10 {
+	flex: 0 0 auto; /* Flex item that doesn't shrink or grow */
+	width: 83.333333%; /* 10 out of 12 columns: (10/12)*100% */
+	max-width: 83.333333%; /* Same as width for consistent scaling */
+	box-sizing: border-box; /* Include padding/border in width */
+}
+
+.col-sm-2 {
+	flex: 0 0 auto; /* Flex item that doesn't shrink or grow */
+	width: 16.666667%; /* 2 out of 12 columns: (2/12)*100% */
+	max-width: 16.666667%; /* Same as width for consistent scaling */
+	box-sizing: border-box; /* Include padding/border in width */
+	padding-right: 15px; /* Add gutter */
+	padding-left: 15px;
+}
+
+@media (max-width: 575.98px) {
+	.col-sm-2 {
+		width: 100%; /* Full width on screens smaller than 576px */
+		max-width: 100%;
+	}
+}
+
+.text-center {
+	text-align: center; /* Horizontally centers the text */
+}
+
+.row {
+	display: flex; /* Use flexbox for layout */
+	flex-wrap: wrap; /* Allow wrapping to the next row */
+	margin-right: 15px; /* Negative margins for gutters */
+	margin-left: 15px;
+}
+
+[class*="col-"] {
+	padding-right: 15px; /* Gutter spacing */
+	padding-left: 15px;
+	box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.col-md-offset-3 {
+	margin-left: 25%; /* 3 out of 12 columns: (3/12)*100% */
+}
+
+@media (max-width: 767.98px) {
+	.col-md-offset-3 {
+		margin-left: 0; /* Reset margin for small screens */
+	}
+}
+
+.alert {
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	font-family: Arial, sans-serif;
+}
+
+.alert-success {
+	color: #3c763d; /* Text color */
+	background-color: #dff0d8; /* Background color */
+	border-color: #d6e9c6; /* Border color */
+}
+
+.alert-error {
+	color: #a94442; /* Text color */
+	background-color: #f2dede; /* Background color */
+	border-color: #ebccd1; /* Border color */
+}
+
+a {
+	color: rgb(3, 122, 122); /* Bootstrap's default link color */
+	text-decoration: none; /* No underline by default */
+	background-color: transparent; /* Ensure no background */
+}
+
+a:hover {
+	color: rgb(3, 94, 94); /* Darker shade of blue on hover */
+	text-decoration: underline; /* Add underline on hover */
+}
+
+a:focus {
+	color: rgb(3, 94, 94); /* Same as hover color */
+	text-decoration: underline; /* Keep underline for accessibility */
+	outline: 0; /* Remove outline for cleaner appearance */
+}
+
+a:active {
+	color: rgb(3, 94, 94); /* Same as hover color */
+	text-decoration: underline; /* Underline when active */
+}
+
+a:visited {
+	color: rgb(3, 94, 94); /* Visited links retain the default color */
+}
+
+/* .container {
+	max-width: 960px; 
+	margin: 0 auto; 
+	padding: 15px; 
+} */
+
+/* Layout & Grid System */
+.container {
+	width: 100%;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.text-center {
+	text-align: center !important;
+}
+
+.h-10 {
+	height: 10px;
+}
+
+.btn-group {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown toggle button */
+.dropbtn {
+	cursor: pointer;
+  }
+  
+  .dropbtn:hover, .dropbtn:focus {
+	transform: scale(1.1);
+  }
+  .dropbtn:active {
+    transform: scale(0.95); /* Simulates a press effect */
+}
+  
+  .dropdown {
+	position: relative;
+	display: inline-block;
+  }
+  
+  .dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 160px;
+	overflow: auto;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+	right: 0px;
+  }
+  
+  .dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+  }
+  
+  .dropdown a:hover {background-color: #ddd;}
+  
+  .show {display: block;}
+  
+/*   
+  /* Button Styles */
+/* .btn {
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	vertical-align: middle;
+	user-select: none;
+	border: 1px solid transparent;
+	padding: 0.375rem 0.75rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	border-radius: 0.25rem;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+	  border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  
+  .btn-primary {
+	color: #fff;
+	background-color: #007bff;
+	border-color: #007bff;
+  }
+  
+  .btn-primary:hover {
+	color: #fff;
+	background-color: #0056b3;
+	border-color: #0056b3;
+  }
+  
+  .btn-success {
+	color: #fff;
+	background-color: #28a745;
+	border-color: #28a745;
+  }
+  
+  .btn-success:hover {
+	color: #fff;
+	background-color: #218838;
+	border-color: #1e7e34;
+  }
+  
+  .btn-block {
+	display: block;
+	width: 100%;
+  } */
+*/ .test {
+	display: none;
+}
+.w-100 {
+	width: 100% !important;
+}
+
+/* Spacing */
+.mb-3 {
+	margin-bottom: 1rem !important;
+}
+
+/* Alerts */
+.alert {
+	position: relative;
+	padding: 0.75rem 1.25rem;
+	margin-bottom: 1rem;
+	border: 1px solid transparent;
+	border-radius: 0.25rem;
+}
+
+.alert-danger {
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+}
+
+.alert-success {
+	color: #155724;
+	background-color: #d4edda;
+	border-color: #c3e6cb;
+}
+
+.input-container {
+	width: 100%;
+	margin-bottom: 1rem; /* Space between input fields */
+	position: relative;  /* Allows for positioning elements like icons inside the container */
+  }
+
+  .form-control {
+	display: block;                /* Ensures inputs are block-level elements */
+	width: 93.5%;                   /* Full-width input fields */
+	height: calc(1.5em + 0.75rem + 2px); /* Set consistent height */
+	padding: 0.375rem 0.75rem;    /* Inner padding */
+	font-size: 1rem;               /* Default font size */
+	font-weight: 400;              /* Normal font weight */
+	line-height: 1.5;              /* Consistent line height */
+	color: rgb(3, 122, 122);                /* Dark gray text color */
+	background-color: #fff;        /* White background */
+	background-clip: padding-box;  /* Prevents background from overflowing padding */
+	border: 1px solid rgb(3, 122, 122);     /* Light gray border */
+	border-radius: 0.25rem;        /* Slightly rounded corners */
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Smooth focus effect */
+  }
+  
+  .form-control:focus {
+	color: rgb(3, 122, 122);                /* Text color remains the same */
+	background-color: #fff;        /* Background remains white */
+	border-color: rgb(3, 122, 122);         /* Blue border on focus */
+	outline: 0;                    /* Removes the default focus outline */
+	box-shadow: 0 0 0 0.2rem rgba(3, 122, 122, 0.25); /* Subtle blue glow */
+  }
+  
+  .form-control::placeholder {
+	color: #6c757d;                /* Lighter gray for placeholder text */
+	opacity: 1;                    /* Ensures placeholder text is visible */
+  }
+  
+  .form-control:disabled, .form-control[readonly] {
+	background-color: #e9ecef;     /* Light gray background for disabled fields */
+	opacity: 1;                    /* Full opacity for readability */
+  }
+
+  .form-control-small {
+    display: block; /* Ensures inputs are block-level elements */
+    width: auto; /* Adjust width as needed, e.g., 80px for number inputs */
+    height: calc(1.25em + 0.5rem + 2px); /* Reduce height */
+    padding: 0.25rem 0.5rem; /* Smaller padding for compact appearance */
+    font-size: 0.875rem; /* Slightly smaller font size */
+    font-weight: 400; /* Normal font weight */
+    line-height: 1.5; /* Consistent line height */
+    color: rgb(3, 122, 122); /* Custom text color */
+    background-color: #fff; /* White background */
+    background-clip: padding-box; /* Prevents background from overflowing padding */
+    border: 1px solid rgb(3, 122, 122); /* Custom border color */
+    border-radius: 0.25rem; /* Slightly rounded corners */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Smooth focus effect */
+}
+
+.form-control-small:focus {
+    color: rgb(3, 122, 122); /* Text color remains the same */
+    background-color: #fff; /* Background remains white */
+    border-color: rgb(3, 122, 122); /* Custom border on focus */
+    outline: 0; /* Removes the default focus outline */
+    box-shadow: 0 0 0 0.2rem rgba(3, 122, 122, 0.25); /* Subtle glow */
+}
+
+.form-control-small::placeholder {
+    color: #6c757d; /* Lighter gray for placeholder text */
+    opacity: 1; /* Ensures placeholder text is visible */
+}
+
+.form-control-small:disabled,
+.form-control-small[readonly] {
+    background-color: #e9ecef; /* Light gray background for disabled fields */
+    opacity: 1; /* Full opacity for readability */
+}
+
+.form-group label {
+	padding-right: 10px;
+}
+
+  
+  .btn-sm {
+    padding: 0.25rem 0.5rem; /* Smaller padding */
+    font-size: 0.875rem; /* Smaller font size */
+    line-height: 1.5; /* Consistent line height */
+    border-radius: 0.2rem; /* Slightly rounded corners */
+}
+
+.btn-danger {
+    color: #fff; /* White text */
+    background-color: #dc3545; /* Red background */
+    border-color: #dc3545; /* Red border */
+}
+
+.btn-danger:hover {
+    color: #fff; /* White text on hover */
+    background-color: #c82333; /* Darker red background */
+    border-color: #bd2130; /* Darker red border */
+}
+
+.btn-danger:focus, .btn-danger.focus {
+    color: #fff; /* White text on focus */
+    background-color: #c82333; /* Darker red background */
+    border-color: #bd2130; /* Darker red border */
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5); /* Red focus ring */
+}
+
+.btn-danger:active, .btn-danger.active,
+.show > .btn-danger.dropdown-toggle {
+    color: #fff; /* White text when active */
+    background-color: #bd2130; /* Even darker red background */
+    border-color: #b21f2d; /* Even darker red border */
+}
+
+.btn-danger:disabled, .btn-danger.disabled {
+    color: #fff; /* White text for disabled button */
+    background-color: #dc3545; /* Same red background */
+    border-color: #dc3545; /* Same red border */
+    opacity: 0.65; /* Slightly faded appearance */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Adds space between form fields */
+}
+
+.form-group label {
+    display: block; /* Ensures the label is on its own line */
+    margin-bottom: 5px; /* Adds space below the label */
+    font-weight: bold; /* Makes the label text bold */
+    font-size: 14px; /* Slightly smaller font size */
+}
+
+.form-group input {
+    width: 100%; /* Makes input fields take up full width of the container */
+    padding: 10px; /* Adds padding inside the input */
+    font-size: 14px; /* Sets a readable font size */
+    line-height: 1.5; /* Adjusts line height for consistency */
+    border: 1px solid #ccc; /* Adds a light gray border */
+    border-radius: 5px; /* Adds slightly rounded corners */
+    box-sizing: border-box; /* Ensures padding is included in width calculation */
+}
+
+.form-group input:focus {
+    border-color: rgb(3, 122, 122); /* Changes border color when focused */
+    box-shadow: 0 0 5px rgba(3, 122, 122, 0.5); /* Adds a subtle glow effect */
+    outline: none; /* Removes the default focus outline */
+}
+
+.panel {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.panel-primary {
+    border-color: rgb(3, 122, 122);
+}
+
+.panel-primary > .panel-heading {
+    background-color: rgb(3, 122, 122);
+    border-color: rgb(3, 122, 122);
+    color: #fff;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.panel-heading {
+    border-bottom: 1px solid #ddd;
+}
+
+.panel-body {
+    padding: 15px;
+    font-size: 14px;
+    color: #333;
+}
+
+
+.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
+}
+
+.list-unstyled li {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.list-unstyled li span {
+    font-weight: bold;
+    color: #333;
+}
+
+.list-unstyled li i {
+    margin-right: 5px;
+    color: #777;
+}
+
+
+.thumbnail {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.item-box {
+    position: relative;
+    text-align: center;
+    padding: 15px;
+}
+
+.price-tag {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgb(3, 122, 122);
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom-left-radius: 4px;
+}
+
+.approve-status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #f0ad4e;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom-right-radius: 4px;
+}
+
+.caption {
+    padding: 10px 15px;
+    color: #333;
+    text-align: left;
+	margin-top: 20px
+}
+
+.caption h3 {
+    font-size: 16px;
+    margin: 0 0 10px;
+}
+
+.caption p {
+    font-size: 14px;
+    color: #555;
+    margin: 0 0 10px;
+}
+
+.caption .date {
+    font-size: 12px;
+    color: #777;
+    text-align: right;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+h1.text-center {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+
+.col-sm-6,
+.col-md-3 {
+    flex: 0 0 auto;
+    width: 50%;
+    padding: 15px;
+}
+
+.col-md-3 {
+    width: 25%;
+}
+
+/* General Layout */
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+/* Centered Text */
+.text-center {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form Styling */
+form {
+    margin: 20px 0;
+}
+
+.form-horizontal {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.form-group-lg {
+    font-size: 1.2em; /* Slightly larger font size */
+}
+
+/* Control Label */
+.control-label {
+    flex: 0 0 20%; /* Width of the label */
+    text-align: right;
+    padding-right: 15px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Form Inputs */
+
+
+
+
+
+/* Column Classes */
+.col-sm-2 {
+    flex: 0 0 20%;
+    max-width: 20%;
+}
+
+.col-sm-10 {
+    flex: 0 0 80%;
+    max-width: 80%;
+}
+
+.col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+/* Offset Class */
+.col-sm-offset-2 {
+    margin-left: 20%;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary {
+    color: #fff !important;
+    background-color: rgb(3, 122, 122);
+    border-color: rgb(3, 122, 122);
+}
+
+.btn-primary:hover {
+    background-color:  rgb(3, 94, 94);
+    border-color: rgb(3, 94, 94);
+}
+
+.btn-lg {
+    font-size: 1.25rem;
+    padding: 15px 30px;
+    border-radius: 0.3rem;
+	width: min-content !important;
+}
+
+/* Small Button */
+.btn-sm {
+    font-size: 0.875rem; /* Slightly smaller font size */
+    padding: 5px 10px; /* Compact padding */
+    border-radius: 0.2rem; /* Slightly rounded corners */
+    width: min-content !important;
+}
+
+/* Medium Button (Default Button Size) */
+.btn-md {
+    font-size: 1rem; /* Standard font size */
+    padding: 10px 20px; /* Medium padding */
+    border-radius: 0.25rem; /* Slightly rounded corners */
+	width: min-content !important;
+}
+
+.thumbnail {
+    display: inline-block;
+    max-width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 15px; /* Add padding */
+    margin-bottom: 20px; /* Space below the box */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animation for hover */
+}
+
+.thumbnail:hover {
+    transform: translateY(-5px); /* Slight upward movement */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+}
+
+.item-box {
+    position: relative; /* To position price tags or other overlays */
+    padding: 15px; /* Add inner padding */
+    text-align: center; /* Center content */
+    background-color: #f9f9f9; /* Light gray background */
+    border-radius: 4px; /* Rounded corners */
+    overflow: hidden; /* Prevent content overflow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth animation */
+}
+
+.item-box:hover {
+    transform: scale(1.03); /* Slight zoom effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+}
+
+.item-box .price-tag {
+    position: absolute; /* Position at the top-right */
+    top: 10px;
+    right: 10px;
+    background-color: rgb(3, 122, 122); /* Bootstrap primary color */
+    color: #fff; /* White text */
+    padding: 5px 10px; /* Add padding */
+    font-size: 14px; /* Small text */
+    font-weight: bold; /* Bold text */
+    border-radius: 4px; /* Rounded corners */
+    z-index: 10; /* Ensure it appears on top */
+}
+
+.live-preview {
+    display: block; /* Make it a block element */
+    background-color: #f7f7f7; /* Light background */
+    border: 1px dashed #ccc; /* Dashed border for a preview effect */
+    padding: 20px; /* Add padding */
+    margin-top: 20px; /* Space above */
+    text-align: center; /* Center the content */
+    color: #555; /* Muted text color */
+    font-size: 16px; /* Medium text size */
+    font-style: italic; /* Italic text for preview indication */
+    transition: all 0.2s ease; /* Add smooth animations */
+}
+
+.live-preview:hover {
+    border-color: rgb(3, 122, 122); /* Highlight border on hover */
+    background-color: rgba(3, 122, 122, 0.1); /* Subtle background change */
+    color: #333; /* Darker text */
+}
+
+select {
+    display: block; /* Ensure it's treated as a block element */
+    width: 100%; /* Takes up the full width of its container */
+    padding: 10px; /* Add padding inside the select */
+    font-size: 14px; /* Slightly smaller font size */
+    line-height: 1; /* Consistent line height */
+    color: #555; /* Subtle gray text color */
+    background-color: #fff; /* White background */
+    background-clip: padding-box; /* Prevent background from overflowing padding */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+    box-shadow: none; /* Remove any default shadow */
+    appearance: none; /* Remove default OS styling */
+    cursor: pointer; /* Change cursor to pointer */
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Hover effect for select */
+select:hover {
+    border-color: rgb(3, 122, 122); /* Bootstrap's primary blue */
+}
+
+/* Focus effect for select */
+select:focus {
+    border-color: rgb(3, 122, 122); /* Custom focus border */
+    box-shadow: 0 0 5px rgba(3, 122, 122, 0.5); /* Subtle glow effect */
+    outline: none; /* Remove default outline */
+}
+
+/* Option styling (inherited) */
+select option {
+    padding: 10px; /* Space within the dropdown options */
+    color: #333; /* Text color */
+    background-color: #fff; /* Background color */
+}
+
+/* Disabled option */
+select option:disabled {
+    color: #aaa; /* Gray out disabled options */
+}
+
+.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+@media (min-width: 992px) {
+    .col-md-4 {
+        width: 33.33333333%;
+    }
+}
+
+.panel-default {
+    border-color: #ddd;
+}
+
+.panel {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.panel-default>.panel-heading {
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+.panel-heading {
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.panel-body {
+    padding: 15px;
+}
+
+.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+
+.pull-right {
+    float: right !important;
+}
+
+.btn-success {
+    color: #fff !important;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.btn-success > i{
+    color: #fff !important;
+}
+
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    border-collapse: collapse; /* Ensures clean borders */
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6; /* Light gray border */
+    text-align: center; /* Center align text */
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6; /* Thicker border for thead */
+    background-color: rgb(3, 122, 122); /* Bootstrap primary color */
+    color: #fff; /* White text for header */
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; /* Alternate row background */
+}
+
+.table tbody tr:hover {
+    background-color: rgba(3, 122, 122, 0.1); /* Subtle hover effect */
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid #dee2e6; /* Light gray border for all cells */
+}
+
+/* Avatar Image Styling */
+.table img {
+    width: 50px; /* Set avatar size */
+    height: 50px; /* Keep avatars square */
+    border-radius: 50%; /* Circular avatars */
+    object-fit: cover; /* Ensures image scales proportionally */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* General styling for radio buttons */
+input[type="radio"] {
+    appearance: none; /* Remove default styling */
+    width: 18px; /* Custom width */
+    height: 18px; /* Custom height */
+    border: 2px solid #ccc; /* Border color */
+    border-radius: 50%; /* Circular shape */
+    outline: none; /* Remove focus outline */
+    cursor: pointer; /* Pointer cursor on hover */
+    margin-right: 8px; /* Space between the radio button and the label */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Styling when a radio button is selected */
+input[type="radio"]:checked {
+    border-color: rgb(3, 122, 122); /* Primary color for border */
+    background-color: rgb(3, 122, 122); /* Fill color */
+}
+
+/* Hover effect for radio buttons */
+input[type="radio"]:hover {
+    border-color: rgb(3, 94, 94); /* Slightly darker shade on hover */
+}
+
+/* Labels associated with radio buttons */
+label {
+    font-size: 14px; /* Standard text size */
+    color: #333; /* Neutral text color */
+    cursor: pointer; /* Pointer cursor when hovering over the label */
+}
+
+/* Container for radio button groups */
+.form-group div {
+    display: flex; /* Use flex layout */
+    align-items: center; /* Center vertically */
+    gap: 15px; /* Space between radio button pairs */
+   // margin-bottom: 10px; /* Space between each group of radio buttons */
+}
+
+/* Specific styles for larger labels in form-group-lg */
+.form-group-lg label {
+    font-size: 16px; /* Larger font size */
+    font-weight: bold; /* Bold for emphasis */
+    color: #555; /* Slightly muted color */
+}
+
+/* Focus styles for accessibility */
+input[type="radio"]:focus {
+    box-shadow: 0 0 5px rgba(3, 122, 122, 0.5); /* Subtle glow effect */
+    outline: none; /* Remove default outline */
+}

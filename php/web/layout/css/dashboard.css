@@ -1,0 +1,133 @@
+.home-stats .stat .info {
+    float: right;
+}
+
+.home-stats .stat {
+	padding: 20px;
+	font-size: 15px;
+	color: #FFF;
+	border-radius: 10px;
+	position: relative;
+	overflow: hidden;
+}
+
+.home-stats .stat i {
+    position: absolute;
+    font-size: 80px;
+    top: 35px;
+    left: 30px;
+}
+
+.home-stats .stat .info {
+	float: right;
+}
+
+.home-stats .stat a {
+	color: #FFF;
+}
+
+.home-stats .stat a:hover {
+	text-decoration: none;
+}
+
+.home-stats .stat span {
+	display: block;
+	font-size: 60px;
+}
+
+.home-stats .st-members {
+	background-color: #3498db;
+}
+
+.home-stats .st-pending {
+	background-color: #c0392b;
+}
+
+.home-stats .st-items {
+	background-color: #d35400;
+}
+
+.home-stats .st-comments {
+	background-color: #8e44ad;
+}
+
+.latest {
+	margin-top: 30px;
+}
+
+.latest .toggle-info {
+	color: #999;
+	cursor: pointer
+}
+
+.latest .toggle-info:hover {
+	color: #444;
+}
+
+.latest-users {
+	margin-bottom: 0;
+}
+
+.latest-users li {
+	padding: 10px;
+	overflow: hidden;
+}
+
+.latest-users li:nth-child(odd) {
+	background-color: #EEE;
+}
+
+.latest-users .btn-success,
+.latest-users .btn-info {
+	padding: 2px 8px;
+}
+
+.latest-users .btn-info {
+	margin-right: 5px;
+}
+
+.latest .comment-box {
+	margin: 5px 0 40px;
+}
+
+.latest .comment-box .member-n,
+.latest .comment-box .member-c {
+	/* float: left; */
+}
+
+.comment-box {
+	/* padding-bottom: 20px; */
+}
+
+
+.latest .comment-box .member-n {
+	width: 80px;
+	text-align: center;
+	margin-right: 20px;
+	position: relative;
+}
+
+
+
+.latest .comment-box .member-c {
+    width: calc(100% - 100px);
+    background-color: #EFEFEF;
+    padding: 10px;
+    position: relative;
+	display: inline;
+	margin: auto;
+}
+
+.latest .comment-box .member-c:before {
+	content: "";
+	display: block;
+	position: absolute;
+	left: -28px;
+	top: 5px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-color: transparent #EFEFEF transparent transparent;
+	border-width: 15px;
+}
+

@@ -1,5 +1,7 @@
 <?php
 
+	$cssFile = "dashboard.css";
+
 	/*
 	================================================
 	== Manage Members Page
@@ -13,7 +15,7 @@
 
 	$pageTitle = 'Members';
 
-	if (isset($_SESSION['Username'])) {
+	if (isset($_SESSION['admin'])) {
 
 		include 'init.php';
 
@@ -33,7 +35,7 @@
 
 			// Select All Users Except Admin 
 
-			$stmt = $con->prepare("SELECT * FROM users WHERE GroupID != 1 $query ORDER BY UserID DESC");
+			$stmt = $con->prepare("SELECT * FROM users WHERE group_id != 1 $query ORDER BY user_id DESC");
 
 			// Execute The Statement
 
@@ -63,23 +65,23 @@
 							foreach($rows as $row) {
 								echo "<tr>";
 									echo "<td>";
-									if (empty($row['avatar'])) {
-										echo "<img src='uploads/default.png' alt='' />";
+									if (empty($row['avatar_url'])) {
+										echo "<img src='". $upload_main ."/default.png' alt='' />";
 									} else {
-										echo "<img src='uploads/avatars/" . $row['avatar'] . "' alt='' />";
+										echo "<img src='". $upload_main . "avatars/" . $row['avatar_url'] . "' alt='' />";
 									}
 									echo "</td>";
 
-									echo "<td>" . $row['Username'] . "</td>";
-									echo "<td>" . $row['Email'] . "</td>";
-									echo "<td>" . $row['FullName'] . "</td>";
-									echo "<td>" . $row['Date'] ."</td>";
+									echo "<td>" . $row['username'] . "</td>";
+									echo "<td>" . $row['email'] . "</td>";
+									echo "<td>" . $row['full_name'] . "</td>";
+									echo "<td>" . $row['registration_date'] ."</td>";
 									echo "<td>
-										<a href='members.php?do=Edit&userid=" . $row['UserID'] . "' class='btn btn-success'><i class='fa fa-edit'></i> Edit</a>
-										<a href='members.php?do=Delete&userid=" . $row['UserID'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
-										if ($row['RegStatus'] == 0) {
+										<a href='members.php?do=Edit&userid=" . $row['user_id'] . "' class='btn btn-success'><i class='fa fa-edit'></i> Edit</a>
+										<a href='members.php?do=Delete&userid=" . $row['user_id'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
+										if ($row['registration_status'] == 0) {
 											echo "<a 
-													href='members.php?do=Activate&userid=" . $row['UserID'] . "' 
+													href='members.php?do=Activate&userid=" . $row['user_id'] . "' 
 													class='btn btn-info activate'>
 													<i class='fa fa-check'></i> Activate</a>";
 										}
@@ -252,7 +254,7 @@
 
 					$avatar = rand(0, 10000000000) . '_' . $avatarName;
 
-					move_uploaded_file($avatarTmp, "uploads\avatars\\" . $avatar);
+					move_uploaded_file($avatarTmp, $upload_main. '/avatars/' . $avatar);
 
 					// Check If User Exist in Database
 
@@ -269,7 +271,7 @@
 						// Insert Userinfo In Database
 
 						$stmt = $con->prepare("INSERT INTO 
-													users(Username, Password, Email, FullName, RegStatus, Date, avatar)
+													users(username, password, email, full_name, registration_status, registration_date, avatar_url)
 												VALUES(:zuser, :zpass, :zmail, :zname, 1, now(), :zavatar) ");
 						$stmt->execute(array(
 
@@ -320,7 +322,7 @@
 
 			// Select All Data Depend On This ID
 
-			$stmt = $con->prepare("SELECT * FROM users WHERE UserID = ? LIMIT 1");
+			$stmt = $con->prepare("SELECT * FROM users WHERE user_id = ? LIMIT 1");
 
 			// Execute Query
 
@@ -346,7 +348,7 @@
 						<div class="form-group form-group-lg">
 							<label class="col-sm-2 control-label">Username</label>
 							<div class="col-sm-10 col-md-6">
-								<input type="text" name="username" class="form-control" value="<?php echo $row['Username'] ?>" autocomplete="off" required="required" />
+								<input type="text" name="username" class="form-control" value="<?php echo $row['username'] ?>" autocomplete="off" required="required" />
 							</div>
 						</div>
 						<!-- End Username Field -->
@@ -354,7 +356,7 @@
 						<div class="form-group form-group-lg">
 							<label class="col-sm-2 control-label">Password</label>
 							<div class="col-sm-10 col-md-6">
-								<input type="hidden" name="oldpassword" value="<?php echo $row['Password'] ?>" />
+								<input type="hidden" name="oldpassword" value="<?php echo $row['password'] ?>" />
 								<input type="password" name="newpassword" class="form-control" autocomplete="new-password" placeholder="Leave Blank If You Dont Want To Change" />
 							</div>
 						</div>
@@ -363,7 +365,7 @@
 						<div class="form-group form-group-lg">
 							<label class="col-sm-2 control-label">Email</label>
 							<div class="col-sm-10 col-md-6">
-								<input type="email" name="email" value="<?php echo $row['Email'] ?>" class="form-control" required="required" />
+								<input type="email" name="email" value="<?php echo $row['email'] ?>" class="form-control" required="required" />
 							</div>
 						</div>
 						<!-- End Email Field -->
@@ -371,7 +373,7 @@
 						<div class="form-group form-group-lg">
 							<label class="col-sm-2 control-label">Full Name</label>
 							<div class="col-sm-10 col-md-6">
-								<input type="text" name="full" value="<?php echo $row['FullName'] ?>" class="form-control" required="required" />
+								<input type="text" name="full" value="<?php echo $row['full_name'] ?>" class="form-control" required="required" />
 							</div>
 						</div>
 						<!-- End Full Name Field -->
@@ -458,9 +460,9 @@
 											FROM 
 												users
 											WHERE
-												Username = ?
+												username = ?
 											AND 
-												UserID != ?");
+												user_id != ?");
 
 					$stmt2->execute(array($user, $id));
 
@@ -476,7 +478,7 @@
 
 						// Update The Database With This Info
 
-						$stmt = $con->prepare("UPDATE users SET Username = ?, Email = ?, FullName = ?, Password = ? WHERE UserID = ?");
+						$stmt = $con->prepare("UPDATE users SET username = ?, email = ?, full_name = ?, password = ? WHERE user_id = ?");
 
 						$stmt->execute(array($user, $email, $name, $pass, $id));
 
@@ -516,13 +518,13 @@
 
 				// Select All Data Depend On This ID
 
-				$check = checkItem('userid', 'users', $userid);
+				$check = checkItem('user_id', 'users', $userid);
 
 				// If There's Such ID Show The Form
 
 				if ($check > 0) {
 
-					$stmt = $con->prepare("DELETE FROM users WHERE UserID = :zuser");
+					$stmt = $con->prepare("DELETE FROM users WHERE user_id = :zuser");
 
 					$stmt->bindParam(":zuser", $userid);
 
@@ -559,7 +561,7 @@
 
 				if ($check > 0) {
 
-					$stmt = $con->prepare("UPDATE users SET RegStatus = 1 WHERE UserID = ?");
+					$stmt = $con->prepare("UPDATE users SET RegStatus = 1 WHERE user_id = ?");
 
 					$stmt->execute(array($userid));
 

@@ -1,9 +1,11 @@
 <?php
 
-	/*
-	** Get All Function v2.0
-	** Function To Get All Records From Any Database Table
-	*/
+function getSingleValue($con, $sql, $parameters)
+{
+	$q = $con->prepare($sql);
+	$q->execute($parameters);
+	return $q->fetchColumn();
+}
 
 	function getAllFrom($field, $table, $where = NULL, $and = NULL, $orderfield = NULL, $ordering = "DESC") {
 
@@ -19,23 +21,18 @@
 
 	}
 	
-	/*
-	** Check If User Is Not Activated
-	** Function To Check The RegStatus Of The User
-	*/
-
 	function checkUserStatus($user) {
 
 		global $con;
 
 		$stmtx = $con->prepare("SELECT 
-									Username, RegStatus 
+									username, registration_status 
 								FROM 
 									users 
 								WHERE 
-									Username = ? 
+									username = ? 
 								AND 
-									RegStatus = 0");
+									registration_status = 0");
 
 		$stmtx->execute(array($user));
 
@@ -45,13 +42,6 @@
 
 	}
 
-	/*
-	** Check Items Function v1.0
-	** Function to Check Item In Database [ Function Accept Parameters ]
-	** $select = The Item To Select [ Example: user, item, category ]
-	** $from = The Table To Select From [ Example: users, items, categories ]
-	** $value = The Value Of Select [ Example: Osama, Box, Electronics ]
-	*/
 
 	function checkItem($select, $from, $value) {
 
@@ -69,30 +59,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
-	** Title Function v1.0
-	** Title Function That Echo The Page Title In Case The Page
-	** Has The Variable $pageTitle And Echo Defult Title For Other Pages
-	*/
-
 	function getTitle() {
 
 		global $pageTitle;
@@ -108,13 +74,21 @@
 		}
 	}
 
-	/*
-	** Home Redirect Function v2.0
-	** This Function Accept Parameters
-	** $theMsg = Echo The Message [ Error | Success | Warning ]
-	** $url = The Link You Want To Redirect To
-	** $seconds = Seconds Before Redirecting
-	*/
+	function getCssFile() {
+
+		global $cssFile;
+
+		if (isset($cssFile)) {
+
+			echo $cssFile;
+
+		} else {
+
+			echo 'index.css';
+
+		}
+	}
+
 
 	function redirectHome($theMsg, $url = null, $seconds = 3) {
 
@@ -152,13 +126,6 @@
 
 	}
 
-	/*
-	** Count Number Of Items Function v1.0
-	** Function To Count Number Of Items Rows
-	** $item = The Item To Count
-	** $table = The Table To Choose From
-	*/
-
 	function countItems($item, $table) {
 
 		global $con;
@@ -170,15 +137,6 @@
 		return $stmt2->fetchColumn();
 
 	}
-
-	/*
-	** Get Latest Records Function v1.0
-	** Function To Get Latest Items From Database [ Users, Items, Comments ]
-	** $select = Field To Select
-	** $table = The Table To Choose From
-	** $order = The Desc Ordering
-	** $limit = Number Of Records To Get
-	*/
 
 	function getLatest($select, $table, $order, $limit = 5) {
 
@@ -193,3 +151,36 @@
 		return $rows;
 
 	}
+
+	function printProductCard($item, $upload) {
+		echo '<div id="box">';
+		echo '<a href="items.php?itemid=' . $item['item_id'] . '">';
+		echo '<img src="' . $upload . $item["image_url"] . '" alt="Clothing Item Preview">';
+		echo '<div id="details">';
+		echo '<h3>' . $item["name"] . '</h3>';
+		echo '<h4>' . $item['description'] . '</h4>';
+		echo '<h2>' . $item['price'] . ' €</h2>';
+		echo '</div>';
+		echo '</a>';
+		echo '</div>';
+	}
+
+	function dynamicCartSection($item, $itemCounter, $upload)
+{
+	// Generate the cart item HTML
+	return '
+   <div id="box">
+        <img style="height: 220px; object-fit: contain;" src="' . $upload . htmlspecialchars($item['image_url']) . '" alt="' . htmlspecialchars($item['name']) . '">
+        <div>
+            <h3>' . htmlspecialchars($item['name']) . ' × ' . $itemCounter . '</h3>
+            <h4>Amount: ' . htmlspecialchars($item['price']) . ' €</h4>
+            <h4>Total Amount: ' . htmlspecialchars($item['price'] * $itemCounter) . ' €</h4>
+            <form action="" method="POST" style="display: flex; gap: 10px; margin-top: 10px;">
+                <input type="hidden" name="item_id" value="' . htmlspecialchars($item['id']) . '">
+                <input type="number" class="form-control-small" name="quantity" value="' . htmlspecialchars($itemCounter) . '" min="1" style="width: 60px;">
+                <button type="submit" name="update_quantity" class="btn btn-sm btn-success">Update</button>
+                <button type="submit" name="remove_item" class="btn btn-sm btn-danger">Remove</button>
+            </form>
+        </div>
+    </div>';
+}

@@ -1,10 +1,11 @@
 <?php
 
 	ob_start(); // Output Buffering Start
+	$cssFile = "dashboard.css";
 
 	session_start();
 
-	if (isset($_SESSION['Username'])) {
+	if (isset($_SESSION['admin'])) {
 
 		$pageTitle = 'Dashboard';
 
@@ -14,11 +15,11 @@
 
 		$numUsers = 6; // Number Of Latest Users
 
-		$latestUsers = getLatest("*", "users", "UserID", $numUsers); // Latest Users Array
+		$latestUsers = getLatest("*", "users", "user_id", $numUsers); // Latest Users Array
 
 		$numItems = 6; // Number Of Latest Items
 
-		$latestItems = getLatest("*", 'items', 'Item_ID', $numItems); // Latest Items Array
+		$latestItems = getLatest("*", 'items', 'item_id', $numItems); // Latest Items Array
 
 		$numComments = 4;
 
@@ -34,7 +35,7 @@
 							<div class="info">
 								Total Members
 								<span>
-									<a href="members.php"><?php echo countItems('UserID', 'users') ?></a>
+									<a href="members.php"><?php echo countItems('user_id', 'users') ?></a>
 								</span>
 							</div>
 						</div>
@@ -45,7 +46,7 @@
 							<div class="info">
 								Total Items
 								<span>
-									<a href="items.php"><?php echo countItems('Item_ID', 'items') ?></a>
+									<a href="items.php"><?php echo countItems('item_id', 'items') ?></a>
 								</span>
 							</div>
 						</div>
@@ -56,7 +57,7 @@
 							<div class="info">
 								Total Feedbacks
 								<span>
-									<a href="comments.php"><?php echo countItems('c_id', 'comments') ?></a>
+									<a href="comments.php"><?php echo countItems('comment_id', 'comments') ?></a>
 								</span>
 							</div>
 						</div>
@@ -83,13 +84,13 @@
 									if (! empty($latestUsers)) {
 										foreach ($latestUsers as $user) {
 											echo '<li>';
-												echo $user['Username'];
-												echo '<a href="members.php?do=Edit&userid=' . $user['UserID'] . '">';
+												echo $user['username'];
+												echo '<a href="members.php?do=Edit&userid=' . $user['user_id'] . '">';
 													echo '<span class="btn btn-success pull-right">';
 														echo '<i class="fa fa-edit"></i> Edit';
-														if ($user['RegStatus'] == 0) {
+														if ($user['registration_status'] == 0) {
 															echo "<a 
-																	href='members.php?do=Activate&userid=" . $user['UserID'] . "' 
+																	href='members.php?do=Activate&userid=" . $user['user_id'] . "' 
 																	class='btn btn-info pull-right activate'>
 																	<i class='fa fa-check'></i> Activate</a>";
 														}
@@ -119,13 +120,13 @@
 										if (! empty($latestItems)) {
 											foreach ($latestItems as $item) {
 												echo '<li>';
-													echo $item['Name'];
-													echo '<a href="items.php?do=Edit&itemid=' . $item['Item_ID'] . '">';
+													echo $item['name'];
+													echo '<a href="items.php?do=Edit&itemid=' . $item['item_id'] . '">';
 														echo '<span class="btn btn-success pull-right">';
 															echo '<i class="fa fa-edit"></i> Edit';
-															if ($item['Approve'] == 0) {
+															if ($item['is_approved'] == 0) {
 																echo "<a 
-																		href='items.php?do=Approve&itemid=" . $item['Item_ID'] . "' 
+																		href='items.php?do=Approve&itemid=" . $item['item_id'] . "' 
 																		class='btn btn-info pull-right activate'>
 																		<i class='fa fa-check'></i> Approve</a>";
 															}
@@ -156,15 +157,15 @@
 							<div class="panel-body">
 								<?php
 									$stmt = $con->prepare("SELECT 
-																comments.*, users.Username AS Member  
+																comments.*, users.username AS member  
 															FROM 
 																comments
 															INNER JOIN 
 																users 
 															ON 
-																users.UserID = comments.user_id
+																users.user_id = comments.user_id
 															ORDER BY 
-																c_id DESC
+																comment_id DESC
 															LIMIT $numComments");
 
 									$stmt->execute();
@@ -175,8 +176,8 @@
 											echo '<div class="comment-box">';
 												echo '<span class="member-n">
 													<a href="members.php?do=Edit&userid=' . $comment['user_id'] . '">
-														' . $comment['Member'] . '</a></span>';
-												echo '<p class="member-c">' . $comment['comment'] . '</p>';
+														' . $comment['member'] . '</a></span>';
+												echo '<p class="member-c">' . $comment['content'] . '</p>';
 											echo '</div>';
 										}
 									} else {

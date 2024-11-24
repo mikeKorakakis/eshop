@@ -13,7 +13,7 @@
 
 	$pageTitle = 'Comments';
 
-	if (isset($_SESSION['Username'])) {
+	if (isset($_SESSION['admin'])) {
 
 		include 'init.php';
 
@@ -26,19 +26,19 @@
 			// Select All Users Except Admin 
 
 			$stmt = $con->prepare("SELECT 
-										comments.*, items.Name AS Item_Name, users.Username AS Member  
+										comments.*, items.name AS item_name, users.username AS username  
 									FROM 
 										comments
 									INNER JOIN 
 										items 
 									ON 
-										items.Item_ID = comments.item_id
+										items.item_id = comments.item_id
 									INNER JOIN 
 										users 
 									ON 
-										users.UserID = comments.user_id
+										users.user_id = comments.user_id
 									ORDER BY 
-										c_id DESC");
+										comment_id DESC");
 
 			// Execute The Statement
 
@@ -66,12 +66,12 @@
 						<?php
 							foreach($comments as $comment) {
 								echo "<tr>";
-									echo "<td>" . $comment['comment'] . "</td>";
-									echo "<td>" . $comment['Item_Name'] . "</td>";
-									echo "<td>" . $comment['Member'] . "</td>";
-									echo "<td>" . $comment['comment_date'] ."</td>";
+									echo "<td>" . $comment['content'] . "</td>";
+									echo "<td>" . $comment['item_name'] . "</td>";
+									echo "<td>" . $comment['username'] . "</td>";
+									echo "<td>" . $comment['created_date'] ."</td>";
 									echo "<td>
-										<a href='comments.php?do=Delete&comid=" . $comment['c_id'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
+										<a href='comments.php?do=Delete&comid=" . $comment['comment_id'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
 										if ($comment['status'] == 0) {
 											echo "<a href='comments.php?do=Approve&comid="
 													 . $comment['c_id'] . "' 
@@ -109,13 +109,13 @@
 
 				// Select All Data Depend On This ID
 
-				$check = checkItem('c_id', 'comments', $comid);
+				$check = checkItem('comment_id', 'comments', $comid);
 
 				// If There's Such ID Show The Form
 
 				if ($check > 0) {
 
-					$stmt = $con->prepare("DELETE FROM comments WHERE c_id = :zid");
+					$stmt = $con->prepare("DELETE FROM comments WHERE comment_id = :zid");
 
 					$stmt->bindParam(":zid", $comid);
 
@@ -146,13 +146,13 @@
 
 				// Select All Data Depend On This ID
 
-				$check = checkItem('c_id', 'comments', $comid);
+				$check = checkItem('comment_id', 'comments', $comid);
 
 				// If There's Such ID Show The Form
 
 				if ($check > 0) {
 
-					$stmt = $con->prepare("UPDATE comments SET status = 1 WHERE c_id = ?");
+					$stmt = $con->prepare("UPDATE comments SET status = 1 WHERE comment_id = ?");
 
 					$stmt->execute(array($comid));
 

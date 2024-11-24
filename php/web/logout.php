@@ -1,11 +1,11 @@
 <?php
+ob_start();
+session_start(); // Start The Session
 
-	session_start(); // Start The Session
+unset($_SESSION['user']); 
+unset($_SESSION['uid']);      
+unset($_SESSION['avatar']);      
 
-	session_unset(); // Unset The Data
+header('Location: index.php');
 
-	session_destroy(); // Destory The Session
-
-	header('Location: index.php');
-
-	exit();
+exit();
