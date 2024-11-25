@@ -10,3 +10,6 @@ composer install
 php artisan key:generate
 php artisan migrate
 php artisan serve
+
+
+composer create-project --prefer-dist laravel/laravel eshop-api "^8.0"
