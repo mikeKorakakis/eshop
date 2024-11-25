@@ -1,0 +1,41 @@
+.root {
+  @apply relative;
+}
+
+.button {
+  @apply h-10 pl-2 pr-1 rounded-md  flex items-center justify-center transition-colors ease-linear;
+}
+
+.button:hover {
+  @apply shadow-sm;
+}
+
+.button:focus {
+  @apply outline-none;
+}
+
+.dropdownMenu {
+  @apply fixed right-0 top-12 mt-2 origin-top-right outline-none bg-white z-40 w-min rounded-md;
+}
+
+.item {
+  @apply flex cursor-pointer p-3 transition ease-in-out duration-150 text-black leading-6 font-medium items-center rounded-md;
+  text-transform: capitalize;
+}
+
+.item:hover {
+  @apply bg-slate-100 rounded-md;
+}
+
+.icon {
+  @apply h-4 text-white;
+  transition: transform 0.2s ease;
+}
+
+.icon.active {
+  transform: rotate(90deg);
+}
+
+.dropdownMenu {
+  @apply relative  shadow-lg w-fit h-auto;
+}

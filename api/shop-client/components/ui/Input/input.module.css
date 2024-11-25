@@ -1,0 +1,7 @@
+.root {
+  @apply pointer-events-auto   block w-full rounded-md border-gray-300 shadow-sm sm:text-sm;
+}
+
+.root:focus {
+  @apply outline-none shadow-outline-normal border-red-500 ring-red-500 ;
+}

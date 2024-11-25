@@ -1,0 +1,26 @@
+.actions {
+  @apply ml-1 flex p-1 border-zinc-300 border items-center justify-center rounded-md
+  w-12 text-zinc-800 shadow-sm;
+  transition-property: border-color, background, color, transform, box-shadow;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
+  user-select: none;
+}
+
+.actions:hover {
+  @apply border bg-zinc-200 border-zinc-400 text-black;
+  transition: border-color;
+  z-index: 10;
+}
+
+.actions:focus {
+  @apply outline-none;
+}
+
+.actions:disabled {
+  @apply cursor-not-allowed;
+}
+
+.input {
+  @apply bg-transparent select-none pointer-events-auto h-full w-full rounded-md border-zinc-300 shadow-sm focus:border-zinc-300 focus:ring-zinc-300 sm:text-sm;
+}

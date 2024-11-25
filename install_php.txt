@@ -1,0 +1,12 @@
+sudo apt update
+sudo apt install php8.3-cli
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+sudo apt install php8.3-xml php8.3-dom
+sudo apt install php-sqlite3
+sudo apt install php-zip
+sudo apt install unzip
+composer install
+php artisan key:generate
+php artisan migrate
+php artisan serve
