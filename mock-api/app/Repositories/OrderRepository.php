@@ -2,28 +2,25 @@
 
 namespace App\Repositories;
 
-use App\Models\ModelName;
+use App\Models\Order;
 use App\Repositories\BaseRepository;
 
 /**
- * Class ModelNameRepository
+ * Class OrderRepository
  * @package App\Repositories
- * @version November 25, 2024, 12:23 pm UTC
+ * @version November 25, 2024, 6:09 pm UTC
 */
 
-class ModelNameRepository extends BaseRepository
+class OrderRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'name',
-        'description',
-        'parent_id',
-        'ordering',
-        'is_visible',
-        'allow_comments',
-        'allow_ads'
+        'user_id',
+        'order_date',
+        'total_amount',
+        'order_status'
     ];
 
     /**
@@ -41,6 +38,6 @@ class ModelNameRepository extends BaseRepository
      **/
     public function model()
     {
-        return ModelName::class;
+        return Order::class;
     }
 }

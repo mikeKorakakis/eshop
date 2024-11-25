@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model as Model;
+use Eloquent as Model;
 
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * Class ModelName
+ * Class Category
  * @package App\Models
- * @version November 25, 2024, 12:23 pm UTC
+ * @version November 25, 2024, 6:09 pm UTC
  *
  * @property \Illuminate\Database\Eloquent\Collection $users
  * @property string $name
@@ -20,9 +20,10 @@ use Illuminate\Database\Eloquent\Model as Model;
  * @property boolean $allow_comments
  * @property boolean $allow_ads
  */
-class ModelName extends Model
+class Category extends Model
 {
 
+    use HasFactory;
 
     public $table = 'categories';
     

@@ -19,4 +19,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::resource('model_names', App\Http\Controllers\API\ModelNameAPIController::class);
+Route::resource('users', App\Http\Controllers\API\UserAPIController::class);
+
+
+Route::resource('categories', App\Http\Controllers\API\CategoryAPIController::class);
+
+
+Route::resource('credit_cards', App\Http\Controllers\API\CreditCardAPIController::class);
+
+
+Route::resource('items', App\Http\Controllers\API\ItemAPIController::class);
+
+
+Route::resource('orders', App\Http\Controllers\API\OrderAPIController::class);
+
+
+Route::resource('order_items', App\Http\Controllers\API\OrderItemAPIController::class);
