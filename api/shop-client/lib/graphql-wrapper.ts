@@ -1,5 +1,5 @@
 // import { getSdk, type LogicalOperator } from '~/generated/graphql';
-import { requester } from '@/lib/api';
+import { requester } from '@/lib/client';
 import { getSdk as getAdminSdk } from '@/lib/vendure/generated/graphql-admin';
 import { getSdk as getShopSdk, type LogicalOperator } from '@/lib/vendure/generated/graphql-shop';
 
