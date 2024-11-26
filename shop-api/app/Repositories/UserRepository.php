@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\User;
+use App\Repositories\BaseRepository;
+
+class UserRepository extends BaseRepository
+{
+    protected $fieldSearchable = [
+        'username',
+        'password',
+        'email',
+        'full_name',
+        'group_id',
+        'trust_status',
+        'registration_status',
+        'registration_date',
+        'avatar_url'
+    ];
+
+    public function getFieldsSearchable(): array
+    {
+        return $this->fieldSearchable;
+    }
+
+    public function model(): string
+    {
+        return User::class;
+    }
+}

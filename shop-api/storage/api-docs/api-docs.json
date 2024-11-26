@@ -1,0 +1,1604 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "InfyOm Laravel Generator APIs",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
+    "paths": {
+        "/categories": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "getCategoryList",
+                "description": "Get all Categories",
+                "operationId": "21d96dfbc80636958752fc33a26c8433",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "createCategory",
+                "description": "Create Category",
+                "operationId": "3b780d462171922a63ed1b955c8ddff4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Category"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Category"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "getCategoryItem",
+                "description": "Get Category",
+                "operationId": "c3e0e260a52e021112641c313563209d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Category",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Category"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "updateCategory",
+                "description": "Update Category",
+                "operationId": "32718f26775bcb9041c1b14c05f98329",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Category",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Category"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Category"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "deleteCategory",
+                "description": "Delete Category",
+                "operationId": "5533ad6fc90bab3f42f017feadfad8aa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Category",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/credit-cards": {
+            "get": {
+                "tags": [
+                    "CreditCard"
+                ],
+                "summary": "getCreditCardList",
+                "description": "Get all CreditCards",
+                "operationId": "237c0bfdf6092acf25f08761cfbe1602",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/CreditCard"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CreditCard"
+                ],
+                "summary": "createCreditCard",
+                "description": "Create CreditCard",
+                "operationId": "b2a0f322a397b706a231709840da7f2b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreditCard"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CreditCard"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/credit-cards/{id}": {
+            "get": {
+                "tags": [
+                    "CreditCard"
+                ],
+                "summary": "getCreditCardItem",
+                "description": "Get CreditCard",
+                "operationId": "c0601dd20ce0e2f7748d285544517c72",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of CreditCard",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CreditCard"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CreditCard"
+                ],
+                "summary": "updateCreditCard",
+                "description": "Update CreditCard",
+                "operationId": "90dab335014a0dde7daaf8f78ebf672d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of CreditCard",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreditCard"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CreditCard"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CreditCard"
+                ],
+                "summary": "deleteCreditCard",
+                "description": "Delete CreditCard",
+                "operationId": "9a695a3467161c781d331791a3789662",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of CreditCard",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/items": {
+            "get": {
+                "tags": [
+                    "Item"
+                ],
+                "summary": "getItemList",
+                "description": "Get all Items",
+                "operationId": "903a129b448a6d048872ed19f0cd2416",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Item"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Item"
+                ],
+                "summary": "createItem",
+                "description": "Create Item",
+                "operationId": "5db62a1456c5428981dccc082b52c734",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Item"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Item"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/items/{id}": {
+            "get": {
+                "tags": [
+                    "Item"
+                ],
+                "summary": "getItemItem",
+                "description": "Get Item",
+                "operationId": "9eb823d8efd63b3de273c920f7a42a35",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Item",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Item"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Item"
+                ],
+                "summary": "updateItem",
+                "description": "Update Item",
+                "operationId": "a7b3ebb3f8ba639c8460970055f64b7c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Item",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Item"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Item"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Item"
+                ],
+                "summary": "deleteItem",
+                "description": "Delete Item",
+                "operationId": "aecdd4fc05d1086d67ea34f9fdeeaa8a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Item",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "get": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "getOrderList",
+                "description": "Get all Orders",
+                "operationId": "fb21745d6840c15cfa15f1a5ac9f7089",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Order"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "createOrder",
+                "description": "Create Order",
+                "operationId": "8251788a6fc19fc50524a2dff59e801b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Order"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Order"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "getOrderItem",
+                "description": "Get Order",
+                "operationId": "8e3ad4da49bf0c6d2dbc0132f4bbf245",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Order",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Order"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "updateOrder",
+                "description": "Update Order",
+                "operationId": "19c4661d9a7eef28174f9646481983d3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Order",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Order"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Order"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "deleteOrder",
+                "description": "Delete Order",
+                "operationId": "fafc3aa6f4a00ca437632dfef32f2cde",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Order",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order-items": {
+            "get": {
+                "tags": [
+                    "OrderItem"
+                ],
+                "summary": "getOrderItemList",
+                "description": "Get all OrderItems",
+                "operationId": "0fdb98fdb5ca0daa1bdebfea446aaa18",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/OrderItem"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "OrderItem"
+                ],
+                "summary": "createOrderItem",
+                "description": "Create OrderItem",
+                "operationId": "7e765b73ca60025b512b08effcc28375",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderItem"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/OrderItem"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order-items/{id}": {
+            "get": {
+                "tags": [
+                    "OrderItem"
+                ],
+                "summary": "getOrderItemItem",
+                "description": "Get OrderItem",
+                "operationId": "10ef09dd7e6f470f5b4e50f7950496d2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of OrderItem",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/OrderItem"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "OrderItem"
+                ],
+                "summary": "updateOrderItem",
+                "description": "Update OrderItem",
+                "operationId": "74b59db1d922106dfc2d509c01c6e744",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of OrderItem",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderItem"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/OrderItem"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "OrderItem"
+                ],
+                "summary": "deleteOrderItem",
+                "description": "Delete OrderItem",
+                "operationId": "358d3fa86ffd2c83084f378054310f83",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of OrderItem",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "getUserList",
+                "description": "Get all Users",
+                "operationId": "1df092f5eddb2e29c3c5aa8043dd6d44",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "createUser",
+                "description": "Create User",
+                "operationId": "3465c05467f56755d8fde6dfe336f784",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "getUserItem",
+                "description": "Get User",
+                "operationId": "ca775ff26d0144e4b01abbd8c926f7c3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "updateUser",
+                "description": "Update User",
+                "operationId": "acefdff5c10ad10456b5e12506f8ab63",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "deleteUser",
+                "description": "Delete User",
+                "operationId": "b3671c968c691df9358298f3a285c767",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Category": {
+                "required": [
+                    "name",
+                    "description",
+                    "is_visible",
+                    "allow_comments",
+                    "allow_ads"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Category name",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "description": {
+                        "description": "Category description",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "is_visible": {
+                        "description": "Visibility status",
+                        "type": "boolean",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "allow_comments": {
+                        "description": "Allow comments in category",
+                        "type": "boolean",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "allow_ads": {
+                        "description": "Allow ads in category",
+                        "type": "boolean",
+                        "readOnly": false,
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "CreditCard": {
+                "required": [
+                    "user_id",
+                    "card_number",
+                    "cardholder_name",
+                    "expiration_date",
+                    "cvv",
+                    "balance"
+                ],
+                "properties": {
+                    "card_number": {
+                        "description": "16-digit card number",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "cardholder_name": {
+                        "description": "Name on the card",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "expiration_date": {
+                        "description": "Expiration date of card",
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "cvv": {
+                        "description": "3-digit CVV",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "balance": {
+                        "description": "Available balance",
+                        "type": "number",
+                        "format": "number",
+                        "readOnly": false,
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "Item": {
+                "required": [
+                    "name",
+                    "description",
+                    "price",
+                    "added_date",
+                    "country_of_origin",
+                    "status",
+                    "rating",
+                    "is_approved",
+                    "category_id",
+                    "owner_id",
+                    "image_url",
+                    "contact_info"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Name of the item",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "description": {
+                        "description": "Description of the item",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "price": {
+                        "description": "Price of the item",
+                        "type": "number",
+                        "format": "number",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "added_date": {
+                        "description": "Date item was added",
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "country_of_origin": {
+                        "description": "Country where item was made",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "status": {
+                        "description": "Status (e.g., Available, Sold)",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "is_approved": {
+                        "description": "Approval status",
+                        "type": "boolean",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "image_url": {
+                        "description": "URL to item image",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "contact_info": {
+                        "description": "Contact information",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "Order": {
+                "required": [
+                    "user_id",
+                    "order_date",
+                    "total_amount",
+                    "order_status"
+                ],
+                "properties": {
+                    "order_date": {
+                        "description": "Date and time the order was placed",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "total_amount": {
+                        "description": "Total amount for the order",
+                        "type": "number",
+                        "format": "number",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "order_status": {
+                        "description": "Order status",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "OrderItem": {
+                "required": [
+                    "order_id",
+                    "item_id",
+                    "quantity",
+                    "price_at_purchase"
+                ],
+                "properties": {
+                    "price_at_purchase": {
+                        "description": "Price at the time of purchase",
+                        "type": "number",
+                        "format": "number",
+                        "readOnly": false,
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "required": [
+                    "username",
+                    "password",
+                    "email",
+                    "full_name",
+                    "group_id",
+                    "trust_status",
+                    "registration_status",
+                    "registration_date",
+                    "avatar_url"
+                ],
+                "properties": {
+                    "username": {
+                        "description": "Username for login",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "password": {
+                        "description": "Hashed password",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "email": {
+                        "description": "User email",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "full_name": {
+                        "description": "Full name of user",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "registration_status": {
+                        "description": "Registration approval status",
+                        "type": "boolean",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "registration_date": {
+                        "description": "Date of registration",
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "avatar_url": {
+                        "description": "URL to avatar image",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Category",
+            "description": "Category"
+        },
+        {
+            "name": "CreditCard",
+            "description": "CreditCard"
+        },
+        {
+            "name": "Item",
+            "description": "Item"
+        },
+        {
+            "name": "Order",
+            "description": "Order"
+        },
+        {
+            "name": "OrderItem",
+            "description": "OrderItem"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
+}

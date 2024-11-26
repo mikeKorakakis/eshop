@@ -7,29 +7,24 @@ sudo apt install php-sqlite3
 sudo apt install php-mysql
 sudo apt install php-zip
 sudo apt install unzip
-composer install
-php artisan key:generate
-php artisan migrate
-php artisan serve
-
-
-
-
+// composer install
+// php artisan key:generate
+// php artisan migrate
+// php artisan serve
 
  
 // scaffold an API
 
-   composer create-project --prefer-dist laravel/laravel mock-api "^8.0"
+   composer create-project --prefer-dist laravel/laravel mock-api "^10.0"
 
-// Add following packages into composer.json while using it with Laravel 8.
+// Add following packages into composer.json while using it with Laravel 10.
 
-
- "require": {
-     "infyomlabs/laravel-generator": "^3.0",
-     "laravelcollective/html": "^6.2",
-     "infyomlabs/adminlte-templates": "^3.0",
-	  "doctrine/dbal": "~2.3"
- }
+	"infyomlabs/laravel-generator": "^6.0",
+	"laravelcollective/html": "^6.2",
+	"infyomlabs/adminlte-templates": "^6.0",
+	"doctrine/dbal": "~2.3",
+	"darkaonline/l5-swagger": "8.*",
+	"infyomlabs/swagger-generator": "^3.0"
 
  composer update
 
@@ -42,6 +37,7 @@ php artisan serve
 
 
 php artisan vendor:publish --provider="InfyOm\Generator\InfyOmGeneratorServiceProvider"
+php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
 
 // Open app\Providers\RouteServiceProvider.php and update boot method as following:
 
@@ -52,9 +48,6 @@ Route::prefix('api/v1')
     ->group(base_path('routes/api.php'));
 
 php artisan infyom:publish
-
-
-
 
 // Edit the file config/infyom/laravel_generator.php:
 
@@ -69,39 +62,29 @@ php artisan infyom:publish
 
 // edit the .env file for your db config
 
-
-   php artisan infyom:api User --fromTable --tableName=users
-   php artisan infyom:api Category --fromTable --tableName=categories
-   php artisan infyom:api CreditCard --fromTable --tableName=credit_cards
-   php artisan infyom:api Item --fromTable --tableName=items
-   php artisan infyom:api Order --fromTable --tableName=orders
-   php artisan infyom:api OrderItem --fromTable --tableName=order_items
-
-
-
-// For that, you need to install two packages. Add the following code to your composer.json
-
-"require": {
-   "darkaonline/l5-swagger": "8.*",
-   "infyomlabs/swagger-generator": "^3.0"
-}
-
-composer update
-php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
-
 // Swagger option is false by default. It needs to be enabled from config config/laravel_generator.php.
 
 'options' => [
     'swagger' => true, // generate swagger for your APIs
 ],
 
+// run the followings commands
+
+   php artisan infyom:api User --fromTable --table=users
+   php artisan infyom:api Category --fromTable --table=categories
+   php artisan infyom:api CreditCard --fromTable --table=credit_cards
+   php artisan infyom:api Item --fromTable --table=items
+   php artisan infyom:api Order --fromTable --table=orders
+   php artisan infyom:api OrderItem --fromTable --table=order_items
+
+// Generate swagger types
+
 php artisan l5-swagger:generate
 
 
+// EXTRA STUFF
 
-
- // EXTRA STUFF
- // CLEAR ARTISAN CACHE
+// CLEAR ARTISAN CACHE
 		php artisan cache:clear
 		php artisan route:clear
 		php artisan config:clear
