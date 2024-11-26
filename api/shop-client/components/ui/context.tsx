@@ -1,8 +1,9 @@
 'use client';
-import { Address } from '@/lib/vendure/generated/graphql-shop';
+// import { Address } from '@/lib/vendure/generated/graphql-shop';
 import React, { FC, ReactNode, useCallback, useMemo } from 'react';
 // import { ThemeProvider } from 'next-themes'
-type PayloadType = (() => Promise<void>) | Address | null;
+// type PayloadType = (() => Promise<void>) | Address | null;
+type PayloadType = (() => Promise<void>) | null;
 export interface State {
   displaySidebar: boolean;
   displayDropdown: boolean;

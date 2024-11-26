@@ -1,9 +1,9 @@
 'use client';
-import image1 from '@/assets/images/home1.jpg';
-import image2 from '@/assets/images/home2.jpg';
-import image3 from '@/assets/images/home3.jpg';
-import image4 from '@/assets/images/home4.jpg';
-import image5 from '@/assets/images/home5.jpg';
+import image1 from '@/assets/images/slider/shop-1.jpg';
+import image2 from '@/assets/images/slider/shop-2.jpg';
+import image3 from '@/assets/images/slider/shop-3.jpg';
+import image4 from '@/assets/images/slider/shop-4.jpg';
+// import image5 from '@/assets/images/home5.jpg';
 import Image from 'next/image';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -63,7 +63,7 @@ export default function Slider() {
           className="-z-10 h-full w-full  object-cover object-top"
         />
       </SwiperSlide>
-      <SwiperSlide>
+      {/* <SwiperSlide>
         <Image
           width={1920}
           height={1080}
@@ -71,7 +71,7 @@ export default function Slider() {
           alt="image1"
           className="-z-10 h-full w-full  object-cover object-center"
         />
-      </SwiperSlide>
+      </SwiperSlide> */}
     </Swiper>
   );
 }
