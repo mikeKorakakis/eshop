@@ -9,22 +9,16 @@ import { LanguageProps } from '@/lib/types';
 import dynamic from 'next/dynamic';
 import HeroSection from '@/components/home/hero-section';
 
-// const BenelliSection = dynamic(() => import('@/components/home/benelli-section'));
-// const ServicesSection = dynamic(() => import('@/components/home/services-section'));
-// const BrandsSection = dynamic(() => import('@/components/home/brands-section'));
-// const TuningSection = dynamic(() => import('@/components/home/tuning-section'));
-
-// export const runtime = 'edge';
+const ProductsSection = dynamic(() => import('@/components/home/products-section'));
+const BenelliSection = dynamic(() => import('@/components/home/benelli-section'));
 
 export default async function HomePage({ params: { lang } }: LanguageProps) {
   const dictionary = await getDictionary(lang);
   return (
     <>
       <HeroSection dictionary={dictionary} />
-      {/* <ServicesSection dictionary={dictionary} />
-      <BrandsSection dictionary={dictionary} />
-      <TuningSection dictionary={dictionary} />
-      <BenelliSection dictionary={dictionary} /> */}
+      <ProductsSection dictionary={dictionary} />
+      <BenelliSection dictionary={dictionary} /> 
     </>
   );
 }
