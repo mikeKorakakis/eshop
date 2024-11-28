@@ -1,6 +1,7 @@
 'use server';
 
 import { TAGS } from '@/lib/constants';
+import { addItemToOrderMutation } from '@/lib/vendure/shop/orders/order';
 import { revalidateTag } from 'next/cache';
 
 export async function addProductToCart({
@@ -10,9 +11,9 @@ export async function addProductToCart({
   productVariantId: string;
   quantity: number;
 }) {
-//   const res = await addItemToOrderMutation(productVariantId, quantity);
+  const res = await addItemToOrderMutation(productVariantId, quantity);
   revalidateTag(TAGS.order);
-//   return res;
+  return res;
 }
 
 export async function refreshCart() {

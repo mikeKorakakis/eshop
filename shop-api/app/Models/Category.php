@@ -9,6 +9,13 @@ use Illuminate\Database\Eloquent\Model;
  *      schema="Category",
  *      required={"name","description","is_visible","allow_comments","allow_ads"},
  *      @OA\Property(
+ *          property="category_id",
+ *          description="Primary key: Unique identifier for the category",
+ *          readOnly=true,
+ *          nullable=false,
+ *          type="integer",
+ *      ),
+ *      @OA\Property(
  *          property="name",
  *          description="Category name",
  *          readOnly=false,
@@ -47,6 +54,8 @@ use Illuminate\Database\Eloquent\Model;
  */class Category extends Model
 {
     public $table = 'categories';
+
+    protected $primaryKey = 'category_id';
 
     public $fillable = [
         'name',

@@ -13,6 +13,7 @@ import { RATINGS_ENABLED } from '@/lib/constants';
 import Link from 'next/link';
 import ShareButtons from '@/components/ui/ShareButtons';
 import { Dictionary } from '@/lib/get-dictionary';
+import { Customer, FavoriteList, Product } from '@/lib/vendure/generated/graphql-shop';
 import {
   SelectedOptions,
   getProductVariant,
@@ -20,14 +21,15 @@ import {
   selectDefaultOptionFromProduct
 } from '../helpers';
 import { formatPrice } from '@/lib/utils';
-import { Item } from '@/types/types';
 
 interface Props {
-  product: Item;
+  product: Product;
   dictionary: Dictionary;
+  customer: Customer;
+  wishlist: FavoriteList | null;
 }
 
-const ProductSidebar = ({ product, dictionary }: Props) => {
+const ProductSidebar = ({ product, dictionary, wishlist, customer }: Props) => {
   const common_dictionary = dictionary.common;
   const product_dictionary = dictionary.product;
   //   const addItem = useAddItem();
@@ -44,6 +46,11 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
 
   const variant = getProductVariant(product, selectedOptions);
 
+  const selectedVariant = product.variants.filter((v) => v.id == variant?.id)[0];
+  let priceWithoutTax = selectedVariant?.price || 0;
+  let priceWithTax = selectedVariant?.priceWithTax || 0;
+  priceWithoutTax = formatPrice(priceWithoutTax, selectedVariant?.currencyCode);
+  priceWithTax = formatPrice(priceWithTax, selectedVariant?.currencyCode);
 
   const addToCart = async () => {
     setLoading(true);
@@ -121,7 +128,11 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
         </div>
 
         <form className="mt-6">
-        
+          <ProductOptions
+            options={product.optionGroups}
+            selectedOptions={selectedOptions}
+            setSelectedOptions={setSelectedOptions}
+          />
 
           <div className="mt-10">
             {error && <ErrorMessage error={error} className="my-5" />}
@@ -140,7 +151,16 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
                     : common_dictionary.add_to_cart} */}
                 </Button>
               )}
-              
+              {process.env.NEXT_PUBLIC_WISHLIST_ENABLED && (
+                <WishlistButton
+                  dictionary={dictionary}
+                  //   className={s.wishlistButton}
+                  productId={product.id}
+                  variantId={product.variants[0]?.id!}
+                  wishlist={wishlist}
+                  customer={customer}
+                />
+              )}
             </div>
           </div>
         </form>

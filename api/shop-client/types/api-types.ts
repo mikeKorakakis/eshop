@@ -56,6 +56,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getCommentList
+         * @description Get all Comments
+         */
+        get: operations["60c2516e7f4c01183e8b898f254a28d2"];
+        put?: never;
+        /**
+         * createComment
+         * @description Create Comment
+         */
+        post: operations["2df37255c7b8a7e599d3c03743a26918"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/comments/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getCommentItem
+         * @description Get Comment
+         */
+        get: operations["c0d2cb33ba321b85baff25141a323c91"];
+        /**
+         * updateComment
+         * @description Update Comment
+         */
+        put: operations["916f5b9ad1b77b30b946aa7f7ce3a454"];
+        post?: never;
+        /**
+         * deleteComment
+         * @description Delete Comment
+         */
+        delete: operations["5bc074250b721abdab14f90ce60b80b4"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/credit-cards": {
         parameters: {
             query?: never;
@@ -321,6 +373,8 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         Category: {
+            /** @description Primary key: Unique identifier for the category */
+            readonly category_id?: number;
             /** @description Category name */
             name: string;
             /** @description Category description */
@@ -332,7 +386,22 @@ export interface components {
             /** @description Allow ads in category */
             allow_ads: boolean;
         };
+        Comment: {
+            /** @description Primary key: Unique identifier for the comment */
+            readonly comment_id?: number;
+            /** @description Comment text */
+            content: string;
+            /** @description Approval status of comment */
+            status: boolean;
+            /**
+             * Format: date
+             * @description Date comment was created
+             */
+            created_date: string;
+        };
         CreditCard: {
+            /** @description Primary key: Unique identifier for the credit card */
+            readonly credit_card_id?: number;
             /** @description 16-digit card number */
             card_number: string;
             /** @description Name on the card */
@@ -351,6 +420,8 @@ export interface components {
             balance: number;
         };
         Item: {
+            /** @description Primary key: Unique identifier for the item */
+            readonly item_id?: number;
             /** @description Name of the item */
             name: string;
             /** @description Description of the item */
@@ -377,6 +448,8 @@ export interface components {
             contact_info: string;
         };
         Order: {
+            /** @description Primary key: Unique identifier for the order */
+            readonly order_id?: number;
             /**
              * Format: date-time
              * @description Date and time the order was placed
@@ -391,6 +464,8 @@ export interface components {
             order_status: string;
         };
         OrderItem: {
+            /** @description Primary key: Unique identifier for the order item */
+            readonly order_item_id?: number;
             /**
              * Format: number
              * @description Price at the time of purchase
@@ -398,6 +473,8 @@ export interface components {
             price_at_purchase: number;
         };
         User: {
+            /** @description Primary key: Unique identifier for the user */
+            readonly user_id?: number;
             /** @description Username for login */
             username: string;
             /** @description Hashed password */
@@ -541,6 +618,143 @@ export interface operations {
             header?: never;
             path: {
                 /** @description id of Category */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        success?: boolean;
+                        data?: string;
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    "60c2516e7f4c01183e8b898f254a28d2": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        success?: boolean;
+                        data?: components["schemas"]["Comment"][];
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    "2df37255c7b8a7e599d3c03743a26918": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Comment"];
+            };
+        };
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        success?: boolean;
+                        data?: components["schemas"]["Comment"];
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    c0d2cb33ba321b85baff25141a323c91: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description id of Comment */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        success?: boolean;
+                        data?: components["schemas"]["Comment"];
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    "916f5b9ad1b77b30b946aa7f7ce3a454": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description id of Comment */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Comment"];
+            };
+        };
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        success?: boolean;
+                        data?: components["schemas"]["Comment"];
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    "5bc074250b721abdab14f90ce60b80b4": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description id of Comment */
                 id: number;
             };
             cookie?: never;
