@@ -6,11 +6,11 @@ import //   getProductVariant,
 //   SelectedOptions,
 '../helpers';
 import placeholderImg from '@/assets/images/product-img-placeholder.svg';
-import { cloudinaryImageLoader } from '@/lib/cloudinary-image-loader';
 import { Dictionary } from '@/lib/get-dictionary';
 import { formatPrice } from '@/lib/utils';
 import ProductButton from './product-button';
 import { Item } from '@/types/types';
+import { imageUrl } from '@/lib/helpers';
 
 interface Props {
   dictionary: Dictionary;
@@ -42,7 +42,7 @@ const ProductCard: FC<Props> = ({
                     className="h-full w-full object-cover object-center"
                     // loader={cloudinaryImageLoader}
                     // unoptimized
-                    src={ placeholderImg}
+                    src={ imageUrl(product.image_url) ||  placeholderImg}
                     // src={product?.image_url || placeholderImg}
                     alt={'Product Image'}
                     width={500}

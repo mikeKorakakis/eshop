@@ -1,25 +1,17 @@
 // import { useAddItem } from '@framework/cart';
 import { useEffect, useState } from 'react';
-import ProductOptions from '@/components/product/ProductOptions';
 import Button from '@/components/ui/Button';
 import { useUI } from '@/components/ui/context';
 import Rating from '@/components/ui/Rating';
 
 // import { getProductVariant, selectDefaultOptionFromProduct, SelectedOptions } from '../helpers';
 import ErrorMessage from '@/components/ui/ErrorMessage';
-import WishlistButton from '@/components/wishlist/WishlistButton';
 // import usePrice from '@framework/product/use-price';
 import { RATINGS_ENABLED } from '@/lib/constants';
 import Link from 'next/link';
 import ShareButtons from '@/components/ui/ShareButtons';
 import { Dictionary } from '@/lib/get-dictionary';
-import {
-  SelectedOptions,
-  getProductVariant,
-  normalizeFacets,
-  selectDefaultOptionFromProduct
-} from '../helpers';
-import { formatPrice } from '@/lib/utils';
+
 import { Item } from '@/types/types';
 
 interface Props {
@@ -34,15 +26,10 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
   const { openSidebar, setSidebarView } = useUI();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | Error>(null);
-  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
   const [truncateText, setTruncateText] = useState(true);
   const showMore = () => setTruncateText((truncateText) => !truncateText);
 
-  useEffect(() => {
-    selectDefaultOptionFromProduct(product, setSelectedOptions);
-  }, [product]);
 
-  const variant = getProductVariant(product, selectedOptions);
 
 
   const addToCart = async () => {
@@ -76,13 +63,9 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
         <div className="mt-3">
           <h2 className="sr-only">Product information</h2>
           <p className="text-3xl tracking-tight text-gray-900">
-            {priceWithTax}
-            {/* {`${price} ${product.price?.currencyCode}`} */}
+            {product.price}
           </p>{' '}
-          <p className="text-xl  font-extralight tracking-tight text-gray-900">
-            ({common_dictionary.excluding_tax} {priceWithoutTax})
-            {/* {`${price} ${product.price?.currencyCode}`} */}
-          </p>
+     
         </div>
 
         {/* Reviews */}
@@ -126,7 +109,6 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
           <div className="mt-10">
             {error && <ErrorMessage error={error} className="my-5" />}
             <div className="sm:flex-col1 flex  max-w-xs">
-              {process.env.NEXT_PUBLIC_SHOP_ENABLED && (
                 <Button
                   aria-label="Add to Cart"
                   type="button"
@@ -139,7 +121,6 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
                     ? common_dictionary.not_available
                     : common_dictionary.add_to_cart} */}
                 </Button>
-              )}
               
             </div>
           </div>
@@ -151,53 +132,27 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
           </h2>
 
           <div className="divide-y divide-gray-200 border-t">
-            {normalizeFacets(product).map((facet, i) => {
-              return (
-                <div key={i} className="sm:divide-y sm:divide-gray-200">
-                  <ul className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-                    <li className="text-sm font-medium text-gray-500">{facet?.name}</li>
-                    <ul className="w-96">
-                      {facet?.values?.map((facetVal, i) => {
-                        if (facetVal)
-                          return (
-                            <li
-                              key={`facetVal${i}`}
-                              className="floa mt-1 list-disc text-sm text-gray-900 sm:col-span-2 sm:mt-0	"
-                            >
-                              {facetVal.name}
-                            </li>
-                          );
-                      })}
-                    </ul>
-                  </ul>
-                </div>
-              );
-            })}
-            {product?.customFields?.sku && (
+         
+           
+            {product?.country_of_origin && (
               <ul className="sm:divide-y sm:divide-gray-200">
                 <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-                  <li className="text-sm font-medium text-gray-500">SKU</li>
+                  <li className="text-sm font-medium text-gray-500">Country of Origin</li>
                   <div className="w-96">
                     <li className="floa mt-1 list-disc text-sm text-gray-900 sm:col-span-2 sm:mt-0	">
-                      {product?.customFields?.sku}
+                      {product?.country_of_origin}
                     </li>
                   </div>
                 </div>
               </ul>
             )}
-            {product?.customFields?.car_url && (
+			 {product?.added_date && (
               <ul className="sm:divide-y sm:divide-gray-200">
                 <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-                  <li className="text-sm font-medium text-gray-500">CAR.GR</li>
+                  <li className="text-sm font-medium text-gray-500">Added Date</li>
                   <div className="w-96">
                     <li className="floa mt-1 list-disc text-sm text-gray-900 sm:col-span-2 sm:mt-0	">
-                      <Link
-                        target="_blank"
-                        className="link text-red-500"
-                        href={`https:/${product?.customFields?.car_url}`}
-                      >
-                        {common_dictionary.link}
-                      </Link>
+                      {product?.added_date}
                     </li>
                   </div>
                 </div>

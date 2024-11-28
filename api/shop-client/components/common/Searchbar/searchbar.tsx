@@ -11,7 +11,6 @@ import clsx from 'clsx';
 import Spinner from '@/components/ui/Spinner';
 import Image from 'next/image';
 // import { Product } from '@commerce/types/product' must_fix_type
-import { cloudinaryImageLoader } from '@/lib/cloudinary-image-loader';
 import { Dictionary } from '@/lib/get-dictionary';
 // import { Product } from '@/lib/types';
 
@@ -172,7 +171,6 @@ const Searchbar: FC<Props> = ({ openSearch = false, setOpenSearch, dictionary })
                           >
                             <div className="inline-flex items-center">
                               <Image
-                                loader={cloudinaryImageLoader}
                                 src={product.images[0].url}
                                 alt="Empty cart"
                                 width={64}

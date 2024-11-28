@@ -5,7 +5,6 @@ import { ProductList } from '../product/ProductList';
 import CategoryProductsSection from './category-products-section';
 
 interface Props {
-	category_id: number;
 	dictionary: Dictionary;
 }
 

@@ -16,7 +16,6 @@ import { useRouter } from 'next/navigation';
 import { emailPattern } from './helpers';
 import GoogleButton from './google-button';
 import { Dictionary } from '@/lib/get-dictionary';
-import { registerCustomerAccountMutation } from '@/lib/vendure/shop/account/account';
 
 const { link_verify } = LINKS;
 interface Props {
@@ -55,7 +54,7 @@ const SignUpView: FC<Props> = ({ dictionary }: Props) => {
 
   //   const signup = useSignup(); must_fix_framework
   const signup = async ({email, password, firstName, lastName }: SignUpType) => {
-    const { registerCustomerAccount } = await registerCustomerAccountMutation({input: {emailAddress: email, password, firstName, lastName}});
+    const registerCustomerAccount = () => {}
     return registerCustomerAccount;
   };
 
