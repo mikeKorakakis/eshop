@@ -9,6 +9,13 @@ use Illuminate\Database\Eloquent\Model;
  *      schema="Order",
  *      required={"user_id","order_date","total_amount","order_status"},
  *      @OA\Property(
+ *          property="order_id",
+ *          description="Primary key: Unique identifier for the order",
+ *          readOnly=true,
+ *          nullable=false,
+ *          type="integer",
+ *      ),
+ *      @OA\Property(
  *          property="order_date",
  *          description="Date and time the order was placed",
  *          readOnly=false,
@@ -35,6 +42,8 @@ use Illuminate\Database\Eloquent\Model;
  */class Order extends Model
 {
     public $table = 'orders';
+
+    protected $primaryKey = 'order_id';
 
     public $fillable = [
         'user_id',

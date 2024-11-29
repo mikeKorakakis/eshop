@@ -8,7 +8,7 @@ import SidebarUI from './sidebar-ui';
 import ModalUI from './modal-ui';
 import MobileMenu from './mobile-menu';
 import NavigationClient from '@/components/home/Navigation/navigation-client';
-import { getActiveOrderQuery } from '@/lib/vendure/shop/orders/order';
+// import { getActiveOrderQuery } from '@/lib/vendure/shop/orders/order';
 
 interface Props {
   children?: React.ReactNode;
@@ -21,7 +21,8 @@ const Layout: React.FC<Props> = async ({ children, dictionary, pathname }) => {
   //     label: c.name,
   //     href: `/search/${c.slug}`,
   // }))
- const order = await getActiveOrderQuery()
+//  const order = await getActiveOrderQuery()
+ const order = {}
   return (
     <div>
       <div>

@@ -1,5 +1,4 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
-import { Address, SearchResponse } from '@/lib/vendure/generated/graphql-shop';
 import { ENV_VARIABLES_SCHEMA } from './env';
 import {
   ActiveCustomer,
@@ -33,36 +32,36 @@ export function formatPrice(value = 0, currency: string = 'EUR') {
   }).format(value / 100);
 }
 
-export const groupFacetValues = (
-  search: SearchResponse,
-  activeFacetValueIds: string[]
-): FacetWithValues[] => {
-  if (!search) {
-    return [];
-  }
-  const facetMap = new Map<string, FacetWithValues>();
-  for (const {
-    facetValue: { id, name, facet },
-    count
-  } of search.facetValues) {
-    if (count === search.totalItems) {
-      continue;
-    }
-    const facetFromMap = facetMap.get(facet.id);
-    const selected = (activeFacetValueIds || []).includes(id);
-    if (facetFromMap) {
-      facetFromMap.values.push({ id, name, selected });
-    } else {
-      facetMap.set(facet.id, {
-        id: facet.id,
-        name: facet.name,
-        open: true,
-        values: [{ id, name, selected }]
-      });
-    }
-  }
-  return Array.from(facetMap.values());
-};
+// export const groupFacetValues = (
+//   search: SearchResponse,
+//   activeFacetValueIds: string[]
+// ): FacetWithValues[] => {
+//   if (!search) {
+//     return [];
+//   }
+//   const facetMap = new Map<string, FacetWithValues>();
+//   for (const {
+//     facetValue: { id, name, facet },
+//     count
+//   } of search.facetValues) {
+//     if (count === search.totalItems) {
+//       continue;
+//     }
+//     const facetFromMap = facetMap.get(facet.id);
+//     const selected = (activeFacetValueIds || []).includes(id);
+//     if (facetFromMap) {
+//       facetFromMap.values.push({ id, name, selected });
+//     } else {
+//       facetMap.set(facet.id, {
+//         id: facet.id,
+//         name: facet.name,
+//         open: true,
+//         values: [{ id, name, selected }]
+//       });
+//     }
+//   }
+//   return Array.from(facetMap.values());
+// };
 
 export const enableDisableFacetValues = (_facedValues: FacetWithValues[], ids: string[]) => {
   const facetValueIds: string[] = [];
@@ -172,19 +171,19 @@ export const formatDateTime = (dateToConvert: Date) => {
 
 export const ischeckout = (url: string) => url.indexOf('/checkout/') >= 0;
 
-export const normalizeAddress = (address: Address): AddressType => {
-  return {
-    firstName: (address?.fullName ? address?.fullName.split(' ')[0] : '') as string,
-    lastName: (address?.fullName ? address?.fullName.split(' ')[1] : '') as string,
-    company: address?.company || '',
-    streetNumber: address?.streetLine1 || '',
-    city: address?.city || '',
-    province: address?.province || '',
-    postalCode: address?.postalCode || '',
-    country: address?.country?.code || '',
-    phoneNumber: address?.phoneNumber || ''
-  };
-};
+// export const normalizeAddress = (address: Address): AddressType => {
+//   return {
+//     firstName: (address?.fullName ? address?.fullName.split(' ')[0] : '') as string,
+//     lastName: (address?.fullName ? address?.fullName.split(' ')[1] : '') as string,
+//     company: address?.company || '',
+//     streetNumber: address?.streetLine1 || '',
+//     city: address?.city || '',
+//     province: address?.province || '',
+//     postalCode: address?.postalCode || '',
+//     country: address?.country?.code || '',
+//     phoneNumber: address?.phoneNumber || ''
+//   };
+// };
 
 export const getCountryCode = (country: string) => {
   const countryObj = countries.find((c) => c.label === country);

@@ -30,7 +30,7 @@ const inter = Inter({ subsets: ['latin'] })
 const { SITE_NAME } = process.env;
 const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL
   ? `https://${process.env.NEXT_PUBLIC_FRONTEND_URL}`
-  : 'http://localhost:3000';
+  : 'http://localhost:8000';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),

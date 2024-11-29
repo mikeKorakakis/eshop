@@ -36,3 +36,6 @@ Route::resource('orders', App\Http\Controllers\API\OrderAPIController::class)
 
 Route::resource('order-items', App\Http\Controllers\API\OrderItemAPIController::class)
     ->except(['create', 'edit']);
+
+Route::resource('comments', App\Http\Controllers\API\CommentAPIController::class)
+    ->except(['create', 'edit']);

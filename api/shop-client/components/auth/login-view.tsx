@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import GoogleButton from './google-button';
 import { Dictionary } from '@/lib/get-dictionary';
-import { loginMutation } from '@/lib/vendure/shop/account/account';
+// import { loginMutation } from '@/lib/vendure/shop/account/account';
 
 const { link_password_reset_request } = LINKS;
 interface LoginType {
@@ -42,7 +42,7 @@ const LoginView = ({ dictionary }: Props) => {
   });
 
   const login = async ({ email, password, rememberMe }: LoginType) => {
-    const { login } = await loginMutation(email, password, rememberMe);
+    // const { login } = await loginMutation(email, password, rememberMe);
     await router.refresh();
     return login;
   };
@@ -57,9 +57,9 @@ const LoginView = ({ dictionary }: Props) => {
         password: data?.password,
         rememberMe: data?.rememberMe || false
       });
-      if (res.__typename === 'InvalidCredentialsError') {
-        throw new Error(res.__typename);
-      }
+    //   if (res.__typename === 'InvalidCredentialsError') {
+    //     throw new Error(res.__typename);
+    //   }
       closeModal();
       toast.success(common_dictionary.login_success);
     } catch (err: any) {

@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import UserNav from '../UserNav';
 import { i18n } from '@/i18n-config'
-import { Order } from '@/lib/vendure/generated/graphql-shop';
+// import { Order } from '@/lib/vendure/generated/graphql-shop';
 
 
 interface Props {
@@ -16,7 +16,8 @@ interface Props {
   search: ReactNode;
   navigationClient: ReactNode;
   pathName: string;
-  order: Order
+  order: any
+//   order: Order
 }
 
 export default async function Navigation({ dictionary, search, navigationClient, pathName, order }: Props) {
@@ -99,7 +100,7 @@ export default async function Navigation({ dictionary, search, navigationClient,
 
                 {/* Logo (lg-) */}
                 <Logo className="lg:hidden" />
-                <UserNav dictionary={dictionary} order={order}/>
+                {/* <UserNav dictionary={dictionary} order={order}/> */}
               </div>
             </div>
           </div>

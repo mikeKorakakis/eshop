@@ -9,6 +9,13 @@ use Illuminate\Database\Eloquent\Model;
  *      schema="Item",
  *      required={"name","description","price","added_date","country_of_origin","status","rating","is_approved","category_id","owner_id","image_url","contact_info"},
  *      @OA\Property(
+ *          property="item_id",
+ *          description="Primary key: Unique identifier for the item",
+ *          readOnly=true,
+ *          nullable=false,
+ *          type="integer",
+ *      ),
+ *      @OA\Property(
  *          property="name",
  *          description="Name of the item",
  *          readOnly=false,
@@ -77,6 +84,8 @@ use Illuminate\Database\Eloquent\Model;
  */class Item extends Model
 {
     public $table = 'items';
+
+    protected $primaryKey = 'item_id';
 
     public $fillable = [
         'name',

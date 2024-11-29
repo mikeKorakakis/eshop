@@ -1,5 +1,5 @@
 'use client';
-import AddressForm from '@/components/profile/AddressesView/address-form';
+// import AddressForm from '@/components/profile/AddressesView/address-form';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { MODAL_VIEWS, useUI } from '@/components/ui/context';
 import { Dictionary } from '@/lib/get-dictionary';
@@ -15,13 +15,13 @@ const dynamicProps = {
   loading: Loading
 };
 
-const LoginView = dynamic(() => import('@/components/auth/login-view'), {
-  ...dynamicProps
-});
+// const LoginView = dynamic(() => import('@/components/auth/login-view'), {
+//   ...dynamicProps
+// });
 
-const SignUpView = dynamic(() => import('@/components/auth/signup-view'), {
-  ...dynamicProps
-});
+// const SignUpView = dynamic(() => import('@/components/auth/signup-view'), {
+//   ...dynamicProps
+// });
 
 const ForgotPassword = dynamic(() => import('@/components/auth/forgot-password'), {
   ...dynamicProps
@@ -52,11 +52,11 @@ interface ModalProps {
 const ModalView: React.FC<ModalProps> = ({ modalView, closeModal, dictionary }) => {
   return (
     <Modal onClose={closeModal}>
-      {modalView === 'LOGIN_VIEW' && <LoginView dictionary={dictionary} />}
-      {modalView === 'SIGNUP_VIEW' && <SignUpView dictionary={dictionary} />}
+      {/* {modalView === 'LOGIN_VIEW' && <LoginView dictionary={dictionary} />} */}
+      {/* {modalView === 'SIGNUP_VIEW' && <SignUpView dictionary={dictionary} />} */}
       {modalView === 'FORGOT_VIEW' && <ForgotPassword dictionary={dictionary} />}
       {modalView === 'DELETE_ADDRESS_CONFIRMATION_VIEW' && <DeleteAddressConfirmation dictionary={dictionary} />}
-      {modalView === 'CREATE_UPDATE_ADDRESS_VIEW' && <AddressForm dictionary={dictionary} />}
+      {/* {modalView === 'CREATE_UPDATE_ADDRESS_VIEW' && <AddressForm dictionary={dictionary} />} */}
     </Modal>
   );
 };

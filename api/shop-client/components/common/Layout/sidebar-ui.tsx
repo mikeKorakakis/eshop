@@ -3,7 +3,7 @@ import LoadingDots from '@/components/ui/LoadingDots';
 import Sidebar from '@/components/ui/Sidebar';
 import { useUI } from '@/components/ui/context';
 import { Dictionary } from '@/lib/get-dictionary';
-import { Order } from '@/lib/vendure/generated/graphql-shop';
+// import { Order } from '@/lib/vendure/generated/graphql-shop';
 import dynamic from 'next/dynamic';
 
 const Loading = () => (
@@ -24,7 +24,7 @@ interface SidebarViewProps {
   sidebarView: string;
   closeSidebar(): any;
   dictionary: Dictionary;
-  order: Order;
+  order: any;
 }
 
 const SidebarView: React.FC<SidebarViewProps> = ({
@@ -49,10 +49,11 @@ const SidebarView: React.FC<SidebarViewProps> = ({
 
 interface SidebarUIProps {
   dictionary: Dictionary;
-  order: Order;
+  order: any;
 }
 
-const SidebarUI: React.FC<SidebarUIProps> = ({ dictionary, order }) => {
+const SidebarUI: React.FC<SidebarUIProps> = ({ dictionary }) => {
+	const order = {} as any
   // const SidebarUI: React.FC<{ links: LinkProps[] }> = ({ links }) => {
   const { closeSidebar, sidebarView } = useUI();
   return (

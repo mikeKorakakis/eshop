@@ -225,6 +225,221 @@
                 }
             }
         },
+        "/comments": {
+            "get": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "getCommentList",
+                "description": "Get all Comments",
+                "operationId": "60c2516e7f4c01183e8b898f254a28d2",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Comment"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "createComment",
+                "description": "Create Comment",
+                "operationId": "2df37255c7b8a7e599d3c03743a26918",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Comment"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Comment"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/comments/{id}": {
+            "get": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "getCommentItem",
+                "description": "Get Comment",
+                "operationId": "c0d2cb33ba321b85baff25141a323c91",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Comment",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Comment"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "updateComment",
+                "description": "Update Comment",
+                "operationId": "916f5b9ad1b77b30b946aa7f7ce3a454",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Comment",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Comment"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Comment"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "deleteComment",
+                "description": "Delete Comment",
+                "operationId": "5bc074250b721abdab14f90ce60b80b4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Comment",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/credit-cards": {
             "get": {
                 "tags": [
@@ -1312,6 +1527,12 @@
                     "allow_ads"
                 ],
                 "properties": {
+                    "category_id": {
+                        "description": "Primary key: Unique identifier for the category",
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": false
+                    },
                     "name": {
                         "description": "Category name",
                         "type": "string",
@@ -1345,6 +1566,43 @@
                 },
                 "type": "object"
             },
+            "Comment": {
+                "required": [
+                    "content",
+                    "status",
+                    "created_date",
+                    "item_id",
+                    "user_id"
+                ],
+                "properties": {
+                    "comment_id": {
+                        "description": "Primary key: Unique identifier for the comment",
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": false
+                    },
+                    "content": {
+                        "description": "Comment text",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "status": {
+                        "description": "Approval status of comment",
+                        "type": "boolean",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "created_date": {
+                        "description": "Date comment was created",
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": false,
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
             "CreditCard": {
                 "required": [
                     "user_id",
@@ -1355,6 +1613,12 @@
                     "balance"
                 ],
                 "properties": {
+                    "credit_card_id": {
+                        "description": "Primary key: Unique identifier for the credit card",
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": false
+                    },
                     "card_number": {
                         "description": "16-digit card number",
                         "type": "string",
@@ -1406,6 +1670,12 @@
                     "contact_info"
                 ],
                 "properties": {
+                    "item_id": {
+                        "description": "Primary key: Unique identifier for the item",
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": false
+                    },
                     "name": {
                         "description": "Name of the item",
                         "type": "string",
@@ -1473,6 +1743,12 @@
                     "order_status"
                 ],
                 "properties": {
+                    "order_id": {
+                        "description": "Primary key: Unique identifier for the order",
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": false
+                    },
                     "order_date": {
                         "description": "Date and time the order was placed",
                         "type": "string",
@@ -1504,6 +1780,12 @@
                     "price_at_purchase"
                 ],
                 "properties": {
+                    "order_item_id": {
+                        "description": "Primary key: Unique identifier for the order item",
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": false
+                    },
                     "price_at_purchase": {
                         "description": "Price at the time of purchase",
                         "type": "number",
@@ -1527,6 +1809,12 @@
                     "avatar_url"
                 ],
                 "properties": {
+                    "user_id": {
+                        "description": "Primary key: Unique identifier for the user",
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": false
+                    },
                     "username": {
                         "description": "Username for login",
                         "type": "string",
@@ -1579,6 +1867,10 @@
         {
             "name": "Category",
             "description": "Category"
+        },
+        {
+            "name": "Comment",
+            "description": "Comment"
         },
         {
             "name": "CreditCard",

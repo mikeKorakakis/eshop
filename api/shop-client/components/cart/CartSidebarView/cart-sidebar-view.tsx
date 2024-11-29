@@ -12,7 +12,7 @@ import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { LINKS } from '@/lib/constants';
 import { Dictionary } from '@/lib/get-dictionary';
 import { useState } from 'react';
-import { Order } from '@/lib/vendure/generated/graphql-shop';
+// import { Order } from '@/lib/vendure/generated/graphql-shop';
 import { formatPrice } from '@/lib/utils';
 // import { useRouter } from 'next/router'
 
@@ -20,7 +20,7 @@ const { link_cart, link_checkout } = LINKS;
 
 interface Props {
   dictionary: Dictionary;
-  order: Order;
+  order: any;
 }
 
 const CartSidebarView = ({ dictionary, order }: Props) => {
@@ -90,7 +90,7 @@ const CartSidebarView = ({ dictionary, order }: Props) => {
                   {common_dictionary.cart}
                 </h1>
               </Link>
-              <ul className="no-scrollbar w-full flex-grow space-y-6  overflow-auto border-slate-200 py-4 sm:space-y-0 sm:divide-y sm:divide-slate-200 sm:py-0">
+              {/* <ul className="no-scrollbar w-full flex-grow space-y-6  overflow-auto border-slate-200 py-4 sm:space-y-0 sm:divide-y sm:divide-slate-200 sm:py-0">
                 {activeOrder?.lines.map((item: any, i) => (
                   <CartItem
                     key={i}
@@ -101,7 +101,7 @@ const CartSidebarView = ({ dictionary, order }: Props) => {
                     // setActiveOrder={setActiveOrder}
                   />
                 ))}
-              </ul>
+              </ul> */}
               <div className="left-0 right-0 z-20 w-full flex-shrink-0 border-t  px-3 py-6 text-sm sm:px-3">
                 <ul className="pb-2">
                   <li className="flex justify-between py-1">
