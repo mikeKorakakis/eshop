@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class StoreCategoryRequest extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,11 +18,16 @@ class StoreCategoryRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:65535',
-            'parent_id' => 'nullable',
-            'ordering' => 'nullable',
-            'is_visible' => 'required|boolean',
-            'allow_comments' => 'required|boolean',
-            'allow_ads' => 'required|boolean'
+            'price' => 'required|numeric',
+            'added_date' => 'required',
+            'country_of_origin' => 'required|string|max:255',
+            'status' => 'required|string|max:50',
+            'rating' => 'required',
+            'is_approved' => 'required|boolean',
+            'category_id' => 'required',
+            'owner_id' => 'required',
+            'image_url' => 'required|string|max:255',
+            'contact_info' => 'required|string|max:255'
         ];
     }
 

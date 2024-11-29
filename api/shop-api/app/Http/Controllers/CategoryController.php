@@ -32,10 +32,13 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $details = [
-            'title' => $request->title,
-            'mediaId' => $request->mediaId,
-            'parentId' => $request->parentId,
-            'isParent' => $request->isParent
+            'name' => $request->name,
+            'description' => $request->description,
+            'parent_id' => $request->parent_id,
+            'ordering' => $request->ordering,
+            'is_visible' => $request->is_visible,
+            'allow_comments' => $request->allow_comments,
+            'allow_ads' => $request->allow_ads
         ];
         DB::beginTransaction();
         try {
@@ -62,10 +65,13 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, $id)
     {
         $updateDetails = [
-            'title' => $request->title,
-            'mediaId' => $request->mediaId,
-            'parentId' => $request->parentId,
-            'isParent' => $request->isParent
+            'name' => $request->name,
+            'description' => $request->description,
+            'parent_id' => $request->parent_id,
+            'ordering' => $request->ordering,
+            'is_visible' => $request->is_visible,
+            'allow_comments' => $request->allow_comments,
+            'allow_ads' => $request->allow_ads
         ];
         DB::beginTransaction();
         try {

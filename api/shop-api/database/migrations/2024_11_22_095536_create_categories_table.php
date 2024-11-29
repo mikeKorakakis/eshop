@@ -8,22 +8,27 @@ return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id();  // auto-incrementing primary key
-            $table->string('title');  // title column
-            $table->integer('mediaId');  // mediaId column
-            $table->integer('parentId')->nullable();  // parentId column (nullable, for root categories)
-            $table->boolean('isParent');  // isParent column (true or false)
-            $table->timestamps();  // created_at and updated_at columns
+            $table->id(); // Primary key
+            $table->string('name'); // Name field
+            $table->text('description')->nullable(); // Description field
+            $table->unsignedBigInteger('parent_id')->nullable(); // Parent ID for nested categories
+            $table->integer('ordering')->nullable(); // Ordering for sorting
+            $table->boolean('is_visible')->default(true); // Visibility flag
+            $table->boolean('allow_comments')->default(true); // Allow comments flag
+            $table->boolean('allow_ads')->default(true); // Allow ads flag
+            $table->timestamps(); // Created at and updated at timestamps
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('categories');
     }
