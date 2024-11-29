@@ -2,47 +2,45 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    public $table = "users";
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
+    protected $primaryKey = "user_id";
+
+    public $fillable = [
+        'username',
+        'password',
         'email',
-        'password',
+        'full_name',
+        'group_id',
+        'trust_status',
+        'registration_status',
+        'registration_date',
+        'avatar_url'
+    ];
+    
+    protected $casts = [
+        'username' => 'string',
+        'password' => 'string',
+        'email' => 'string',
+        'full_name' => 'string',
+        'registration_status' => 'boolean',
+        'registration_date' => 'date',
+        'avatar_url' => 'string'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+    public static array $rules = [
+        'username' => 'required|string|max:255',
+        'password' => 'required|string|max:255',
+        'email' => 'required|string|max:255',
+        'full_name' => 'required|string|max:255',
+        'group_id' => 'required',
+        'trust_status' => 'required',
+        'registration_status' => 'required|boolean',
+        'registration_date' => 'required',
+        'avatar_url' => 'required|string|max:255'
     ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 }
