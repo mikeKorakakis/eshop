@@ -7,3 +7,18 @@ export type Item = components["schemas"]["Item"]
 export type Order = components["schemas"]["Order"]
 export type OrderItem = components["schemas"]["OrderItem"]
 export type User = components["schemas"]["User"]
+
+export interface CartItem {
+	id: number;
+	name: string;
+	price: number;
+	imageUrl: string;
+	quantity: number;
+  }
+  
+  // Define the state structure
+  export interface CartState {
+	items:  CartItem[];
+	totalAmount: number;
+  }
+  

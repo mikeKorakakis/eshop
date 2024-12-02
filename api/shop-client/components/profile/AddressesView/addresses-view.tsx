@@ -6,7 +6,7 @@ import { Dictionary } from '@/lib/get-dictionary';
 import { Address } from '@/lib/vendure/generated/graphql-shop';
 
 import AddressItem from './address-item';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 
 interface Props {
   dictionary: Dictionary;

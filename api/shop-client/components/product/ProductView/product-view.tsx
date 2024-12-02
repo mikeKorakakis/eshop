@@ -32,50 +32,54 @@ export default function ProductView({
 
 	return (
 		<>
-			<Lightbox
-				open={open}
-				close={() => setOpen(false)}
-				slides={photos}
-				index={index}
-				styles={{ container: { backgroundColor: 'rgba(0, 0, 0, .8)' } }}
-				render={{
-					slide: (image) => {
-						return (
-							<div className="h-full w-full">
+			<div className='pb-20'>
+				<Lightbox
+					open={open}
+					close={() => setOpen(false)}
+					slides={photos}
+					index={index}
+					styles={{ container: { backgroundColor: 'rgba(0, 0, 0, .8)' } }}
+					render={{
+						slide: (image) => {
+							return (
+								<div className="h-full w-full">
+									<Image
+										fill={true}
+										style={{ objectFit: 'contain' }}
+										src={image.slide.src}
+										quality={100}
+										// width={200}
+										// height={200}
+										alt={image?.slide.alt ?? ''}
+									/>
+								</div>
+							);
+						}
+					}}
+				/>
+				<div className="bg-transparent">
+					<div className="mx-auto max-w-2xl px-4 pt-16 sm:px-6 sm:pt-24 lg:max-w-7xl lg:px-8">
+						<div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+							<span className=" inset-0 overflow-hidden rounded-md">
 								<Image
-									style={{ objectFit: 'contain' }}
-									src={image.slide.src}
-									quality={100}
-									width={200}
-									height={200}
-									alt={image?.slide.alt ?? ''}
+									onClick={() => setOpen(true)}
+									priority
+									width={500}
+									height={500}
+									//   src={placeholderImg}
+									src={imageUrl(product.image_url)}
+									alt=""
+									className="h-[500px]  object-contain object-center" // hover:scale-110 transition ease-in-out duration-500"
 								/>
-							</div>
-						);
-					}
-				}}
-			/>
-			<div className="bg-transparent">
-				<div className="mx-auto max-w-2xl px-4 pt-16 sm:px-6 sm:pt-24 lg:max-w-7xl lg:px-8">
-					<div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
-						<span className="absolute inset-0 overflow-hidden rounded-md">
-							<Image
-								priority
-								width={100}
-								height={100}
-								//   src={placeholderImg}
-								src={imageUrl(product.image_url)}
-								alt=""
-								className="h-full w-full object-contain object-center" // hover:scale-110 transition ease-in-out duration-500"
+							</span>
+							<ProductSidebar
+								dictionary={dictionary}
+								key={product.item_id}
+								product={product}
 							/>
-						</span>
-						<ProductSidebar
-							dictionary={dictionary}
-							key={product.item_id}
-							product={product}
-						/>
-					</div>
+						</div>
 
+					</div>
 				</div>
 			</div>
 			{/* <SEO

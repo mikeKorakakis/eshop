@@ -14,20 +14,17 @@ import Link from 'next/link';
 import clsx from 'clsx';
 // import { useAddCustomer } from '@/framework/checkout';
 import toast from 'react-hot-toast';
-import LoginView from './login-view';
+// import LoginView from './login-view';
 import { Dictionary } from '@/lib/get-dictionary';
-import { Customer, Order } from '@/lib/vendure/generated/graphql-shop';
-import { logoutMutation } from '@/lib/vendure/shop/account/account';
 import { useRouter } from 'next/navigation';
-import { setCustomerForOrderMutation } from '@/lib/vendure/shop/orders/order';
 
-const { link_profile_addresses, link_checkout_addresses } = LINKS;
+const { link_profile_addresses, link_checkout_payment } = LINKS;
 
 type Props = {
   dictionary: Dictionary;
   //   setStep: React.Dispatch<React.SetStateAction<number>>;
-  customer: Customer;
-  order: Order;
+//   customer: Customer;
+//   order: Order;
 };
 
 interface CustomerBaseInfo {
@@ -36,15 +33,20 @@ interface CustomerBaseInfo {
   email: string;
 }
 
-const UserInfoView = ({ dictionary, customer, order }: Props) => {
+const UserInfoView = ({ dictionary }: Props) => {
   const common_dictionary = dictionary.common;
   const checkout_dictionary = dictionary.checkout;
+  const customer = {
+	firstName: "mike",
+	lastName: "kor",
+	email: "mike@test.com"
+  }
   const router = useRouter();
   //   const { data: customerData, isLoading: isLoadingCustomer } = useCustomer();
 
   //   const addCustomer = useAddCustomer();
   //   const { data: cartData, isLoading: isLoadingCart } = useCart();
-  const orderCustomer = order?.customer;
+  const orderCustomer = customer;
   const [isGuest, setIsGuest] = useState(!!customer);
 
   //   const [email, setEmail] = useState('');
@@ -62,15 +64,15 @@ const UserInfoView = ({ dictionary, customer, order }: Props) => {
     lastName: string;
     email: string;
   }) => {
-    return await setCustomerForOrderMutation({
-      firstName,
-      lastName,
-      emailAddress: email
-    });
+    // return await setCustomerForOrderMutation({
+    //   firstName,
+    //   lastName,
+    //   email: email
+    // });
   };
 
   const logout = async () => {
-    await logoutMutation();
+    // await logoutMutation();
     router.refresh();
   };
 
@@ -83,29 +85,29 @@ const UserInfoView = ({ dictionary, customer, order }: Props) => {
     defaultValues: {
       firstName: customer?.firstName || '',
       lastName: customer?.lastName || '',
-      email: customer?.emailAddress || ''
+      email: customer?.email || ''
     },
     mode: 'onBlur'
   });
 
-  useEffect(() => {
-    if (customer) {
-      setIsGuest(false);
-      reset({
-        firstName: customer.firstName || '',
-        lastName: customer.lastName || '',
-        email: customer.emailAddress || ''
-      });
-    }
-    if (orderCustomer && !customer) {
-      reset({
-        firstName: orderCustomer.firstName || '',
-        lastName: orderCustomer.lastName || '',
-        email: orderCustomer.emailAddress || ''
-      });
-      setIsGuest(true);
-    }
-  }, [customer, orderCustomer, reset]);
+//   useEffect(() => {
+//     if (customer) {
+//       setIsGuest(false);
+//       reset({
+//         firstName: customer.firstName || '',
+//         lastName: customer.lastName || '',
+//         email: customer.email || ''
+//       });
+//     }
+//     if (orderCustomer && !customer) {
+//       reset({
+//         firstName: orderCustomer.firstName || '',
+//         lastName: orderCustomer.lastName || '',
+//         email: orderCustomer.email || ''
+//       });
+//       setIsGuest(true);
+//     }
+//   }, [customer, orderCustomer, reset]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
@@ -171,9 +173,7 @@ const UserInfoView = ({ dictionary, customer, order }: Props) => {
           lastName: data.lastName,
           email: data.email
         });
-        if (res?.__typename === 'Order') {
-          //   setStep(1);
-        }
+      
       } else {
         // setStep(1);
       }
@@ -214,7 +214,7 @@ const UserInfoView = ({ dictionary, customer, order }: Props) => {
         <div>
           <h2 className="text-lg font-medium text-gray-900">{checkout_dictionary.customer_info}</h2>
           {/* {message && <ErrorMessage error={{ message }} className=" mt-4" />} */}
-          {customer?.emailAddress && (
+          {customer?.email && (
             <>
               <div className="mt-8">
                 <div className="">
@@ -223,7 +223,7 @@ const UserInfoView = ({ dictionary, customer, order }: Props) => {
                   </h2>
                   <p className="mt-1 text-sm text-gray-600">
                     {checkout_dictionary.logged_in_as} {customer.firstName} {customer.lastName} (
-                    {customer.emailAddress})
+                    {customer.email})
                   </p>
                   <p className="mt-1 text-sm text-gray-600">
                     {checkout_dictionary.set_address}{' '}
@@ -244,8 +244,8 @@ const UserInfoView = ({ dictionary, customer, order }: Props) => {
           )}
         </div>
         <div>
-          {!isGuest && !!!customer && (
-            <LoginView dictionary={dictionary} customer={customer} />
+          {!isGuest && !!!customer && (<div></div>
+            // <LoginView dictionary={dictionary} customer={customer} />
             // <div className="mt-4">
             //   <div className="mt-4 grid grid-cols-1">
             //     <div className={s.fieldset}>
@@ -365,7 +365,7 @@ const UserInfoView = ({ dictionary, customer, order }: Props) => {
                 type="submit"
                 loading={loading}
                 disabled={!isValid && !customer}
-                onClick={() => router.push(link_checkout_addresses)}
+                onClick={() => router.push(link_checkout_payment)}
                 //   onClick={() => setStep(1)}
               >
                 {common_dictionary.next}

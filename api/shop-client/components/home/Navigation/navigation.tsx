@@ -100,7 +100,7 @@ export default async function Navigation({ dictionary, search, navigationClient,
 
                 {/* Logo (lg-) */}
                 <Logo className="lg:hidden" />
-                {/* <UserNav dictionary={dictionary} order={order}/> */}
+                <UserNav dictionary={dictionary}/>
               </div>
             </div>
           </div>

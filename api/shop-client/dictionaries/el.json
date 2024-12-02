@@ -25,7 +25,10 @@
     "customer_info": "Πληροφορίες Πελάτη",
     "shipping_method": "Μέθοδος Αποστολής",
     "payment": "Πληρωμή",
-    "addresses": "Στοιχεία Αποστολής"
+    "addresses": "Στοιχεία Αποστολής",
+	"card_number": "Αριθμός κάρτας",
+	"name_on_card": "Όνομα στην κάρτα",
+	"expiration_date": "Η/Μ λήξης (MM/YY)"
   },
   "common": {
     "home": "Αρχική",

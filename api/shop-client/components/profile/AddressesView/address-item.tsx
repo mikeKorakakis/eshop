@@ -7,7 +7,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { MoreButton } from './more-button';
 import { Dictionary } from '@/lib/get-dictionary';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 
 export type Props = {
   address: Address;

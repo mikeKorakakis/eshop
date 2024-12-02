@@ -1,7 +1,7 @@
 'use client';
 // import AddressForm from '@/components/profile/AddressesView/address-form';
 import LoadingDots from '@/components/ui/LoadingDots';
-import { MODAL_VIEWS, useUI } from '@/components/ui/context';
+import { MODAL_VIEWS, useUI } from '@/components/ui/ui-context';
 import { Dictionary } from '@/lib/get-dictionary';
 import dynamic from 'next/dynamic';
 

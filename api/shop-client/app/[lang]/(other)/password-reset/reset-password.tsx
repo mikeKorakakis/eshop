@@ -11,7 +11,7 @@ import Button from '@/components/ui/Button';
 import { resetPasswordMutation } from '@/lib/vendure/shop/account/account';
 import ErrorMessage from './error-message';
 import toast from 'react-hot-toast';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 
 const { link_search } = LINKS;
 

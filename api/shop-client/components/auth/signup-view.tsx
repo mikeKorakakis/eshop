@@ -2,7 +2,7 @@
 import { FC, useState } from 'react';
 // import { validate } from 'email-validator'
 import { Info } from '@/components/icons';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';

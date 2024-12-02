@@ -1,4 +1,4 @@
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import { Dictionary } from '@/lib/get-dictionary';
 import { Dialog } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';

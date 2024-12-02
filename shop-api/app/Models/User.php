@@ -9,13 +9,6 @@ use Illuminate\Database\Eloquent\Model;
  *      schema="User",
  *      required={"username","password","email","full_name","group_id","trust_status","registration_status","registration_date","avatar_url"},
  *      @OA\Property(
- *          property="user_id",
- *          description="Primary key: Unique identifier for the user",
- *          readOnly=true,
- *          nullable=false,
- *          type="integer",
- *      ),
- *      @OA\Property(
  *          property="username",
  *          description="Username for login",
  *          readOnly=false,
@@ -71,6 +64,8 @@ use Illuminate\Database\Eloquent\Model;
     public $table = 'users';
 
     protected $primaryKey = 'user_id';
+
+    public $timestamps = false;
 
     public $fillable = [
         'username',

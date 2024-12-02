@@ -3,7 +3,6 @@ import BreadCrumbs from '@/components/ui/BreadCrumbs';
 import { LanguageProps } from '@/lib/types';
 import { getDictionary } from '@/lib/get-dictionary';
 import Search from '@/components/search/search';
-import { getWishlistQuery } from '@/lib/vendure/shop/wishlist/wishlist';
 
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -11,11 +10,11 @@ type Props = {
 
 export default async function SearchPage({ searchParams, params }: Props) {
   // language
-  //   const dictionary = await getDictionary(lang);
   //   const wishlist = await getWishlistQuery();
   const lang = params.lang;
+  const dictionary = await getDictionary(lang);
 
-  const [wishlist, dictionary] = await Promise.all([getWishlistQuery(), getDictionary(lang)]);
+//   const [wishlist, dictionary] = await Promise.all([getWishlistQuery(), getDictionary(lang)]);
 
   const common_dictionary = dictionary.common;
 
@@ -33,7 +32,7 @@ export default async function SearchPage({ searchParams, params }: Props) {
         </div>
       </div>
       <div className="pt-16">
-        <Search dictionary={dictionary} searchParams={searchParams} wishlist={wishlist} />
+        {/* <Search dictionary={dictionary} searchParams={searchParams} wishlist={wishlist} /> */}
       </div>
     </>
   );

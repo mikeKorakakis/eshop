@@ -9,13 +9,6 @@ use Illuminate\Database\Eloquent\Model;
  *      schema="CreditCard",
  *      required={"user_id","card_number","cardholder_name","expiration_date","cvv","balance"},
  *      @OA\Property(
- *          property="credit_card_id",
- *          description="Primary key: Unique identifier for the credit card",
- *          readOnly=true,
- *          nullable=false,
- *          type="integer",
- *      ),
- *      @OA\Property(
  *          property="card_number",
  *          description="16-digit card number",
  *          readOnly=false,
@@ -58,6 +51,8 @@ use Illuminate\Database\Eloquent\Model;
     public $table = 'credit_cards';
 
     protected $primaryKey = 'credit_card_id';
+
+    public $timestamps = false;
 
     public $fillable = [
         'user_id',

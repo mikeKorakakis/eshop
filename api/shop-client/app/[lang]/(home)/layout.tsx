@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 
-import { ManagedUIContext } from '@/components/ui/context';
 import Layout from '@/components/common/Layout/layout';
 import { LanguageProps } from '@/lib/types';
 import { getDictionary } from '@/lib/get-dictionary';
@@ -21,14 +20,9 @@ export default async function RootLayout({ children, params }: Props) {
   const dictionary = await getDictionary(lang);
   return (
     <>
-      {/* <Navbar /> */}
-      {/* <Suspense fallback={"loading"}> */}
-      <ManagedUIContext>
         <Layout dictionary={dictionary} pathname={'/'}>
           {children}
         </Layout>
-      </ManagedUIContext>
-      {/* </Suspense> */}
     </>
   );
 }

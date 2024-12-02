@@ -7,7 +7,7 @@ import s from './wishlist-card.module.css';
 import { Trash } from '@/components/icons';
 import Button from '@/components/ui/Button';
 
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import { cloudinaryImageLoader } from '@/lib/cloudinary-image-loader';
 import { Favorite } from '@/lib/vendure/generated/graphql-shop';
 import { Product } from '@/lib/types';

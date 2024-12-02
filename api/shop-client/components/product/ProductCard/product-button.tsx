@@ -1,7 +1,7 @@
 'use client'
 
 import Button from '@/components/ui/Button';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import { Dictionary } from '@/lib/get-dictionary';
 import { useRouter } from 'next/navigation';
 import { refreshCart } from '../actions';

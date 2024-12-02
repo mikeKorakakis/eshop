@@ -16,7 +16,7 @@ import track_days from '@/assets/images/services/trackdays.jpg';
 import transport from '@/assets/images/services/truck.jpg';
 import { useRouter } from 'next/navigation';
 import { Dictionary } from '@/lib/get-dictionary';
-import { useUI } from '../../ui/context';
+import { useUI } from '../../ui/ui-context';
 
 const {
   link_services_dyno,

@@ -1,7 +1,7 @@
 import { Dictionary } from '@/lib/get-dictionary';
 import { useForm } from 'react-hook-form';
 import s from './address-form.module.css';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import { Address, UpdateAddressInput } from '@/lib/vendure/generated/graphql-shop';
 import { useState } from 'react';
 import clsx from 'clsx';

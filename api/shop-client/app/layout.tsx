@@ -4,6 +4,8 @@ import { Metadata } from 'next';
 import clsx from 'clsx';
 import './globals.css';
 import { Inter } from 'next/font/google'
+import { ManagedCartContext } from '@/components/ui/cart-context';
+import { ManagedUIContext } from '@/components/ui/ui-context';
 
 // const myFont = localFont({
 //   src: [
@@ -29,48 +31,56 @@ const inter = Inter({ subsets: ['latin'] })
 
 const { SITE_NAME } = process.env;
 const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL
-  ? `https://${process.env.NEXT_PUBLIC_FRONTEND_URL}`
-  : 'http://localhost:8000';
+	? `https://${process.env.NEXT_PUBLIC_FRONTEND_URL}`
+	: 'http://localhost:8000';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
-  title: {
-    default: SITE_NAME!,
-    template: `%s | ${SITE_NAME}`
-  },
-  robots: {
-    follow: true,
-    index: true,
-    
-  },
-//   openGraph: {
-//     title: 'Zen1one Racing',
-//     description:
-//       'ZenOne Racing is the result of the collaboration of a group of people who have worked over the last years on motorcycles, preparing and improving them for track days and racing and are up-to-date on the latest technological advances in the fields of engine, suspension and electronics.',
-//     url: process.env.NEXT_PUBLIC_FRONTEND_URL,
-//     siteName: SITE_NAME!,
-//     locale: LOCALES.join(', '),
-//     type: 'website',
-//     images: [
-//       {
-//         url: `/icon-512x512.png`,
-//         width: 512,
-//         height: 512,
-//         alt: SITE_NAME!
-//       }
-//     ]
-//   }
+	metadataBase: new URL(baseUrl),
+	title: {
+		default: SITE_NAME!,
+		template: `%s | ${SITE_NAME}`
+	},
+	robots: {
+		follow: true,
+		index: true,
+
+	},
+	//   openGraph: {
+	//     title: 'Zen1one Racing',
+	//     description:
+	//       'ZenOne Racing is the result of the collaboration of a group of people who have worked over the last years on motorcycles, preparing and improving them for track days and racing and are up-to-date on the latest technological advances in the fields of engine, suspension and electronics.',
+	//     url: process.env.NEXT_PUBLIC_FRONTEND_URL,
+	//     siteName: SITE_NAME!,
+	//     locale: LOCALES.join(', '),
+	//     type: 'website',
+	//     images: [
+	//       {
+	//         url: `/icon-512x512.png`,
+	//         width: 512,
+	//         height: 512,
+	//         alt: SITE_NAME!
+	//       }
+	//     ]
+	//   }
 };
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" className={clsx(inter.className, "h-full")} >
-      <head>
-        <meta key="viewport" name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="manifest" href="/site.webmanifest" key="site-manifest" />
-      </head>
-      <body className='h-full'>{children}</body>
-    </html>
-  );
+	return (
+		<html lang="en" className={clsx(inter.className, "h-full")} >
+			<head>
+				<meta key="viewport" name="viewport" content="width=device-width, initial-scale=1" />
+				<link rel="manifest" href="/site.webmanifest" key="site-manifest" />
+			</head>
+			<body className='h-full'>
+				<ManagedUIContext>
+
+					<ManagedCartContext>
+						{children}
+					</ManagedCartContext>
+				</ManagedUIContext>
+
+			</body>
+		</html>
+	);
 }

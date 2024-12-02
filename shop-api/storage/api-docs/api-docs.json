@@ -1527,12 +1527,6 @@
                     "allow_ads"
                 ],
                 "properties": {
-                    "category_id": {
-                        "description": "Primary key: Unique identifier for the category",
-                        "type": "integer",
-                        "readOnly": true,
-                        "nullable": false
-                    },
                     "name": {
                         "description": "Category name",
                         "type": "string",
@@ -1575,12 +1569,6 @@
                     "user_id"
                 ],
                 "properties": {
-                    "comment_id": {
-                        "description": "Primary key: Unique identifier for the comment",
-                        "type": "integer",
-                        "readOnly": true,
-                        "nullable": false
-                    },
                     "content": {
                         "description": "Comment text",
                         "type": "string",
@@ -1613,12 +1601,6 @@
                     "balance"
                 ],
                 "properties": {
-                    "credit_card_id": {
-                        "description": "Primary key: Unique identifier for the credit card",
-                        "type": "integer",
-                        "readOnly": true,
-                        "nullable": false
-                    },
                     "card_number": {
                         "description": "16-digit card number",
                         "type": "string",
@@ -1670,12 +1652,6 @@
                     "contact_info"
                 ],
                 "properties": {
-                    "item_id": {
-                        "description": "Primary key: Unique identifier for the item",
-                        "type": "integer",
-                        "readOnly": true,
-                        "nullable": false
-                    },
                     "name": {
                         "description": "Name of the item",
                         "type": "string",
@@ -1743,12 +1719,6 @@
                     "order_status"
                 ],
                 "properties": {
-                    "order_id": {
-                        "description": "Primary key: Unique identifier for the order",
-                        "type": "integer",
-                        "readOnly": true,
-                        "nullable": false
-                    },
                     "order_date": {
                         "description": "Date and time the order was placed",
                         "type": "string",
@@ -1768,6 +1738,13 @@
                         "type": "string",
                         "readOnly": false,
                         "nullable": false
+                    },
+                    "user_id": {
+                        "description": "id of the user",
+                        "type": "number",
+                        "format": "number",
+                        "readOnly": false,
+                        "nullable": false
                     }
                 },
                 "type": "object"
@@ -1780,14 +1757,22 @@
                     "price_at_purchase"
                 ],
                 "properties": {
-                    "order_item_id": {
-                        "description": "Primary key: Unique identifier for the order item",
-                        "type": "integer",
-                        "readOnly": true,
-                        "nullable": false
-                    },
                     "price_at_purchase": {
                         "description": "Price at the time of purchase",
+                        "type": "number",
+                        "format": "number",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "item_id": {
+                        "description": "id of the item",
+                        "type": "number",
+                        "format": "number",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "quantity": {
+                        "description": "quantity of the item",
                         "type": "number",
                         "format": "number",
                         "readOnly": false,
@@ -1809,12 +1794,6 @@
                     "avatar_url"
                 ],
                 "properties": {
-                    "user_id": {
-                        "description": "Primary key: Unique identifier for the user",
-                        "type": "integer",
-                        "readOnly": true,
-                        "nullable": false
-                    },
                     "username": {
                         "description": "Username for login",
                         "type": "string",

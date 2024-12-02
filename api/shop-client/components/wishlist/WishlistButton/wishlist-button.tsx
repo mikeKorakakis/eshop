@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { clsx } from 'clsx';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 // import { Heart } from '@/components/icons'
 // import useAddItem from '@framework/wishlist/use-add-item'
 // import useCustomer from '@framework/customer/use-customer'

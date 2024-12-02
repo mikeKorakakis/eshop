@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import ProductOptions from '@/components/product/ProductOptions';
 import Button from '@/components/ui/Button';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import Rating from '@/components/ui/Rating';
 
 // import { getProductVariant, selectDefaultOptionFromProduct, SelectedOptions } from '../helpers';

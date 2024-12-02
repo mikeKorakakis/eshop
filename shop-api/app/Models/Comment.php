@@ -9,13 +9,6 @@ use Illuminate\Database\Eloquent\Model;
  *      schema="Comment",
  *      required={"content","status","created_date","item_id","user_id"},
  *      @OA\Property(
- *          property="comment_id",
- *          description="Primary key: Unique identifier for the comment",
- *          readOnly=true,
- *          nullable=false,
- *          type="integer",
- *      ),
- *      @OA\Property(
  *          property="content",
  *          description="Comment text",
  *          readOnly=false,
@@ -43,6 +36,8 @@ use Illuminate\Database\Eloquent\Model;
     public $table = 'comments';
 
     protected $primaryKey = 'comment_id';
+
+    public $timestamps = false;
 
     public $fillable = [
         'content',

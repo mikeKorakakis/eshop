@@ -14,7 +14,7 @@ import { Address } from '@/lib/vendure/generated/graphql-shop';
 import LoadingDots from '@/components//ui/LoadingDots';
 import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 
 type Props = {
   address: Address;

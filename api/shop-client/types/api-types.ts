@@ -373,8 +373,6 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         Category: {
-            /** @description Primary key: Unique identifier for the category */
-            readonly category_id?: number;
             /** @description Category name */
             name: string;
             /** @description Category description */
@@ -387,8 +385,6 @@ export interface components {
             allow_ads: boolean;
         };
         Comment: {
-            /** @description Primary key: Unique identifier for the comment */
-            readonly comment_id?: number;
             /** @description Comment text */
             content: string;
             /** @description Approval status of comment */
@@ -400,8 +396,6 @@ export interface components {
             created_date: string;
         };
         CreditCard: {
-            /** @description Primary key: Unique identifier for the credit card */
-            readonly credit_card_id?: number;
             /** @description 16-digit card number */
             card_number: string;
             /** @description Name on the card */
@@ -420,8 +414,6 @@ export interface components {
             balance: number;
         };
         Item: {
-            /** @description Primary key: Unique identifier for the item */
-            readonly item_id?: number;
             /** @description Name of the item */
             name: string;
             /** @description Description of the item */
@@ -448,8 +440,6 @@ export interface components {
             contact_info: string;
         };
         Order: {
-            /** @description Primary key: Unique identifier for the order */
-            readonly order_id?: number;
             /**
              * Format: date-time
              * @description Date and time the order was placed
@@ -462,19 +452,30 @@ export interface components {
             total_amount: number;
             /** @description Order status */
             order_status: string;
+            /**
+             * Format: number
+             * @description id of the user
+             */
+            user_id: number;
         };
         OrderItem: {
-            /** @description Primary key: Unique identifier for the order item */
-            readonly order_item_id?: number;
             /**
              * Format: number
              * @description Price at the time of purchase
              */
             price_at_purchase: number;
+            /**
+             * Format: number
+             * @description id of the item
+             */
+            item_id: number;
+            /**
+             * Format: number
+             * @description quantity of the item
+             */
+            quantity: number;
         };
         User: {
-            /** @description Primary key: Unique identifier for the user */
-            readonly user_id?: number;
             /** @description Username for login */
             username: string;
             /** @description Hashed password */

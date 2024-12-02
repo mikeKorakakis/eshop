@@ -8,6 +8,6 @@ type Props = {
   };
 } & LanguageProps;
 
-export default async function Product({ params: { lang } }: Props) {
+export default async function CheckoutPage({ params: { lang } }: Props) {
   redirect(`/${lang}${LINKS.link_checkout_general}`);
 }

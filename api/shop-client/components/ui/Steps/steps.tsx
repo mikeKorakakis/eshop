@@ -28,7 +28,7 @@ const getStepId = (id: number) => {
   }
 }
 
-export default function Example({ steps }: Props) {
+export default function Steps({ steps }: Props) {
   return (
     <nav aria-label="Progress">
       <ol

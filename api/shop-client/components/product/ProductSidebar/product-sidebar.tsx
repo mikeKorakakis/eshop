@@ -1,7 +1,7 @@
 // import { useAddItem } from '@framework/cart';
 import { useEffect, useState } from 'react';
 import Button from '@/components/ui/Button';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import Rating from '@/components/ui/Rating';
 
 // import { getProductVariant, selectDefaultOptionFromProduct, SelectedOptions } from '../helpers';
@@ -13,6 +13,7 @@ import ShareButtons from '@/components/ui/ShareButtons';
 import { Dictionary } from '@/lib/get-dictionary';
 
 import { Item } from '@/types/types';
+import { useCart } from '@/components/ui/cart-context';
 
 interface Props {
   product: Item;
@@ -22,6 +23,7 @@ interface Props {
 const ProductSidebar = ({ product, dictionary }: Props) => {
   const common_dictionary = dictionary.common;
   const product_dictionary = dictionary.product;
+  const {addToCart} = useCart()
   //   const addItem = useAddItem();
   const { openSidebar, setSidebarView } = useUI();
   const [loading, setLoading] = useState(false);
@@ -32,14 +34,16 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
 
 
 
-  const addToCart = async () => {
+  const handleAddToCart = async () => {
     setLoading(true);
     setError(null);
     try {
-      //   await addItem({
-      //     productId: String(product.id),
-      //     variantId: String(variant ? variant.id : product.variants[0]?.id)
-      //   });
+	  addToCart({
+		id: product.item_id!,
+		imageUrl: product.image_url,
+		name: product.name,
+		price: product.price,
+	  })
       setSidebarView('CART_VIEW');
       openSidebar();
       setLoading(false);
@@ -112,7 +116,7 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
                 <Button
                   aria-label="Add to Cart"
                   type="button"
-                  onClick={addToCart}
+                  onClick={handleAddToCart}
                   loading={loading}
                   //   disabled={variant?.availableForSale === false}
                 >

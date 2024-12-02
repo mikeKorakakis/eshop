@@ -1,7 +1,7 @@
 'use client';
 import LoadingDots from '@/components/ui/LoadingDots';
 import Sidebar from '@/components/ui/Sidebar';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import { Dictionary } from '@/lib/get-dictionary';
 // import { Order } from '@/lib/vendure/generated/graphql-shop';
 import dynamic from 'next/dynamic';
@@ -24,21 +24,19 @@ interface SidebarViewProps {
   sidebarView: string;
   closeSidebar(): any;
   dictionary: Dictionary;
-  order: any;
 }
 
 const SidebarView: React.FC<SidebarViewProps> = ({
   sidebarView,
   closeSidebar,
   dictionary,
-  order
 
   //   locale,
   //  links
 }) => {
   return (
     <Sidebar onClose={closeSidebar}>
-      {sidebarView === 'CART_VIEW' && <CartSidebarView dictionary={dictionary} order={order} />}
+      {sidebarView === 'CART_VIEW' && <CartSidebarView dictionary={dictionary} />}
       {/* {sidebarView === 'SHIPPING_VIEW' && <ShippingView />} */}
       {/* {sidebarView === 'PAYMENT_VIEW' && <PaymentMethodView />} */}
       {/* {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />} */}
@@ -49,16 +47,13 @@ const SidebarView: React.FC<SidebarViewProps> = ({
 
 interface SidebarUIProps {
   dictionary: Dictionary;
-  order: any;
 }
 
 const SidebarUI: React.FC<SidebarUIProps> = ({ dictionary }) => {
-	const order = {} as any
   // const SidebarUI: React.FC<{ links: LinkProps[] }> = ({ links }) => {
   const { closeSidebar, sidebarView } = useUI();
   return (
     <SidebarView
-      order={order}
       sidebarView={sidebarView}
       closeSidebar={closeSidebar}
       dictionary={dictionary}

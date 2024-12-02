@@ -54,7 +54,7 @@ const Layout: React.FC<Props> = async ({ children, dictionary, pathname }) => {
         <ModalUI dictionary={dictionary} />
         {/* <CheckoutProvider> */}
         {/* SidebarUI */}
-        <SidebarUI dictionary={dictionary} order={order} />
+        <SidebarUI dictionary={dictionary} />
         {/* <SidebarUI links={navBarlinks} /> */}
         {/* </CheckoutProvider> */}
         {/* FeatureBar */}

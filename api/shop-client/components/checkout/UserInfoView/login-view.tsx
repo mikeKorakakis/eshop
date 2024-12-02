@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import { validate } from 'email-validator';
 import s from './UserInfoView.module.css';
 import { useForm } from 'react-hook-form';

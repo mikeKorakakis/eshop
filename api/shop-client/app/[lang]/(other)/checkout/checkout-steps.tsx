@@ -26,14 +26,9 @@ export default function CheckoutSteps({ dictionary }: Props) {
     case 'general':
       currentStep = 0;
       break;
-    case 'addresses':
-      currentStep = 1;
-      break;
-    case 'shipping':
-      currentStep = 2;
-      break;
+  
     case 'payment':
-      currentStep = 3;
+      currentStep = 1;
       break;
     default:
       currentStep = 0;
@@ -46,24 +41,56 @@ export default function CheckoutSteps({ dictionary }: Props) {
       href: '#',
       status: getStepStatus(0, currentStep)
     },
+ 
     {
       id: 1,
-      name: checkout_dictionary.addresses,
-      href: '#',
-      status: getStepStatus(1, currentStep)
-    },
-    {
-      id: 2,
-      name: checkout_dictionary.shipping_method,
-      href: '#',
-      status: getStepStatus(2, currentStep)
-    },
-    {
-      id: 3,
       name: checkout_dictionary.payment,
       href: '#',
-      status: getStepStatus(3, currentStep)
+      status: getStepStatus(1, currentStep)
     }
   ];
+//   switch (testPathname) {
+//     case 'general':
+//       currentStep = 0;
+//       break;
+//     case 'addresses':
+//       currentStep = 1;
+//       break;
+//     case 'shipping':
+//       currentStep = 2;
+//       break;
+//     case 'payment':
+//       currentStep = 3;
+//       break;
+//     default:
+//       currentStep = 0;
+//   }
+
+//   const steps = [
+//     {
+//       id: 0,
+//       name: checkout_dictionary.customer_info,
+//       href: '#',
+//       status: getStepStatus(0, currentStep)
+//     },
+//     {
+//       id: 1,
+//       name: checkout_dictionary.addresses,
+//       href: '#',
+//       status: getStepStatus(1, currentStep)
+//     },
+//     {
+//       id: 2,
+//       name: checkout_dictionary.shipping_method,
+//       href: '#',
+//       status: getStepStatus(2, currentStep)
+//     },
+//     {
+//       id: 3,
+//       name: checkout_dictionary.payment,
+//       href: '#',
+//       status: getStepStatus(3, currentStep)
+//     }
+//   ];
   return <Steps steps={steps} />;
 }

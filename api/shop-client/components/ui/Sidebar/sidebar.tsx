@@ -4,7 +4,7 @@ import cn from 'clsx';
 import { Fragment, useEffect, useRef } from 'react';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { Dialog, Transition } from '@headlessui/react';
-import { useUI } from '../context';
+import { useUI } from '../ui-context';
 interface SidebarProps {
   children: any;
   onClose: () => void;

@@ -25,7 +25,10 @@
     "customer_info": "Customer Information",
     "shipping_method": "Shipping Method",
     "payment": "Payment",
-    "addresses": "Shipping Info"
+    "addresses": "Shipping Info",
+	"card_number": "Card number",
+	"name_on_card": "Name on card",
+	"expiration_date": "Expiration date (MM/YY)"
   },
   "common": {
     "home": "Home",

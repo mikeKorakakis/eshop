@@ -1,5 +1,5 @@
 import Button from '@/components/ui/Button';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import { Dictionary } from '@/lib/get-dictionary';
 import { ListedProductFragment } from '@/lib/vendure/generated/graphql-shop';
 import { useRouter } from 'next/navigation';

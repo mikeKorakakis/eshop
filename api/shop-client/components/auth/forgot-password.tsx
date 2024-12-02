@@ -1,7 +1,7 @@
 'use client'
 import { FC, useEffect, useState, useCallback } from 'react';
 import { validate } from 'email-validator';
-import { useUI } from '@/components/ui/context';
+import { useUI } from '@/components/ui/ui-context';
 import Logo from '@/components/ui/Logo/logo';
 import Button from '@/components/ui/Button/button';
 import Input from '@/components/ui/Input/input';
