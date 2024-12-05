@@ -9,7 +9,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->bigIncrements('order_id');
+            $table->id('order_id');
             $table->unsignedBigInteger('user_id');
             $table->dateTime('order_date');
             $table->decimal('total_amount', 10, 2);

@@ -2,30 +2,26 @@
 
 namespace App\Http\Requests;
 
+use App\Models\OrderItem;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class UserRequest extends FormRequest
+class OrderItemRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
     public function authorize(): bool
     {
         return true;
     }
+
     public function rules(): array
     {
-        return [
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'email' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
-            'group_id' => 'required',
-            'trust_status' => 'required',
-            'registration_status' => 'required|boolean',
-            'registration_date' => 'required',
-            'avatar_url' => 'string|max:255'
-        ];
+        return OrderItem::$rules;
     }
+
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

@@ -27,4 +27,7 @@ class MediaRepository implements IMediaRepository
     {
         return Media::destroy($id);
     }
+    public function assignToProduct($id, $productId){
+        return 0;
+    }
 }

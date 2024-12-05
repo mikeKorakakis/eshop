@@ -27,7 +27,8 @@ class StoreProductRequest extends FormRequest
             'category_id' => 'required',
             'owner_id' => 'required',
             'image_url' => 'required|string|max:255',
-            'contact_info' => 'required|string|max:255'
+            'contact_info' => 'required|string|max:255',
+            'media_id' => 'nullable|integer'
         ];
     }
 

@@ -41,14 +41,15 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
             'owner_id' => $request->owner_id,
             'image_url' => $request->image_url,
-            'contact_info' => $request->contact_info
+            'contact_info' => $request->contact_info,
+            'media_id' => $request->media_id
         ];
         DB::beginTransaction();
 
         try {
             $product = $this->productRepository->store($details);
             DB::commit();
-            return ApiResponseClass::sendResponse(new ProductResource($product), 'Product Created', 201);
+            return ApiResponseClass::sendResponse(new ProductResource($product), 'Product Created', ApiResponseClass::HTTP_CREATED);
         } catch (\Exception $ex) {
             Log::error('Error creating product: ' . $ex->getMessage());
             return ApiResponseClass::rollback($ex);
@@ -57,7 +58,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = $this->productRepository->getById($id);
-        return ApiResponseClass::sendResponse(new ProductResource($product), '', 200);
+        return ApiResponseClass::sendResponse(new ProductResource($product), '', ApiResponseClass::HTTP_OK);
     }
     public function edit(Product $product)
     {
@@ -77,13 +78,14 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
             'owner_id' => $request->owner_id,
             'image_url' => $request->image_url,
-            'contact_info' => $request->contact_info
+            'contact_info' => $request->contact_info,
+            'media_id' => $request->media_id
         ];
         DB::beginTransaction();
         try {
             $product = $this->productRepository->update($updateDetails, $id);
             DB::commit();
-            return ApiResponseClass::sendResponse('Product updated', '', 201);
+            return ApiResponseClass::sendResponse('Product updated', '', ApiResponseClass::HTTP_NO_CONTENT);
         } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);
         }
@@ -91,6 +93,11 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $this->productRepository->delete($id);
-        return ApiResponseClass::sendResponse('Deleted', '', 204);
+        return ApiResponseClass::sendResponse('Deleted', '', ApiResponseClass::HTTP_NO_CONTENT);
+    }
+    public function getProductsOfCategory($categoryId)
+    {
+        $products = $this->productRepository->getByCategory($categoryId);
+        return ApiResponseClass::sendResponse(ProductResource::collection($products), '', ApiResponseClass::HTTP_OK);
     }
 }

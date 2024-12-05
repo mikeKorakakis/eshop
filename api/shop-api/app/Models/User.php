@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model
+class User extends Authenticatable implements JWTSubject//Model
 {
     public $table = "users";
 
@@ -21,7 +23,7 @@ class User extends Model
         'registration_date',
         'avatar_url'
     ];
-    
+
     protected $casts = [
         'username' => 'string',
         'password' => 'string',
@@ -43,4 +45,19 @@ class User extends Model
         'registration_date' => 'required',
         'avatar_url' => 'required|string|max:255'
     ];
+
+    protected $hidden = ['password'];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }

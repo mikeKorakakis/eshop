@@ -30,6 +30,12 @@ class ApiResponseClass
         throw new HttpResponseException(response()->json(["message" => $message], 500));
     }
 
+    public static function error($e, $message, $code = self::HTTP_INTERNAL_SERVER_ERROR)
+    {
+        Log::info($e);
+        throw new HttpResponseException(response()->json(["message" => $message], $code));
+    }
+
     public static function sendResponse($result, $message, $code = self::HTTP_OK)
     {
         $response = $result;
@@ -38,5 +44,5 @@ class ApiResponseClass
         // }
         return response()->json($response, $code);
     }
-    
+
 }

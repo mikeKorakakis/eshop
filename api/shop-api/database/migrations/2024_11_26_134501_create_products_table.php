@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('items', function (Blueprint $table) {
@@ -22,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('owner_id'); // Foreign key for product owner (user)
             $table->string('image_url')->nullable(); // Image URL for the product
             $table->string('contact_info')->nullable(); // Contact information related to the product
+            $table->integer('media_id')->nullable();
             $table->timestamps(); // Created at & updated at timestamps
         });
     }

@@ -5,20 +5,22 @@ namespace App\Http\Controllers;
 use App\Classes\ApiResponseClass;
 use App\Http\Requests\MediaRequest;
 use App\Http\Resources\MediaResource;
+use App\Http\Resources\ProductResource;
 use App\Interfaces\IMediaRepository;
+use App\Interfaces\IProductRepository;
 use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Str;
-
 
 class MediaController extends Controller
 {
     private IMediaRepository $mediaRepository;
-    public function __construct(IMediaRepository $mediaRepository)
+    private IProductRepository $productRepository;
+    public function __construct(IMediaRepository $mediaRepository, IProductRepository $productRepository)
     {
         $this->mediaRepository = $mediaRepository;
+        $this->productRepository = $productRepository;
     }
     public function index()
     {
@@ -29,6 +31,7 @@ class MediaController extends Controller
     {
 
     }
+
     public function store(MediaRequest $request)
     {
 
@@ -56,6 +59,16 @@ class MediaController extends Controller
             DB::rollBack();
             return ApiResponseClass::rollback($ex);
         }
+    }
+    public function stream($media_id)
+    {
+        $media = $this->mediaRepository->getById($media_id);
+        if (!$media) {
+            return ApiResponseClass::error("Error", 'Media not found', ApiResponseClass::HTTP_NOT_FOUND);
+        }
+        $filePath = $media->path;
+        $fileUrl = Storage::disk('minio')->url($filePath);
+        return ApiResponseClass::sendResponse($fileUrl, '', ApiResponseClass::HTTP_OK);
     }
     public function show($media_id)
     {
@@ -86,5 +99,32 @@ class MediaController extends Controller
     {
         $this->mediaRepository->delete($media_id);
         return ApiResponseClass::sendResponse('Deleted', '', ApiResponseClass::HTTP_NO_CONTENT);
+    }
+    public function assignToProduct(Request $request)
+    {
+        $request->validate([
+            'media_id' => 'required',
+            'product_id' => 'required',
+        ]);
+
+        $media_id = $request->input('media_id');
+        $product_id = $request->input('product_id');
+
+        try {
+            $media = $this->mediaRepository->getById($media_id);
+            if (!$media) {
+                return ApiResponseClass::error('Not found', 'Media not found', ApiResponseClass::HTTP_NOT_FOUND);
+            }
+            $product = $this->productRepository->getById($product_id);
+            if (!$product) {
+                return ApiResponseClass::error('Not found', 'Product not found', ApiResponseClass::HTTP_NOT_FOUND);
+            }
+            $product->media_id = $media->media_id;
+            $product->save();
+            return ApiResponseClass::sendResponse(new ProductResource($product), 'Media assigned to product', ApiResponseClass::HTTP_OK);
+        } catch (\Exception $ex) {
+            ApiResponseClass::error('Not found', 'Product or media not found', ApiResponseClass::HTTP_NOT_FOUND);
+        }
+
     }
 }
