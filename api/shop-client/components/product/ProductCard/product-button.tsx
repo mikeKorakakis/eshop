@@ -7,11 +7,11 @@ import { useRouter } from 'next/navigation';
 import { refreshCart } from '../actions';
 import { useState } from 'react';
 import { wait } from '@/lib/utils';
-import { Item } from '@/types/types';
+import { Product } from '@/types/types';
 
 type Props = {
   dictionary: Dictionary;
-  product: Item;
+  product: Product;
 };
 export default function ProductButton({ dictionary, product }: Props) {
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function ProductButton({ dictionary, product }: Props) {
   const addToCart = async () => {
     setLoading(true);
     try {
-    //   await addItemToOrderMutation(product.productVariantId, 1);
+    //   await addProductToOrderMutation(product.productVariantId, 1);
       const res = await refreshCart();
       //   await addProductToCart({ productVariantId: product.productVariantId, quantity: 1 });
       if (res) {
@@ -40,7 +40,7 @@ export default function ProductButton({ dictionary, product }: Props) {
   return (
     <Button
       //    href={product.href}
-      onClick={hasVariant ? () => router.push(`/product/${product.item_id}`) : () => addToCart()}
+      onClick={hasVariant ? () => router.push(`/product/${product.product_id}`) : () => addToCart()}
       // onClick={()=>alert(JSON.stringify(product))}
       className="w-full"
       loading={loading}

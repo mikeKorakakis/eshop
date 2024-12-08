@@ -72,30 +72,6 @@
         "inView": true
     },
     {
-        "name": "trust_status",
-        "dbType": "integer,false",
-        "htmlType": "number",
-        "validations": "required",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": true,
-        "inView": true
-    },
-    {
-        "name": "registration_status",
-        "dbType": "boolean",
-        "htmlType": "checkbox",
-        "validations": "required|boolean|boolean",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": true,
-        "inView": true
-    },
-    {
         "name": "registration_date",
         "dbType": "date",
         "htmlType": "date",
@@ -121,15 +97,15 @@
     },
     {
         "type": "relation",
+        "relation": "mtm,Product,comments"
+    },
+    {
+        "type": "relation",
+        "relation": "mtm,Category,products"
+    },
+    {
+        "type": "relation",
         "relation": "1tm,Order,user_id"
-    },
-    {
-        "type": "relation",
-        "relation": "mtm,Item,comments"
-    },
-    {
-        "type": "relation",
-        "relation": "mtm,Category,items"
     },
     {
         "type": "relation",

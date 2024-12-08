@@ -45,23 +45,6 @@ export const metadata: Metadata = {
 		index: true,
 
 	},
-	//   openGraph: {
-	//     title: 'Zen1one Racing',
-	//     description:
-	//       'ZenOne Racing is the result of the collaboration of a group of people who have worked over the last years on motorcycles, preparing and improving them for track days and racing and are up-to-date on the latest technological advances in the fields of engine, suspension and electronics.',
-	//     url: process.env.NEXT_PUBLIC_FRONTEND_URL,
-	//     siteName: SITE_NAME!,
-	//     locale: LOCALES.join(', '),
-	//     type: 'website',
-	//     images: [
-	//       {
-	//         url: `/icon-512x512.png`,
-	//         width: 512,
-	//         height: 512,
-	//         alt: SITE_NAME!
-	//       }
-	//     ]
-	//   }
 };
 
 
@@ -74,7 +57,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			</head>
 			<body className='h-full'>
 				<ManagedUIContext>
-
 					<ManagedCartContext>
 						{children}
 					</ManagedCartContext>

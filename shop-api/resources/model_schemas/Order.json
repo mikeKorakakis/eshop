@@ -65,6 +65,6 @@
     },
     {
         "type": "relation",
-        "relation": "mtm,Item,order_items"
+        "relation": "mtm,Product,order_items"
     }
 ]

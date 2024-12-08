@@ -6,14 +6,10 @@ import FormInput from '@/components/ui/FormInput';
 import { useUI } from '@/components/ui/ui-context';
 import { validate } from 'email-validator';
 import { useForm } from 'react-hook-form';
-import { LINKS } from '@/lib/constants';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import GoogleButton from './google-button';
 import { Dictionary } from '@/lib/get-dictionary';
-// import { loginMutation } from '@/lib/vendure/shop/account/account';
 
-const { link_password_reset_request } = LINKS;
 interface LoginType {
   email: string;
   password: string;
@@ -41,10 +37,9 @@ const LoginView = ({ dictionary }: Props) => {
     mode: 'onBlur'
   });
 
-  const login = async ({ email, password, rememberMe }: LoginType) => {
+  const login = async ({ email, password }: LoginType) => {
     // const { login } = await loginMutation(email, password, rememberMe);
     await router.refresh();
-    return login;
   };
   //   const login = useLogin()
 
@@ -57,9 +52,7 @@ const LoginView = ({ dictionary }: Props) => {
         password: data?.password,
         rememberMe: data?.rememberMe || false
       });
-    //   if (res.__typename === 'InvalidCredentialsError') {
-    //     throw new Error(res.__typename);
-    //   }
+   
       closeModal();
       toast.success(common_dictionary.login_success);
     } catch (err: any) {
@@ -68,11 +61,8 @@ const LoginView = ({ dictionary }: Props) => {
       } else {
         toast.error(common_dictionary.NotVerifiedError!);
       }
-      //   if (errors instanceof Array) {
-      //     setMessage(errors.map((e: any) => e.message).join('<br/>'))
-      //   } else {
-      //     setMessage('Unexpected error')
-      //   }
+     
+	  
       setLoading(false);
       setDisabled(false);
     } finally {
@@ -81,19 +71,7 @@ const LoginView = ({ dictionary }: Props) => {
     }
   };
 
-  //   const handleValidation = useCallback(() => {
-  //     // Test for Alphanumeric password
-  //     const validPassword = /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password)
-
-  //     // Unable to send form unless fields are valid.
-  //     if (dirty) {
-  //       setDisabled(!validate(email) || password.length < 7 || !validPassword)
-  //     }
-  //   }, [email, password, dirty])
-
-  //   useEffect(() => {
-  //     handleValidation()
-  //   }, [handleValidation])
+ 
 
   return (
     <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col justify-between w-full">
@@ -118,12 +96,12 @@ const LoginView = ({ dictionary }: Props) => {
             validate: validate
           })}
           type="email"
-          placeholder="Email"
+          label="Email"
           error={errors.email && errors.email?.message}
         />
         <FormInput
           type="password"
-          placeholder={common_dictionary.password!}
+          label={common_dictionary.password!}
           {...register('password', { required: common_dictionary.not_empty! })}
           error={errors.password && errors.password?.message}
         />
@@ -140,23 +118,7 @@ const LoginView = ({ dictionary }: Props) => {
           >
             {common_dictionary.signup}
           </a>
-          <button
-            onClick={() => {
-              closeModal();
-              router.push(link_password_reset_request);
-            }}
-            className="mx-auto block cursor-pointer font-bold text-accent-9 hover:underline"
-          >
-            {common_dictionary.forget_password}
-          </button>
-          {process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED && (
-            <>
-              <div className="mt-2">-{common_dictionary.or}-</div>
-              <div className="mt-2">
-                <GoogleButton dictionary={dictionary} />
-              </div>
-            </>
-          )}
+                 
         </div>
       </div>
     </form>

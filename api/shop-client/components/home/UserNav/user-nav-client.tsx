@@ -125,24 +125,7 @@ export default function UserNavClient({ dictionary, customer }: Props) {
 								</button>
 							</>
 						)}
-						{/* WishList */}
-						{process.env.NEXT_PUBLIC_WISHLIST_ENABLED && (
-							<div className="ml-4 flow-root">
-								<div className="pointer group -m-2 flex items-center p-2">
-									<Link href="/wishlist" legacyBehavior>
-										<a onClick={closeSidebarIfPresent} aria-label="Wishlist">
-											<HeartIcon
-												className={clsx(
-													'h-6 w-6 flex-shrink-0 hover:scale-105 ',
-													isRoot ? 'text-white' : 'text-black'
-												)}
-											/>
-										</a>
-									</Link>
-									<span className="sr-only">wishlist, view items</span>
-								</div>
-							</div>
-						)}
+						
 						{/* Cart */}
 					
 							<div
@@ -183,7 +166,7 @@ export default function UserNavClient({ dictionary, customer }: Props) {
 							</div>
 						
 							<div className="ml-4 flow-root ">
-								{customer?.emailAddress ? (
+								{customer?.email ? (
 									<Menu as="div" className="relative flex-shrink-0">
 										<div>
 											<Menu.Button

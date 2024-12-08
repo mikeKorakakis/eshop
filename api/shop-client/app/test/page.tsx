@@ -1,9 +1,9 @@
+import { getCategories } from '@/lib/actions';
 import { client } from '@/lib/client';
 
 const ProductsPage = async () => {
-	const res = await client.GET("/categories");
-
-	const categories = res.data?.data
+	
+	const categories = await getCategories();
 
 	return (
 		<div>

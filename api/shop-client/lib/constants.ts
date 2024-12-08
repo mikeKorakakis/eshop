@@ -1,6 +1,6 @@
 export const BASE_PATH = 'http://localhost:8000';
 
-
+export const test_user_id = 2;
 export type SortFilterItem = {
   title: string;
   slug: string | null;
@@ -68,7 +68,7 @@ export const LINKS = {
   link_tuning_suspension: '/tuning#suspension',
   link_contact: '/contact',
   link_cart: '/cart',
-  link_checkout: '/checkout',
+  link_checkout: '/checkout/general',
   link_checkout_general: '/checkout/general',
   link_checkout_addresses: '/checkout/addresses',
   link_checkout_shipping: '/checkout/shipping',

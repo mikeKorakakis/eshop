@@ -12,7 +12,7 @@
 				<?php
 				$allCats = getAllFrom("*", "categories", "where parent_id = 0", "", "category_id", "ASC");
 				foreach ($allCats as $cat) {
-					echo '<p><a href="categories.php?pageid=' . $cat['category_id'] . '">
+					echo '<p><a href="categories.php?page_id=' . $cat['category_id'] . '">
 									' . $cat['name'] . '
 								</a></p>';
 				}

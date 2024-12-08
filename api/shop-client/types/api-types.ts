@@ -316,6 +316,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getProductList
+         * @description Get all Products
+         */
+        get: operations["15732299bdeddbb6ee6b7c56ebf56307"];
+        put?: never;
+        /**
+         * createProduct
+         * @description Create Product
+         */
+        post: operations["974b923a4f56c1e533f63ca9eb78d4a2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/products/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getProductItem
+         * @description Get Product
+         */
+        get: operations["1d8e204f0a2534afcaefad51649010dc"];
+        /**
+         * updateProduct
+         * @description Update Product
+         */
+        put: operations["c5e383dccdf04d9ccb04ffcdad51ee75"];
+        post?: never;
+        /**
+         * deleteProduct
+         * @description Delete Product
+         */
+        delete: operations["2968e65018acc4a4d7877ed2321c73c2"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users": {
         parameters: {
             query?: never;
@@ -373,22 +425,26 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         Category: {
+            /** @description Category ID */
+            category_id?: number;
+            /** @description Parent category ID */
+            parent_id?: number | null;
+            /** @description Category ordering */
+            ordering?: number | null;
             /** @description Category name */
             name: string;
             /** @description Category description */
             description: string;
-            /** @description Visibility status */
-            is_visible: boolean;
-            /** @description Allow comments in category */
-            allow_comments: boolean;
-            /** @description Allow ads in category */
-            allow_ads: boolean;
         };
         Comment: {
             /** @description Comment text */
             content: string;
-            /** @description Approval status of comment */
-            status: boolean;
+            /** @description Comment ID */
+            comment_id?: number;
+            /** @description Product ID */
+            product_id: number;
+            /** @description User ID */
+            user_id: number;
             /**
              * Format: date
              * @description Date comment was created
@@ -398,6 +454,10 @@ export interface components {
         CreditCard: {
             /** @description 16-digit card number */
             card_number: string;
+            /** @description Credit card ID */
+            credit_card_id?: number;
+            /** @description User ID */
+            user_id: number;
             /** @description Name on the card */
             cardholder_name: string;
             /**
@@ -414,6 +474,8 @@ export interface components {
             balance: number;
         };
         Item: {
+            /** @description ID of the item */
+            readonly item_id?: number;
             /** @description Name of the item */
             name: string;
             /** @description Description of the item */
@@ -445,6 +507,10 @@ export interface components {
              * @description Date and time the order was placed
              */
             order_date: string;
+            /** @description Order ID */
+            order_id?: number;
+            /** @description User ID */
+            user_id: number;
             /**
              * Format: number
              * @description Total amount for the order
@@ -452,45 +518,66 @@ export interface components {
             total_amount: number;
             /** @description Order status */
             order_status: string;
-            /**
-             * Format: number
-             * @description id of the user
-             */
-            user_id: number;
         };
         OrderItem: {
+            /** @description Order item ID */
+            order_item_id?: number;
+            /** @description Order ID */
+            order_id: number;
+            /** @description Product ID */
+            product_id: number;
+            /** @description Quantity of product */
+            quantity: number;
             /**
              * Format: number
              * @description Price at the time of purchase
              */
             price_at_purchase: number;
+        };
+        Product: {
+            /** @description Product ID */
+            product_id?: number;
+            /** @description Category ID */
+            category_id: number;
+            /** @description Owner ID */
+            owner_id: number;
+            /** @description Name of the product */
+            name: string;
+            /** @description Description of the product */
+            description: string;
             /**
              * Format: number
-             * @description id of the item
+             * @description Price of the product
              */
-            item_id: number;
+            price: number;
             /**
-             * Format: number
-             * @description quantity of the item
+             * Format: date
+             * @description Date product was added
              */
-            quantity: number;
+            added_date?: string;
+            /** @description Country where product was made */
+            country_of_origin: string;
+            /** @description URL to product image */
+            image_url: string;
         };
         User: {
+            /** @description User ID */
+            user_id?: number;
+            /** @description Group ID */
+            group_id: number;
             /** @description Username for login */
             username: string;
             /** @description Hashed password */
-            password: string;
+            password?: string;
             /** @description User email */
             email: string;
             /** @description Full name of user */
             full_name: string;
-            /** @description Registration approval status */
-            registration_status: boolean;
             /**
              * Format: date
              * @description Date of registration
              */
-            registration_date: string;
+            registration_date?: string;
             /** @description URL to avatar image */
             avatar_url: string;
         };
@@ -1304,6 +1391,143 @@ export interface operations {
             header?: never;
             path: {
                 /** @description id of OrderItem */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        success?: boolean;
+                        data?: string;
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    "15732299bdeddbb6ee6b7c56ebf56307": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        success?: boolean;
+                        data?: components["schemas"]["Product"][];
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    "974b923a4f56c1e533f63ca9eb78d4a2": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Product"];
+            };
+        };
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        success?: boolean;
+                        data?: components["schemas"]["Product"];
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    "1d8e204f0a2534afcaefad51649010dc": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description id of Product */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        success?: boolean;
+                        data?: components["schemas"]["Product"];
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    c5e383dccdf04d9ccb04ffcdad51ee75: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description id of Product */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Product"];
+            };
+        };
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        success?: boolean;
+                        data?: components["schemas"]["Product"];
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    "2968e65018acc4a4d7877ed2321c73c2": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description id of Product */
                 id: number;
             };
             cookie?: never;

@@ -24,7 +24,7 @@
         "inView": true
     },
     {
-        "name": "item_id",
+        "name": "product_id",
         "dbType": "integer,false",
         "htmlType": "number",
         "validations": "required",
@@ -65,6 +65,6 @@
     },
     {
         "type": "relation",
-        "relation": "mt1,Item,item_id"
+        "relation": "mt1,Product,product_id"
     }
 ]

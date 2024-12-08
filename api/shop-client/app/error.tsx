@@ -18,9 +18,9 @@ export default function Error({
   const [dictionary, setDictionary] = useState<Dictionary | null>(null);
   const pathname = usePathname();
   useEffect(() => {
-    const lang = (pathname.split('/')[1] || 'el') as 'en' | 'el';
+    const lng = (pathname.split('/')[1] || 'el') as 'en' | 'el';
     const dict = async () => {
-      const dictionary = await getDictionaryServer({ lang });
+      const dictionary = await getDictionaryServer({ lng });
       setDictionary(dictionary);
     };
     dict();

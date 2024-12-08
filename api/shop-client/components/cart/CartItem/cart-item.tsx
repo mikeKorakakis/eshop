@@ -128,13 +128,14 @@ const CartItem = ({
 				{...rest}
 			>
 				<div className="flex flex-row space-x-4 py-4">
-					<div className="relative h-16 w-16 cursor-pointer overflow-hidden">
+					<div className="relative h-16 w-16 cursor-pointer overflow-hidden bg-white rounded-md p-1">
 						<Link href={`/product/${item?.name}`}>
 							<Image
 								onClick={() => closeSidebarIfPresent()}
 								className={s.productImage}
 								width={500}
 								height={500}
+
 								//   src={placeholderImg}
 								src={imageUrl(item.imageUrl) || placeholderImg}
 								
@@ -143,36 +144,12 @@ const CartItem = ({
 						</Link>
 					</div>
 					<div className="flex flex-1 flex-col text-base">
-						<Link href={`/product${item?.name}`}>
+						<Link href={`/product${item?.id}`}>
 							<span className={s.productName} onClick={() => closeSidebarIfPresent()}>
 								{item.name}
 							</span>
 						</Link>
-						{options && options.length > 0 && (
-							<div className="flex items-center pb-1">
-								{options.map((option: ItemOption, i: number) => (
-									<div
-										key={`${item.id}-${option.name}`}
-										className="inline-flex items-center justify-center text-sm font-semibold text-accent-7"
-									>
-										{option.name}
-										{option.name === 'Color' ? (
-											<span
-												className="mx-2 inline-flex h-5 w-5 items-center justify-center overflow-hidden rounded-full border bg-transparent p-1 text-accent-9"
-												style={{
-													backgroundColor: `${option.value}`
-												}}
-											></span>
-										) : (
-											<span className="mx-2 inline-flex h-5 items-center justify-center overflow-hidden rounded-full border bg-transparent p-1 text-accent-9">
-												{option.value}
-											</span>
-										)}
-										{i === options.length - 1 ? '' : <span className="mr-3" />}
-									</div>
-								))}
-							</div>
-						)}
+						
 						{variant === 'display' && <div className="text-sm tracking-wider">{quantity}x</div>}
 					</div>
 					<div className="flex flex-col justify-between space-y-2 text-sm">

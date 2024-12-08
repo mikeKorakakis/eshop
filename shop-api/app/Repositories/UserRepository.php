@@ -13,8 +13,6 @@ class UserRepository extends BaseRepository
         'email',
         'full_name',
         'group_id',
-        'trust_status',
-        'registration_status',
         'registration_date',
         'avatar_url'
     ];

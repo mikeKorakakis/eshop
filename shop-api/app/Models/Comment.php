@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @OA\Schema(
  *      schema="Comment",
- *      required={"content","status","created_date","item_id","user_id"},
+ *      required={"content","created_date","product_id","user_id"},
  *      @OA\Property(
  *          property="content",
  *          description="Comment text",
@@ -15,13 +15,28 @@ use Illuminate\Database\Eloquent\Model;
  *          nullable=false,
  *          type="string",
  *      ),
- *      @OA\Property(
- *          property="status",
- *          description="Approval status of comment",
- *          readOnly=false,
- *          nullable=false,
- *          type="boolean",
- *      ),
+ * 	@OA\Property(
+ * 		property="comment_id",
+ * 		description="Comment ID",
+ * 		readOnly=false,
+ * 		nullable=false,
+ * 		type="number",
+ * 	),
+ * 	@OA\Property(
+ * 		property="product_id",
+ * 		description="Product ID",
+ * 		readOnly=false,
+ * 		nullable=false,
+ * 		type="number",
+ * 	),
+ * 	@OA\Property(
+ * 		property="user_id",
+ * 		description="User ID",
+ * 	
+ * 		readOnly=false,
+ * 		nullable=false,
+ * 		type="number",
+ * 	),
  *      @OA\Property(
  *          property="created_date",
  *          description="Date comment was created",
@@ -41,29 +56,26 @@ use Illuminate\Database\Eloquent\Model;
 
     public $fillable = [
         'content',
-        'status',
         'created_date',
-        'item_id',
+        'product_id',
         'user_id'
     ];
 
     protected $casts = [
         'content' => 'string',
-        'status' => 'boolean',
         'created_date' => 'date'
     ];
 
     public static array $rules = [
         'content' => 'required|string|max:65535',
-        'status' => 'required|boolean',
         'created_date' => 'required',
-        'item_id' => 'required',
+        'product_id' => 'required',
         'user_id' => 'required'
     ];
 
-    public function item(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\Item::class, 'item_id');
+        return $this->belongsTo(\App\Models\Product::class, 'product_id');
     }
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

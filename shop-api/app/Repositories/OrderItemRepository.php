@@ -9,7 +9,7 @@ class OrderItemRepository extends BaseRepository
 {
     protected $fieldSearchable = [
         'order_id',
-        'item_id',
+        'product_id',
         'quantity',
         'price_at_purchase'
     ];

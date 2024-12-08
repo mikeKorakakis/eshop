@@ -8,7 +8,6 @@ import { LINKS } from '@/lib/constants';
 import Link from 'next/link';
 import { useCart } from '@/components/ui/cart-context';
 
-const { link_checkout_general, link_checkout_addresses, link_checkout_shipping } = LINKS;
 
 interface Props {
 	dictionary: Dictionary;
@@ -17,15 +16,9 @@ const OrderView: FC<Props> = ({ dictionary }) => {
 	const common_dictionary = dictionary.common;
 	const checkout_dictionary = dictionary.checkout;
 	const { items, totalAmount} = useCart()
-	//   const { order, isLoading, isEmpty } = useCart({locale})
-
-	//   const subTotal = formatPrice(order?.subTotal, order?.currencyCode);
-	//   const total = formatPrice(order?.totalWithTax, order?.currencyCode);
-	//   const taxPrice = formatPrice(order?.taxSummary[0]?.taxTotal, order?.currencyCode);
 	const total = totalAmount;
 	const currencyCode = "EUR";
 
-	// const shipping = formatPrice(order?.shippingWithTax, order?.currencyCode);
 	const [calculating, setCalculating] = useState(false);
 	const isEmpty = items?.length === 0;
 	const disabled = false;

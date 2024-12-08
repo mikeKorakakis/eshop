@@ -37,7 +37,7 @@
 						}
 						echo
 							'<div>
-								<a href="categories.php?pageid=' . $cat['category_id'] . '">
+								<a href="categories.php?page_id=' . $cat['category_id'] . '">
 									' . $cat['name'] . '
 								</a>
 							</div>';

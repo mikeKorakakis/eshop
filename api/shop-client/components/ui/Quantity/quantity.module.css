@@ -1,5 +1,5 @@
 .actions {
-  @apply ml-1 flex p-1 border-zinc-300 border items-center justify-center rounded-md
+  @apply ml-1 flex p-1 border-zinc-300 border items-center justify-center rounded-md bg-white
   w-12 text-zinc-800 shadow-sm;
   transition-property: border-color, background, color, transform, box-shadow;
   transition-duration: 0.15s;
@@ -22,5 +22,5 @@
 }
 
 .input {
-  @apply bg-transparent select-none pointer-events-auto h-full w-full rounded-md border-zinc-300 shadow-sm focus:border-zinc-300 focus:ring-zinc-300 sm:text-sm;
+  @apply bg-white select-none pointer-events-auto h-full w-full rounded-md border-zinc-300 shadow-sm focus:border-zinc-300 focus:ring-zinc-300 sm:text-sm;
 }

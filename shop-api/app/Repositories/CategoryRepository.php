@@ -11,10 +11,7 @@ class CategoryRepository extends BaseRepository
         'name',
         'description',
         'parent_id',
-        'ordering',
-        'is_visible',
-        'allow_comments',
-        'allow_ads'
+        'ordering'
     ];
 
     public function getFieldsSearchable(): array

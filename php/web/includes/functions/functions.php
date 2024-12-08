@@ -26,13 +26,12 @@ function getSingleValue($con, $sql, $parameters)
 		global $con;
 
 		$stmtx = $con->prepare("SELECT 
-									username, registration_status 
+									username
 								FROM 
 									users 
 								WHERE 
 									username = ? 
-								AND 
-									registration_status = 0");
+								");
 
 		$stmtx->execute(array($user));
 
@@ -82,11 +81,7 @@ function getSingleValue($con, $sql, $parameters)
 
 			echo $cssFile;
 
-		} else {
-
-			echo 'index.css';
-
-		}
+		} 
 	}
 
 
@@ -152,34 +147,34 @@ function getSingleValue($con, $sql, $parameters)
 
 	}
 
-	function printProductCard($item, $upload) {
+	function printProductCard($product, $upload) {
 		echo '<div id="box">';
-		echo '<a href="items.php?itemid=' . $item['item_id'] . '">';
-		echo '<img src="' . $upload . $item["image_url"] . '" alt="Clothing Item Preview">';
+		echo '<a href="products.php?product_id=' . $product['product_id'] . '">';
+		echo '<img src="' . $upload . $product["image_url"] . '" alt="Clothing Item Preview">';
 		echo '<div id="details">';
-		echo '<h3>' . $item["name"] . '</h3>';
-		echo '<h4>' . $item['description'] . '</h4>';
-		echo '<h2>' . $item['price'] . ' €</h2>';
+		echo '<h3>' . $product["name"] . '</h3>';
+		echo '<h4>' . $product['description'] . '</h4>';
+		echo '<h2>' . $product['price'] . ' €</h2>';
 		echo '</div>';
 		echo '</a>';
 		echo '</div>';
 	}
 
-	function dynamicCartSection($item, $itemCounter, $upload)
+	function dynamicCartSection($product, $productCounter, $upload)
 {
-	// Generate the cart item HTML
+	// Generate the cart product HTML
 	return '
    <div id="box">
-        <img style="height: 220px; object-fit: contain;" src="' . $upload . htmlspecialchars($item['image_url']) . '" alt="' . htmlspecialchars($item['name']) . '">
+        <img style="height: 220px; object-fit: contain;" src="' . $upload . htmlspecialchars($product['image_url']) . '" alt="' . htmlspecialchars($product['name']) . '">
         <div>
-            <h3>' . htmlspecialchars($item['name']) . ' × ' . $itemCounter . '</h3>
-            <h4>Amount: ' . htmlspecialchars($item['price']) . ' €</h4>
-            <h4>Total Amount: ' . htmlspecialchars($item['price'] * $itemCounter) . ' €</h4>
+            <h3>' . htmlspecialchars($product['name']) . ' × ' . $productCounter . '</h3>
+            <h4>Amount: ' . htmlspecialchars($product['price']) . ' €</h4>
+            <h4>Total Amount: ' . htmlspecialchars($product['price'] * $productCounter) . ' €</h4>
             <form action="" method="POST" style="display: flex; gap: 10px; margin-top: 10px;">
-                <input type="hidden" name="item_id" value="' . htmlspecialchars($item['id']) . '">
-                <input type="number" class="form-control-small" name="quantity" value="' . htmlspecialchars($itemCounter) . '" min="1" style="width: 60px;">
+                <input type="hidden" name="product_id" value="' . htmlspecialchars($product['id']) . '">
+                <input type="number" class="form-control-small" name="quantity" value="' . htmlspecialchars($productCounter) . '" min="1" style="width: 60px;">
                 <button type="submit" name="update_quantity" class="btn btn-sm btn-success">Update</button>
-                <button type="submit" name="remove_item" class="btn btn-sm btn-danger">Remove</button>
+                <button type="submit" name="remove_product" class="btn btn-sm btn-danger">Remove</button>
             </form>
         </div>
     </div>';

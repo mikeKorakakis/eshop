@@ -6,16 +6,16 @@ include 'init.php';
 
 <div id="mainContainer">
 	<?php
-	if (isset($_GET['pageid']) && is_numeric($_GET['pageid'])) {
-		$category = intval($_GET['pageid']);
-		$allItems = getAllFrom("*", "items", "where category_id = {$category}", "AND is_approved = 1", "item_id");
+	if (isset($_GET['page_id']) && is_numeric($_GET['page_id'])) {
+		$category = intval($_GET['page_id']);
+		$allProducts = getAllFrom("*", "products", "where category_id = {$category}", "", "product_id");
 		$myCategory = getSingleValue($con, "SELECT name FROM categories WHERE category_id=?", [$category]);
 		$allCats = getAllFrom("*", "categories", "where parent_id = 0", "", "category_id", "ASC");
 		echo '<h1>' . $myCategory . '</h1>';
 		echo '<div id="categoryContainer">';
-		$allItems = getAllFrom('*', 'items', 'where is_approved = 1 and category_id=' . $category , '', 'item_id');
-		foreach ($allItems as $item) {
-			printProductCard($item, $upload);			
+		$allProducts = getAllFrom('*', 'products', 'where category_id=' . $category , '', 'product_id');
+		foreach ($allProducts as $product) {
+			printProductCard($product, $upload);			
 		}
 		echo '</div>';
 	} else {

@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { Dictionary } from '@/lib/get-dictionary';
 import { client } from '@/lib/client';
 import { ProductList } from '../product/ProductList';
-import { Item } from '@/types/types';
+import { getProducts } from '@/lib/actions';
 
 interface Props {
 	dictionary: Dictionary;
@@ -11,8 +11,9 @@ interface Props {
 
 export default async function CategoryProductsSection({ dictionary, category_id }: Props) {
 
-	const res = await client.GET(`/items`);
-	let products = res.data?.data as Item[];
+	const products = await getProducts();
+
+	
 
 	return (
 			<Suspense fallback={<div>Loading...</div>}>

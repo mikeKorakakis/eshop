@@ -4,8 +4,8 @@ import { cookies } from 'next/headers';
 
 export default async function NotFound() {
   const c = await cookies();
-  const lang = c.get('X-Language-Preference')?.value;
-  const dictionary = await getDictionary(lang as 'en' | 'el');
+  const lng = c.get('X-Language-Preference')?.value;
+  const dictionary = await getDictionary(lng as 'en' | 'el');
   const not_found_dictionary = dictionary.not_found;
   return (
     <>

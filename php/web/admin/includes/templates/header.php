@@ -24,11 +24,11 @@
 			<!-- MAIN CONTAINER -->
 			<div id="container">
 				<!-- SHOP NAME -->
-				<div id="shopName"><a href="/admin"> <b>UNIWA</b>SHOP </a></div>
+				<div id="shopName"><a href="/admin/dashboard.php"> <b>UNIWA</b>SHOP </a></div>
 				<!-- COLLCETIONS ON WEBSITE -->
 				<div id="admin-collection">
 					<div><a href="categories.php">Categories</a></div>
-					<div><a href="items.php">Products</a></div>
+					<div><a href="products.php">Products</a></div>
 					<div><a href="orders.php">Orders</a></div>
 					<div><a href="members.php">Customers</a></div>
 					<div><a href="comments.php">Comments</a></div>

@@ -11,13 +11,15 @@ import StripePayments from '../StripePayments';
 import { usePathname, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { refreshCart } from '../actions';
-import { LINKS } from '@/lib/constants';
+import { LINKS, test_user_id } from '@/lib/constants';
 import PaymentRadioGroup from './payment-radio-group';
-import { useForm } from 'react-hook-form';
+import { FieldErrors, useForm, UseFormRegister } from 'react-hook-form';
 import FormInput from '@/components/ui/FormInput';
 import { client } from '@/lib/client';
-import { useCart } from '@/components/ui/cart-context';
-import { Order } from '@/types/types';
+import { CartContext, useCart } from '@/components/ui/cart-context';
+import { CreditCard, Order } from '@/types/types';
+import { createOrder, createOrderItem, getOrders, getUserCreditCard, makePurchase, updateCreditCardBalance } from '@/lib/actions';
+import test from 'node:test';
 
 const { link_order_confirmation, link_checkout_shipping, link_checkout_general } = LINKS;
 
@@ -28,21 +30,21 @@ interface Props {
 type PaymentType = {
 	cardNumber: string;
 	nameOnCard: string;
-	exprirationDate: string;
+	expirationDate: string;
 	cvc: string;
 };
 
 export default function PaymentView({ dictionary }: Props) {
 	const common_dictionary = dictionary.common;
 	const checkout_dictionary = dictionary.checkout;
-	const { items, totalAmount } = useCart();
+	const { items, totalAmount, clearCart } = useCart();
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors, isValid }
 	} = useForm<PaymentType>({
-		defaultValues: { cardNumber: '', nameOnCard: '', exprirationDate: '', cvc: '' },
+		defaultValues: { cardNumber: '', nameOnCard: '', expirationDate: '', cvc: '' },
 		mode: 'onBlur'
 	});
 
@@ -54,34 +56,27 @@ export default function PaymentView({ dictionary }: Props) {
 	const onSubmit = async (data: PaymentType) => {
 		try {
 			setLoading(true);
-			client.POST('/orders', {
-				body: {
-					user_id: 2,
-					total_amount: totalAmount,
-					order_date: new Date().toISOString(),
-					order_status: "pending"
-				}
+
+
+			const order = await makePurchase({
+				cardNumber: data.cardNumber,
+				products: items,
+				totalAmount: totalAmount,
+				userId: test_user_id
 			})
 
-			const res = await client.GET(`/orders`);
-		
-			let orders = res.data?.data as Order[];
+			router.push(`${link_order_confirmation}/${order?.order_id}?redirect_status=succeeded`);
 
-			const order = orders[orders.length-1]
-			for (const item of items ){
-				client.POST('/order-items', {
-					body: {
-						item_id: item.id,
-						price_at_purchase: item.price,
-						quantity: item.quantity,
-						order_id: order?.order_id
-					}
-				})
-			}
-			
-			
+
+
 		} catch (err: any) {
-			toast.error(common_dictionary.error);
+			if (err.message === "payment_failed") {
+				toast.error(common_dictionary.PAYMENT_FAILED_ERROR)
+			} else if (err.message === "payment_declined") {
+				toast.error(common_dictionary.PAYMENT_DECLINED_ERROR);
+			}else{
+				toast.error(common_dictionary.error);
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -126,16 +121,12 @@ export default function PaymentView({ dictionary }: Props) {
 				<div className="mt-6 grid grid-cols-4 gap-x-4 gap-y-6">
 					<div className="col-span-4">
 						<div className="mt-2">
+							<CardNumberInput
+								register={register}
+								errors={errors}
+								checkout_dictionary={checkout_dictionary}
+								common_dictionary={common_dictionary} />
 
-							<FormInput
-								{...register('cardNumber', {
-									required: common_dictionary.not_empty!,
-								})}
-								type="text"
-								label={checkout_dictionary.card_number}
-								placeholder={checkout_dictionary.card_number}
-								error={errors.cardNumber && errors.cardNumber?.message}
-							/>
 						</div>
 					</div>
 
@@ -147,7 +138,7 @@ export default function PaymentView({ dictionary }: Props) {
 								})}
 								type="text"
 								label={checkout_dictionary.name_on_card}
-								placeholder={checkout_dictionary.name_on_card}
+								placeholder="John Smith"
 								error={errors.nameOnCard && errors.cardNumber?.message}
 							/>
 						</div>
@@ -155,15 +146,13 @@ export default function PaymentView({ dictionary }: Props) {
 
 					<div className="col-span-3">
 						<div className="mt-2">
-							<FormInput
-								{...register('exprirationDate', {
-									required: common_dictionary.not_empty!,
-								})}
-								type="text"
-								label={checkout_dictionary.expiration_date}
-								placeholder={checkout_dictionary.expiration_date}
-								error={errors.nameOnCard && errors.cardNumber?.message}
-							/>
+							<ExpirationDateInput
+								register={register}
+								errors={errors}
+								checkout_dictionary={checkout_dictionary}
+								common_dictionary={common_dictionary} />
+
+
 						</div>
 					</div>
 
@@ -174,7 +163,8 @@ export default function PaymentView({ dictionary }: Props) {
 									required: common_dictionary.not_empty!,
 								})}
 								type="text"
-								placeholder="CVC"
+								maxLength={3}
+								placeholder="123"
 								label='CVC'
 								error={errors.cvc && errors.cvc?.message}
 							/>
@@ -188,10 +178,12 @@ export default function PaymentView({ dictionary }: Props) {
 						className="h-10"
 						variant="ghost"
 						type="submit"
+						loading={loading}
 						disabled={!isValid}
 					>
 						{checkout_dictionary.confirm_order_pay}
 					</Button>
+					{isValid}
 					<Button
 						//   className="mt-4"
 						className="h-10"
@@ -212,3 +204,60 @@ export default function PaymentView({ dictionary }: Props) {
 		</div >
 	);
 }
+
+const CardNumberInput = ({ register, errors, checkout_dictionary, common_dictionary }:
+	{ register: UseFormRegister<PaymentType>, errors: FieldErrors<PaymentType>, checkout_dictionary: Dictionary["checkout"], common_dictionary: Dictionary["common"] }) => {
+	const handleCardNumberInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+		let input = event.target.value.replace(/\D/g, ''); // Remove non-digit characters
+		input = input.replace(/(\d{4})/g, '$1 ').trim(); // Add spaces after every 4 digits
+		event.target.value = input;
+	};
+
+	return (
+		<FormInput
+			{...register('cardNumber', {
+				required: common_dictionary.not_empty!,
+				validate: (value: string) => {
+					const digitsOnly = value.replace(/\s/g, ''); // Remove spaces
+					return digitsOnly.length === 16 || common_dictionary.invalid_card_number!;
+				},
+			})}
+			maxLength={19} // Max length including spaces (16 digits + 3 spaces)
+			type="text"
+			label={checkout_dictionary.card_number}
+			placeholder="4242 4242 4242 4242"
+			error={errors.cardNumber && errors.cardNumber?.message}
+			onInput={handleCardNumberInput} // Add formatting handler
+		/>
+	);
+};
+
+
+const ExpirationDateInput = ({ register, errors, checkout_dictionary, common_dictionary }:
+	{ register: UseFormRegister<PaymentType>, errors: FieldErrors<PaymentType>, checkout_dictionary: Dictionary["checkout"], common_dictionary: Dictionary["common"] }) => {
+	const handleExpirationDateInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+		let input = event.target.value.replace(/\D/g, ''); // Remove non-digit characters
+		if (input.length > 2) {
+			input = `${input.slice(0, 2)}/${input.slice(2, 4)}`; // Add "/" after the first 2 digits
+		}
+		event.target.value = input;
+	};
+
+	return (
+		<FormInput
+			{...register('expirationDate', {
+				required: common_dictionary.not_empty!,
+				validate: (value: string) => {
+					const regex = /^(0[1-9]|1[0-2])\/\d{2}$/; // Format: MM/YY
+					return regex.test(value) || common_dictionary.invalid_expiration_date!;
+				},
+			})}
+			type="text"
+			maxLength={5} // Max length for "MM/YY"
+			label={checkout_dictionary.expiration_date}
+			placeholder="MM/YY"
+			error={errors.expirationDate && errors.expirationDate?.message}
+			onInput={handleExpirationDateInput} // Add formatting handler
+		/>
+	);
+};

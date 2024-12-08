@@ -67,9 +67,6 @@
 									echo "<h3>" . $cat['name'] . '</h3>';
 									echo "<div class='full-view'>";
 										echo "<p>"; if($cat['description'] == '') { echo 'This category has no description'; } else { echo $cat['description']; } echo "</p>";
-										if($cat['is_visible'] == 1) { echo '<span class="visibility cat-span"><i class="fa fa-eye"></i> Hidden</span>'; } 
-										if($cat['allow_comments'] == 1) { echo '<span class="commenting cat-span"><i class="fa fa-close"></i> Comment Disabled</span>'; }
-										if($cat['allow_ads'] == 1) { echo '<span class="advertises cat-span"><i class="fa fa-close"></i> Ads Disabled</span>'; }  
 									echo "</div>";
 
 									// Get Child Categories
@@ -153,51 +150,7 @@
 						</div>
 					</div>
 					<!-- End Category Type -->
-					<!-- Start Visibility Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Visible</label>
-						<div class="col-sm-10 col-md-6">
-							<div>
-								<input id="vis-yes" type="radio" name="visibility" value="0" checked />
-								<label for="vis-yes">Yes</label> 
-							</div>
-							<div>
-								<input id="vis-no" type="radio" name="visibility" value="1" />
-								<label for="vis-no">No</label> 
-							</div>
-						</div>
-					</div>
-					<!-- End Visibility Field -->
-					<!-- Start Commenting Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Allow Commenting</label>
-						<div class="col-sm-10 col-md-6">
-							<div>
-								<input id="com-yes" type="radio" name="commenting" value="0" checked />
-								<label for="com-yes">Yes</label> 
-							</div>
-							<div>
-								<input id="com-no" type="radio" name="commenting" value="1" />
-								<label for="com-no">No</label> 
-							</div>
-						</div>
-					</div>
-					<!-- End Commenting Field -->
-					<!-- Start Ads Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Allow Ads</label>
-						<div class="col-sm-10 col-md-6">
-							<div>
-								<input id="ads-yes" type="radio" name="ads" value="0" checked />
-								<label for="ads-yes">Yes</label> 
-							</div>
-							<div>
-								<input id="ads-no" type="radio" name="ads" value="1" />
-								<label for="ads-no">No</label> 
-							</div>
-						</div>
-					</div>
-					<!-- End Ads Field -->
+					
 					<!-- Start Submit Field -->
 					<div class="form-group form-group-lg">
 						<div class="col-sm-offset-2 col-sm-10">
@@ -223,9 +176,6 @@
 				$desc 		= $_POST['description'];
 				$parent 	= $_POST['parent'];
 				$order 		= $_POST['ordering'];
-				$visible 	= $_POST['visibility'];
-				$comment 	= $_POST['commenting'];
-				$ads 		= $_POST['ads'];
 
 				// Check If Category Exist in Database
 
@@ -243,18 +193,15 @@
 
 					$stmt = $con->prepare("INSERT INTO 
 
-						categories(Name, Description, parent_id, ordering, is_visible, allow_comments, allow_ads)
+						categories(Name, Description, parent_id, ordering)
 
-					VALUES(:zname, :zdesc, :zparent, :zorder, :zvisible, :zcomment, :zads)");
+					VALUES(:zname, :zdesc, :zparent, :zorder)");
 
 					$stmt->execute(array(
 						'zname' 	=> $name,
 						'zdesc' 	=> $desc,
 						'zparent' 	=> $parent,
 						'zorder' 	=> $order,
-						'zvisible' 	=> $visible,
-						'zcomment' 	=> $comment,
-						'zads'		=> $ads
 					));
 
 					// Echo Success Message
@@ -355,51 +302,7 @@
 							</div>
 						</div>
 						<!-- End Category Type -->
-						<!-- Start Visibility Field -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Visible</label>
-							<div class="col-sm-10 col-md-6">
-								<div>
-									<input id="vis-yes" type="radio" name="visibility" value="0" <?php if ($cat['is_visible'] == 0) { echo 'checked'; } ?> />
-									<label for="vis-yes">Yes</label> 
-								</div>
-								<div>
-									<input id="vis-no" type="radio" name="visibility" value="1" <?php if ($cat['is_visible'] == 1) { echo 'checked'; } ?> />
-									<label for="vis-no">No</label> 
-								</div>
-							</div>
-						</div>
-						<!-- End Visibility Field -->
-						<!-- Start Commenting Field -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Allow Commenting</label>
-							<div class="col-sm-10 col-md-6">
-								<div>
-									<input id="com-yes" type="radio" name="commenting" value="0" <?php if ($cat['allow_comments'] == 0) { echo 'checked'; } ?> />
-									<label for="com-yes">Yes</label> 
-								</div>
-								<div>
-									<input id="com-no" type="radio" name="commenting" value="1" <?php if ($cat['allow_comments'] == 1) { echo 'checked'; } ?> />
-									<label for="com-no">No</label> 
-								</div>
-							</div>
-						</div>
-						<!-- End Commenting Field -->
-						<!-- Start Ads Field -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Allow Ads</label>
-							<div class="col-sm-10 col-md-6">
-								<div>
-									<input id="ads-yes" type="radio" name="ads" value="0" <?php if ($cat['allow_ads'] == 0) { echo 'checked'; } ?>/>
-									<label for="ads-yes">Yes</label> 
-								</div>
-								<div>
-									<input id="ads-no" type="radio" name="ads" value="1" <?php if ($cat['allow_ads'] == 1) { echo 'checked'; } ?>/>
-									<label for="ads-no">No</label> 
-								</div>
-							</div>
-						</div>
-						<!-- End Ads Field -->
+						
 						<!-- Start Submit Field -->
 						<div class="form-group form-group-lg">
 							<div class="col-sm-offset-2 col-sm-10">
@@ -441,9 +344,6 @@
 				$order 		= $_POST['ordering'];
 				$parent 	= $_POST['parent'];
 
-				$visible 	= $_POST['visibility'];
-				$comment 	= $_POST['commenting'];
-				$ads 		= $_POST['ads'];
 
 				// Update The Database With This Info
 
@@ -453,14 +353,11 @@
 											name = ?, 
 											description = ?, 
 											ordering = ?, 
-											parent_id = ?,
-											is_visible = ?,
-											allow_comments = ?,
-											allow_ads = ? 
+											parent_id = ?
 										WHERE 
 											category_id = ?");
 
-				$stmt->execute(array($name, $desc, $order, $parent, $visible, $comment, $ads, $id));
+				$stmt->execute(array($name, $desc, $order, $parent, $id));
 
 				// Echo Success Message
 

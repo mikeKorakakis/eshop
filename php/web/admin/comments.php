@@ -26,13 +26,13 @@
 			// Select All Users Except Admin 
 
 			$stmt = $con->prepare("SELECT 
-										comments.*, items.name AS item_name, users.username AS username  
+										comments.*, products.name AS product_name, users.username AS username  
 									FROM 
 										comments
 									INNER JOIN 
-										items 
+										products 
 									ON 
-										items.item_id = comments.item_id
+										products.product_id = comments.product_id
 									INNER JOIN 
 										users 
 									ON 
@@ -67,17 +67,12 @@
 							foreach($comments as $comment) {
 								echo "<tr>";
 									echo "<td>" . $comment['content'] . "</td>";
-									echo "<td>" . $comment['item_name'] . "</td>";
+									echo "<td>" . $comment['product_name'] . "</td>";
 									echo "<td>" . $comment['username'] . "</td>";
 									echo "<td>" . $comment['created_date'] ."</td>";
 									echo "<td>
 										<a href='comments.php?do=Delete&comid=" . $comment['comment_id'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
-										if ($comment['status'] == 0) {
-											echo "<a href='comments.php?do=Approve&comid="
-													 . $comment['c_id'] . "' 
-													class='btn btn-info activate'>
-													<i class='fa fa-check'></i> Approve</a>";
-										}
+										
 									echo "</td>";
 								echo "</tr>";
 							}

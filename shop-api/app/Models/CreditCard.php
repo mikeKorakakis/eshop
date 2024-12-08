@@ -15,6 +15,21 @@ use Illuminate\Database\Eloquent\Model;
  *          nullable=false,
  *          type="string",
  *      ),
+ * 	@OA\Property(
+ * 		property="credit_card_id",
+ * 		description="Credit card ID",
+ * 		readOnly=false,
+ * 		nullable=false,
+ * 		type="number",
+ * 	),
+ * 	@OA\Property(
+ * 		property="user_id",
+ * 		description="User ID",
+ * 		readOnly=false,
+ * 		nullable=false,
+ * 		type="number",
+ * 	),
+ 
  *      @OA\Property(
  *          property="cardholder_name",
  *          description="Name on the card",

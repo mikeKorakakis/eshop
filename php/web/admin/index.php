@@ -10,7 +10,9 @@ if (isset($_SESSION['Username'])) {
 
 include 'init.php';
 
-// Check If User Coming From HTTP Post Request
+if (isset($_SESSION['admin'])) {
+	header('Location: dashboard.php');
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 

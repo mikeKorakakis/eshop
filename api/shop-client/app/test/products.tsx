@@ -1,13 +1,13 @@
 'use client'
 
+import { getCategories } from "@/lib/actions";
 import { client } from "@/lib/client";
 
 const ProductsList = async () => {
-  const res = await client.GET("/categories");
+  
 
-  const categories = res.data?.data
-
-  console.log('data', categories)
+  const categories = await getCategories();
+  
   return (
     <div>
       {categories?.map((product) => (

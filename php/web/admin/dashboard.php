@@ -19,7 +19,7 @@
 
 		$numItems = 6; // Number Of Latest Items
 
-		$latestItems = getLatest("*", 'items', 'item_id', $numItems); // Latest Items Array
+		$latestProducts = getLatest("*", 'products', 'product_id', $numItems); // Latest Items Array
 
 		$numComments = 4;
 
@@ -46,7 +46,7 @@
 							<div class="info">
 								Total Items
 								<span>
-									<a href="items.php"><?php echo countItems('item_id', 'items') ?></a>
+									<a href="products.php"><?php echo countItems('product_id', 'products') ?></a>
 								</span>
 							</div>
 						</div>
@@ -88,12 +88,7 @@
 												echo '<a href="members.php?do=Edit&userid=' . $user['user_id'] . '">';
 													echo '<span class="btn btn-success pull-right">';
 														echo '<i class="fa fa-edit"></i> Edit';
-														if ($user['registration_status'] == 0) {
-															echo "<a 
-																	href='members.php?do=Activate&userid=" . $user['user_id'] . "' 
-																	class='btn btn-info pull-right activate'>
-																	<i class='fa fa-check'></i> Activate</a>";
-														}
+												
 													echo '</span>';
 												echo '</a>';
 											echo '</li>';
@@ -109,7 +104,7 @@
 					<div class="col-sm-6">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<i class="fa fa-tag"></i> Latest <?php echo $numItems ?> Items 
+								<i class="fa fa-tag"></i> Latest <?php echo $numItems ?> Products 
 								<span class="toggle-info pull-right">
 									<i class="fa fa-plus fa-lg"></i>
 								</span>
@@ -117,19 +112,14 @@
 							<div class="panel-body">
 								<ul class="list-unstyled latest-users">
 									<?php
-										if (! empty($latestItems)) {
-											foreach ($latestItems as $item) {
+										if (! empty($latestProducts)) {
+											foreach ($latestProducts as $product) {
 												echo '<li>';
-													echo $item['name'];
-													echo '<a href="items.php?do=Edit&itemid=' . $item['item_id'] . '">';
+													echo $product['name'];
+													echo '<a href="products.php?do=Edit&productid=' . $product['product_id'] . '">';
 														echo '<span class="btn btn-success pull-right">';
 															echo '<i class="fa fa-edit"></i> Edit';
-															if ($item['is_approved'] == 0) {
-																echo "<a 
-																		href='items.php?do=Approve&itemid=" . $item['item_id'] . "' 
-																		class='btn btn-info pull-right activate'>
-																		<i class='fa fa-check'></i> Approve</a>";
-															}
+															
 														echo '</span>';
 													echo '</a>';
 												echo '</li>';

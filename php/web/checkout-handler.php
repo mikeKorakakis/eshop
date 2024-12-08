@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['credit_card_number'])
 	// Calculate total amount
 	$totalAmount = 0;
 	if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-		foreach ($_SESSION['cart'] as $item) {
-			$totalAmount += $item['price'] * $item['quantity'];
+		foreach ($_SESSION['cart'] as $product) {
+			$totalAmount += $product['price'] * $product['quantity'];
 		}
 	}
 
@@ -66,10 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['credit_card_number'])
 		$stmt->execute([$userId, $totalAmount]);
 		$orderId = $con->lastInsertId();
 
-		// Insert order items into `order_items` table
-		foreach ($_SESSION['cart'] as $item) {
-			$stmt = $con->prepare("INSERT INTO order_items (order_id, item_id, quantity, price_at_purchase) VALUES (?, ?, ?, ?)");
-			$stmt->execute([$orderId, $item['id'], $item['quantity'], $item['price']]);
+		// Insert order products into `order_products` table
+		foreach ($_SESSION['cart'] as $product) {
+			$stmt = $con->prepare("INSERT INTO order_items (order_id, product_id, quantity, price_at_purchase) VALUES (?, ?, ?, ?)");
+			$stmt->execute([$orderId, $product['id'], $product['quantity'], $product['price']]);
 		}
 
 		// Simulate payment processing and order placement

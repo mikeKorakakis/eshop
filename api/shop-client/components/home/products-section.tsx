@@ -3,15 +3,15 @@ import { Dictionary } from '@/lib/get-dictionary';
 import { client } from '@/lib/client';
 import { ProductList } from '../product/ProductList';
 import CategoryProductsSection from './category-products-section';
+import { getCategories } from '@/lib/actions';
 
 interface Props {
 	dictionary: Dictionary;
 }
 
 export default async function CollectionSection({ dictionary }: Props) {
-	const res = await client.GET("/categories");
-
-	const categories = res.data?.data
+	
+	const categories = await getCategories();
 
 	return (
 		<div>

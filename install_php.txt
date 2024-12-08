@@ -73,7 +73,7 @@ php artisan infyom:publish
    php artisan infyom:api User --fromTable --table=users --primary=user_id
    php artisan infyom:api Category --fromTable --table=categories --primary=category_id
    php artisan infyom:api CreditCard --fromTable --table=credit_cards --primary=credit_card_id
-   php artisan infyom:api Item --fromTable --table=items --primary=item_id
+   php artisan infyom:api Product --fromTable --table=products --primary=product_id
    php artisan infyom:api Order --fromTable --table=orders --primary=order_id
    php artisan infyom:api OrderItem --fromTable --table=order_items --primary=order_item_id
    php artisan infyom:api Comment --fromTable --table=comments --primary=comment_id

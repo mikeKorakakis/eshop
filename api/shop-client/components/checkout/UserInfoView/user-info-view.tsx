@@ -1,20 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
 import FormInput from '@/components/ui/FormInput';
-// import Loading from '@/components/ui/Loading';
 import Button from '@/components/ui/Button/button';
-// import useLogin from '@/framework/auth/use-login';
-// import useLogout from '@/framework/auth/use-logout';
-// import { validate } from 'email-validator';
 import s from './UserInfoView.module.css';
 import { emailPattern } from '@/components/auth/helpers';
 import { useForm } from 'react-hook-form';
 import { LINKS } from '@/lib/constants';
 import Link from 'next/link';
 import clsx from 'clsx';
-// import { useAddCustomer } from '@/framework/checkout';
 import toast from 'react-hot-toast';
-// import LoginView from './login-view';
 import { Dictionary } from '@/lib/get-dictionary';
 import { useRouter } from 'next/navigation';
 
@@ -22,9 +16,6 @@ const { link_profile_addresses, link_checkout_payment } = LINKS;
 
 type Props = {
   dictionary: Dictionary;
-  //   setStep: React.Dispatch<React.SetStateAction<number>>;
-//   customer: Customer;
-//   order: Order;
 };
 
 interface CustomerBaseInfo {
@@ -42,34 +33,13 @@ const UserInfoView = ({ dictionary }: Props) => {
 	email: "mike@test.com"
   }
   const router = useRouter();
-  //   const { data: customerData, isLoading: isLoadingCustomer } = useCustomer();
-
-  //   const addCustomer = useAddCustomer();
-  //   const { data: cartData, isLoading: isLoadingCart } = useCart();
   const orderCustomer = customer;
   const [isGuest, setIsGuest] = useState(!!customer);
-
-  //   const [email, setEmail] = useState('');
-  //   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
-  const addCustomer = async ({
-    firstName,
-    lastName,
-    email
-  }: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  }) => {
-    // return await setCustomerForOrderMutation({
-    //   firstName,
-    //   lastName,
-    //   email: email
-    // });
-  };
+
 
   const logout = async () => {
     // await logoutMutation();
@@ -168,11 +138,7 @@ const UserInfoView = ({ dictionary }: Props) => {
     try {
       if (!customer) {
         setLoading(true);
-        const res = await addCustomer({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email
-        });
+      
       
       } else {
         // setStep(1);
@@ -191,22 +157,7 @@ const UserInfoView = ({ dictionary }: Props) => {
     setLoading(false);
   };
 
-  //   const handleValidation = useCallback(() => {
-  //     // Test for Alphanumeric password
-  //     const validPassword = passwordPattern.test(password);
 
-  //     // Unable to send form unless fields are valid.
-  //     if (dirty) {
-  //       const notValid = !validate(email) || !validPassword;
-  //       setDisabled(notValid);
-  //     }
-  //   }, [email, password, dirty]);
-
-  //   useEffect(() => {
-  //     handleValidation();
-  //   }, [handleValidation]);
-
-  //   if (isLoadingCustomer || isLoadingCart) <Loading />;
 
   return (
     <>
@@ -225,7 +176,7 @@ const UserInfoView = ({ dictionary }: Props) => {
                     {checkout_dictionary.logged_in_as} {customer.firstName} {customer.lastName} (
                     {customer.email})
                   </p>
-                  <p className="mt-1 text-sm text-gray-600">
+                  {/* <p className="mt-1 text-sm text-gray-600">
                     {checkout_dictionary.set_address}{' '}
                     <Link href={link_profile_addresses} className="text-red-500 underline">
                       {checkout_dictionary.here}
@@ -237,7 +188,7 @@ const UserInfoView = ({ dictionary }: Props) => {
                     >
                       {common_dictionary.logout}
                     </button>
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </>

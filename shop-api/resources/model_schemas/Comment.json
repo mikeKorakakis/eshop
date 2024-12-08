@@ -24,18 +24,6 @@
         "inView": true
     },
     {
-        "name": "status",
-        "dbType": "boolean",
-        "htmlType": "checkbox",
-        "validations": "required|boolean|boolean",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": true,
-        "inView": true
-    },
-    {
         "name": "created_date",
         "dbType": "date",
         "htmlType": "date",
@@ -48,7 +36,7 @@
         "inView": true
     },
     {
-        "name": "item_id",
+        "name": "product_id",
         "dbType": "integer,false",
         "htmlType": "number",
         "validations": "required",
@@ -73,7 +61,7 @@
     },
     {
         "type": "relation",
-        "relation": "mt1,Item,item_id"
+        "relation": "mt1,Product,product_id"
     },
     {
         "type": "relation",

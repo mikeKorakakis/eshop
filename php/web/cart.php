@@ -14,24 +14,24 @@ $counter = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
 $cartItemsHtml = '';
 
 if ($counter > 0) {
-	$items = $_SESSION['cart'];
-	$itemCounts = [];
+	$products = $_SESSION['cart'];
+	$productCounts = [];
 
-	// Calculate item counts
-	foreach ($items as $item) {
-		$itemId = $item['id'];
-		if (!isset($itemCounts[$itemId])) {
-			$itemCounts[$itemId] = 0;
+	// Calculate product counts
+	foreach ($products as $product) {
+		$productId = $product['id'];
+		if (!isset($productCounts[$productId])) {
+			$productCounts[$productId] = 0;
 		}
-		$itemCounts[$itemId] += $item["quantity"];
+		$productCounts[$productId] += $product["quantity"];
 	}
 
-	// Generate HTML for each cart item
-	foreach ($itemCounts as $itemId => $itemCount) {
-		$filteredItems = array_filter($items, fn($item) => $item['id'] === $itemId);
-		$itemData = array_values($filteredItems)[0]; // Re-index the filtered array
-		$cartItemsHtml .= dynamicCartSection($itemData, $itemCount, $upload);
-		$totalAmount += $itemData['price'] * $itemCount;
+	// Generate HTML for each cart product
+	foreach ($productCounts as $productId => $productCount) {
+		$filteredItems = array_filter($products, fn($product) => $product['id'] === $productId);
+		$productData = array_values($filteredItems)[0]; // Re-index the filtered array
+		$cartItemsHtml .= dynamicCartSection($productData, $productCount, $upload);
+		$totalAmount += $productData['price'] * $productCount;
 	}
 }
 

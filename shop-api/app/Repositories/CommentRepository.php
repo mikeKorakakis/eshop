@@ -9,9 +9,8 @@ class CommentRepository extends BaseRepository
 {
     protected $fieldSearchable = [
         'content',
-        'status',
         'created_date',
-        'item_id',
+        'product_id',
         'user_id'
     ];
 

@@ -9,14 +9,14 @@ import placeholderImg from '@/assets/images/product-img-placeholder.svg';
 import { Dictionary } from '@/lib/get-dictionary';
 import { formatPrice } from '@/lib/utils';
 import ProductButton from './product-button';
-import { Item } from '@/types/types';
+import { Product } from '@/types/types';
 import { imageUrl } from '@/lib/helpers';
 
 interface Props {
   dictionary: Dictionary;
   priority?: boolean;
   className?: string;
-  product: Item;
+  product: Product;
   noNameTag?: boolean;
   imgProps?: Omit<ImageProps, 'src' | 'layout' | 'placeholder' | 'blurDataURL'>;
 }
@@ -32,8 +32,8 @@ const ProductCard: FC<Props> = ({
 
   return (
     <div className="delay-10 flex h-full flex-col rounded-md p-2 shadow transition ease-in-out hover:-translate-y-1  hover:scale-105 hover:shadow-lg">
-      <Link href={`/product/${product.item_id}`} aria-label={product.name}>
-        <div key={product.item_id} className="relative">         
+      <Link href={`/product/${product.product_id}`} aria-label={product.name}>
+        <div key={product.product_id} className="relative">         
           <div className="group relative">
             <div className="relative h-72 w-full overflow-hidden rounded-lg">
               {product?.image_url && (

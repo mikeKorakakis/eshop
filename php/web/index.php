@@ -16,7 +16,7 @@ include 'slider.html';
 		foreach ($allCats as $cat) {
 			echo '<h1>' . $cat['name'] . '</h1>';
 			echo '<div id="categoryContainer">';
-			$allItems = getAllFrom('*', 'items', 'where is_approved = 1 and category_id=' . $cat['category_id'], '', 'item_id');
+			$allItems = getAllFrom('*', 'products', 'where category_id=' . $cat['category_id'], '', 'product_id');
 			foreach ($allItems as $item) {
 				printProductCard($item, $upload);
 			}

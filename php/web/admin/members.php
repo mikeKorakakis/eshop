@@ -79,12 +79,7 @@
 									echo "<td>
 										<a href='members.php?do=Edit&userid=" . $row['user_id'] . "' class='btn btn-success'><i class='fa fa-edit'></i> Edit</a>
 										<a href='members.php?do=Delete&userid=" . $row['user_id'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
-										if ($row['registration_status'] == 0) {
-											echo "<a 
-													href='members.php?do=Activate&userid=" . $row['user_id'] . "' 
-													class='btn btn-info activate'>
-													<i class='fa fa-check'></i> Activate</a>";
-										}
+										
 									echo "</td>";
 								echo "</tr>";
 							}

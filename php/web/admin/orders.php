@@ -60,15 +60,15 @@ if (isset($_SESSION['admin'])) {
                         // Fetch Products for the Current Order
                         $productStmt = $con->prepare("
                             SELECT 
-                                items.name AS product_name, 
+                                products.name AS product_name, 
                                 order_items.quantity, 
                                 order_items.price_at_purchase 
                             FROM 
                                 order_items 
                             INNER JOIN 
-                                items 
+                                products 
                             ON 
-                                items.item_id = order_items.item_id 
+                                products.product_id = order_items.product_id 
                             WHERE 
                                 order_items.order_id = ?
                         ");

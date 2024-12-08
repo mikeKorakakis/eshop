@@ -23,12 +23,6 @@ export default function SidebarNavigation({dictionary}: Props) {
           href: '/profile/profile'
         },
         {
-          name: profile_dictionary.addresses,
-          icon: HomeIcon,
-          current: slug === 'addresses',
-          href: '/profile/addresses'
-        },
-        {
           name: profile_dictionary.password,
           icon: KeyIcon,
           current: slug === 'password',

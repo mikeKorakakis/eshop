@@ -1,5 +1,3 @@
 export { default as LoginView } from './login-view'
 export { default as SignUpView } from './signup-view'
-export { default as ForgotPassword } from './forgot-password'
 export { emailPattern, passwordPattern} from './helpers'
-export { default as GoogleButton } from './google-button'

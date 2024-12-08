@@ -16,6 +16,20 @@ use Illuminate\Database\Eloquent\Model;
  *          type="string",
  *          format="date-time"
  *      ),
+ * 	@OA\Property(
+ * 		property="order_id",
+ * 		description="Order ID",
+ * 		readOnly=false,
+ * 		nullable=false,
+ * 		type="number",
+ * 	),
+ * 	@OA\Property(
+ * 		property="user_id",
+ * 		description="User ID",
+ * 		readOnly=false,
+ * 		nullable=false,
+ * 		type="number",
+ * 	),
  *      @OA\Property(
  *          property="total_amount",
  *          description="Total amount for the order",
@@ -30,15 +44,7 @@ use Illuminate\Database\Eloquent\Model;
  *          readOnly=false,
  *          nullable=false,
  *          type="string",
- *      ),
-  *      @OA\Property(
- *          property="user_id",
- *          description="id of the user",
- *          readOnly=false,
- *          nullable=false,
- *          type="number",
- *          format="number"
- *      ),
+ *      )
  * )
  */class Order extends Model
 {
@@ -73,8 +79,8 @@ use Illuminate\Database\Eloquent\Model;
         return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 
-    public function items(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function products(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Item::class, 'order_items');
+        return $this->belongsToMany(\App\Models\Product::class, 'order_items');
     }
 }

@@ -1,22 +1,20 @@
-// import { useAddItem } from '@framework/cart';
 import { useEffect, useState } from 'react';
 import Button from '@/components/ui/Button';
 import { useUI } from '@/components/ui/ui-context';
 import Rating from '@/components/ui/Rating';
 
-// import { getProductVariant, selectDefaultOptionFromProduct, SelectedOptions } from '../helpers';
 import ErrorMessage from '@/components/ui/ErrorMessage';
-// import usePrice from '@framework/product/use-price';
 import { RATINGS_ENABLED } from '@/lib/constants';
 import Link from 'next/link';
 import ShareButtons from '@/components/ui/ShareButtons';
 import { Dictionary } from '@/lib/get-dictionary';
 
-import { Item } from '@/types/types';
+import { Product } from '@/types/types';
 import { useCart } from '@/components/ui/cart-context';
+import { formatPrice } from '@/lib/utils';
 
 interface Props {
-  product: Item;
+  product: Product;
   dictionary: Dictionary;
 }
 
@@ -39,7 +37,7 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
     setError(null);
     try {
 	  addToCart({
-		id: product.item_id!,
+		id: product.product_id!,
 		imageUrl: product.image_url,
 		name: product.name,
 		price: product.price,
@@ -67,7 +65,7 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
         <div className="mt-3">
           <h2 className="sr-only">Product information</h2>
           <p className="text-3xl tracking-tight text-gray-900">
-            {product.price}
+            {formatPrice(product.price, "EUR")}
           </p>{' '}
      
         </div>
@@ -118,12 +116,8 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
                   type="button"
                   onClick={handleAddToCart}
                   loading={loading}
-                  //   disabled={variant?.availableForSale === false}
                 >
                   {common_dictionary.add_to_cart}
-                  {/* {variant?.availableForSale === false
-                    ? common_dictionary.not_available
-                    : common_dictionary.add_to_cart} */}
                 </Button>
               
             </div>
@@ -156,7 +150,7 @@ const ProductSidebar = ({ product, dictionary }: Props) => {
                   <li className="text-sm font-medium text-gray-500">Added Date</li>
                   <div className="w-96">
                     <li className="floa mt-1 list-disc text-sm text-gray-900 sm:col-span-2 sm:mt-0	">
-                      {product?.added_date}
+                      {new Date(product?.added_date).toLocaleDateString()}
                     </li>
                   </div>
                 </div>

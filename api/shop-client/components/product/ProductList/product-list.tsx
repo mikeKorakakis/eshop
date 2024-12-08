@@ -2,10 +2,10 @@ import React from 'react';
 import ProductCard from '../ProductCard';
 
 import { Dictionary } from '@/lib/get-dictionary';
-import { Item } from '@/types/types';
+import { Product } from '@/types/types';
 
 interface Props {
-  products: Item[];
+  products: Product[];
   title?: string;
   dictionary: Dictionary;
 }
@@ -19,7 +19,7 @@ export default function ProductList({ products, title, dictionary }: Props) {
           {products.map((p) => (
             <ProductCard
               dictionary={dictionary}
-              key={p.item_id}
+              key={p.product_id}
               product={p}
               imgProps={{
                 alt: p.name,

@@ -7,12 +7,13 @@ import Lightbox from 'yet-another-react-lightbox';
 import Image from 'next/image';
 import ProductSidebar from '../ProductSidebar/product-sidebar';
 import 'yet-another-react-lightbox/styles.css';
-import { Item } from '@/types/types';
+import { Product } from '@/types/types';
 import { imageUrl } from '@/lib/helpers';
+import CommentList from '../Comment/comment-list';
 
 type Props = {
 	dictionary: Dictionary;
-	product: Item;
+	product: Product;
 };
 
 export default function ProductView({
@@ -74,7 +75,7 @@ export default function ProductView({
 							</span>
 							<ProductSidebar
 								dictionary={dictionary}
-								key={product.item_id}
+								key={product.product_id}
 								product={product}
 							/>
 						</div>
@@ -82,23 +83,7 @@ export default function ProductView({
 					</div>
 				</div>
 			</div>
-			{/* <SEO
-        title={product.name}
-        description={product.description}
-        openGraph={{
-          type: 'website',
-          title: product.name,
-          description: product.description,
-          images: [
-            {
-              url: product.images[0]?.url!,
-              width: '800',
-              height: '600',
-              alt: product.name,
-            },
-          ],
-        }}
-      /> */}
+			<CommentList product_id={product.product_id!} dictionary={dictionary}/>
 		</>
 	);
 }
