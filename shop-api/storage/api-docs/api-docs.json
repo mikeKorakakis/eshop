@@ -655,221 +655,6 @@
                 }
             }
         },
-        "/items": {
-            "get": {
-                "tags": [
-                    "Item"
-                ],
-                "summary": "getItemList",
-                "description": "Get all Items",
-                "operationId": "903a129b448a6d048872ed19f0cd2416",
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean"
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Item"
-                                            }
-                                        },
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Item"
-                ],
-                "summary": "createItem",
-                "description": "Create Item",
-                "operationId": "5db62a1456c5428981dccc082b52c734",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/Item"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean"
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/Item"
-                                        },
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/items/{id}": {
-            "get": {
-                "tags": [
-                    "Item"
-                ],
-                "summary": "getItemItem",
-                "description": "Get Item",
-                "operationId": "9eb823d8efd63b3de273c920f7a42a35",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of Item",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean"
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/Item"
-                                        },
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "Item"
-                ],
-                "summary": "updateItem",
-                "description": "Update Item",
-                "operationId": "a7b3ebb3f8ba639c8460970055f64b7c",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of Item",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/Item"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean"
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/Item"
-                                        },
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Item"
-                ],
-                "summary": "deleteItem",
-                "description": "Delete Item",
-                "operationId": "aecdd4fc05d1086d67ea34f9fdeeaa8a",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "id of Item",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean"
-                                        },
-                                        "data": {
-                                            "type": "string"
-                                        },
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/orders": {
             "get": {
                 "tags": [
@@ -1734,33 +1519,30 @@
     "components": {
         "schemas": {
             "Category": {
-                "required": [
-                    "name",
-                    "description"
-                ],
+                "required": [],
                 "properties": {
-                    "category_id": {
-                        "description": "Category ID",
-                        "type": "number",
+                    "name": {
+                        "description": "Category name",
+                        "type": "string",
                         "readOnly": false,
                         "nullable": false
                     },
                     "parent_id": {
-                        "description": "Parent category ID",
-                        "type": "number",
+                        "description": "Parent category id",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": true
                     },
                     "ordering": {
                         "description": "Category ordering",
-                        "type": "number",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": true
                     },
-                    "name": {
-                        "description": "Category name",
-                        "type": "string",
-                        "readOnly": false,
+                    "category_id": {
+                        "description": "Category id",
+                        "type": "integer",
+                        "readOnly": true,
                         "nullable": false
                     },
                     "description": {
@@ -1773,12 +1555,7 @@
                 "type": "object"
             },
             "Comment": {
-                "required": [
-                    "content",
-                    "created_date",
-                    "product_id",
-                    "user_id"
-                ],
+                "required": [],
                 "properties": {
                     "content": {
                         "description": "Comment text",
@@ -1787,27 +1564,27 @@
                         "nullable": false
                     },
                     "comment_id": {
-                        "description": "Comment ID",
-                        "type": "number",
-                        "readOnly": false,
+                        "description": "Comment id",
+                        "type": "integer",
+                        "readOnly": true,
                         "nullable": false
                     },
                     "product_id": {
-                        "description": "Product ID",
-                        "type": "number",
+                        "description": "Product id",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": false
                     },
                     "user_id": {
-                        "description": "User ID",
-                        "type": "number",
+                        "description": "User id",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": false
                     },
                     "created_date": {
                         "description": "Date comment was created",
                         "type": "string",
-                        "format": "date",
+                        "format": "date-time",
                         "readOnly": false,
                         "nullable": false
                     }
@@ -1815,14 +1592,7 @@
                 "type": "object"
             },
             "CreditCard": {
-                "required": [
-                    "user_id",
-                    "card_number",
-                    "cardholder_name",
-                    "expiration_date",
-                    "cvv",
-                    "balance"
-                ],
+                "required": [],
                 "properties": {
                     "card_number": {
                         "description": "16-digit card number",
@@ -1831,14 +1601,14 @@
                         "nullable": false
                     },
                     "credit_card_id": {
-                        "description": "Credit card ID",
-                        "type": "number",
-                        "readOnly": false,
+                        "description": "Credit card id",
+                        "type": "integer",
+                        "readOnly": true,
                         "nullable": false
                     },
                     "user_id": {
-                        "description": "User ID",
-                        "type": "number",
+                        "description": "User id",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": false
                     },
@@ -1871,111 +1641,25 @@
                 },
                 "type": "object"
             },
-            "Item": {
-                "required": [
-                    "name",
-                    "description",
-                    "price",
-                    "added_date",
-                    "country_of_origin",
-                    "status",
-                    "rating",
-                    "is_approved",
-                    "category_id",
-                    "owner_id",
-                    "image_url",
-                    "contact_info"
-                ],
+            "Order": {
+                "required": [],
                 "properties": {
-                    "item_id": {
-                        "description": "ID of the item",
+                    "order_id": {
+                        "description": "Order id",
                         "type": "integer",
                         "readOnly": true,
                         "nullable": false
                     },
-                    "name": {
-                        "description": "Name of the item",
-                        "type": "string",
+                    "user_id": {
+                        "description": "User id",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": false
                     },
-                    "description": {
-                        "description": "Description of the item",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "price": {
-                        "description": "Price of the item",
-                        "type": "number",
-                        "format": "number",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "added_date": {
-                        "description": "Date item was added",
-                        "type": "string",
-                        "format": "date",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "country_of_origin": {
-                        "description": "Country where item was made",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "status": {
-                        "description": "Status (e.g., Available, Sold)",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "is_approved": {
-                        "description": "Approval status",
-                        "type": "boolean",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "image_url": {
-                        "description": "URL to item image",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "contact_info": {
-                        "description": "Contact information",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": false
-                    }
-                },
-                "type": "object"
-            },
-            "Order": {
-                "required": [
-                    "user_id",
-                    "order_date",
-                    "total_amount",
-                    "order_status"
-                ],
-                "properties": {
                     "order_date": {
                         "description": "Date and time the order was placed",
                         "type": "string",
                         "format": "date-time",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "order_id": {
-                        "description": "Order ID",
-                        "type": "number",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "user_id": {
-                        "description": "User ID",
-                        "type": "number",
                         "readOnly": false,
                         "nullable": false
                     },
@@ -1996,41 +1680,36 @@
                 "type": "object"
             },
             "OrderItem": {
-                "required": [
-                    "order_id",
-                    "product_id",
-                    "quantity",
-                    "price_at_purchase"
-                ],
+                "required": [],
                 "properties": {
-                    "order_item_id": {
-                        "description": "Order item ID",
+                    "price_at_purchase": {
+                        "description": "Price at the time of purchase",
                         "type": "number",
+                        "format": "number",
                         "readOnly": false,
                         "nullable": false
                     },
+                    "order_item_id": {
+                        "description": "Order item id",
+                        "type": "integer",
+                        "readOnly": true,
+                        "nullable": false
+                    },
                     "order_id": {
-                        "description": "Order ID",
-                        "type": "number",
+                        "description": "Order id",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": false
                     },
                     "product_id": {
-                        "description": "Product ID",
-                        "type": "number",
+                        "description": "Product id",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": false
                     },
                     "quantity": {
                         "description": "Quantity of product",
-                        "type": "number",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "price_at_purchase": {
-                        "description": "Price at the time of purchase",
-                        "type": "number",
-                        "format": "number",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": false
                     }
@@ -2038,31 +1717,23 @@
                 "type": "object"
             },
             "Product": {
-                "required": [
-                    "name",
-                    "description",
-                    "price",
-                    "country_of_origin",
-                    "category_id",
-                    "owner_id",
-                    "image_url"
-                ],
+                "required": [],
                 "properties": {
                     "product_id": {
-                        "description": "Product ID",
-                        "type": "number",
-                        "readOnly": false,
+                        "description": "Product id",
+                        "type": "integer",
+                        "readOnly": true,
                         "nullable": false
                     },
                     "category_id": {
-                        "description": "Category ID",
-                        "type": "number",
+                        "description": "Category id",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": false
                     },
                     "owner_id": {
-                        "description": "Owner ID",
-                        "type": "number",
+                        "description": "Owner id",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": false
                     },
@@ -2088,7 +1759,7 @@
                     "added_date": {
                         "description": "Date product was added",
                         "type": "string",
-                        "format": "date",
+                        "format": "date-time",
                         "readOnly": false,
                         "nullable": false
                     },
@@ -2108,23 +1779,17 @@
                 "type": "object"
             },
             "User": {
-                "required": [
-                    "username",
-                    "email",
-                    "full_name",
-                    "group_id",
-                    "avatar_url"
-                ],
+                "required": [],
                 "properties": {
                     "user_id": {
-                        "description": "User ID",
-                        "type": "number",
-                        "readOnly": false,
+                        "description": "User id",
+                        "type": "integer",
+                        "readOnly": true,
                         "nullable": false
                     },
                     "group_id": {
-                        "description": "Group ID",
-                        "type": "number",
+                        "description": "Group id",
+                        "type": "integer",
                         "readOnly": false,
                         "nullable": false
                     },
@@ -2155,7 +1820,7 @@
                     "registration_date": {
                         "description": "Date of registration",
                         "type": "string",
-                        "format": "date",
+                        "format": "date-time",
                         "readOnly": false,
                         "nullable": false
                     },
@@ -2182,10 +1847,6 @@
         {
             "name": "CreditCard",
             "description": "CreditCard"
-        },
-        {
-            "name": "Item",
-            "description": "Item"
         },
         {
             "name": "Order",

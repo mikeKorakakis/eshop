@@ -19,7 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-
 Route::resource('users', App\Http\Controllers\API\UserAPIController::class)
     ->except(['create', 'edit']);
 
@@ -29,7 +28,7 @@ Route::resource('categories', App\Http\Controllers\API\CategoryAPIController::cl
 Route::resource('credit-cards', App\Http\Controllers\API\CreditCardAPIController::class)
     ->except(['create', 'edit']);
 
-Route::resource('items', App\Http\Controllers\API\ItemAPIController::class)
+Route::resource('products', App\Http\Controllers\API\ProductAPIController::class)
     ->except(['create', 'edit']);
 
 Route::resource('orders', App\Http\Controllers\API\OrderAPIController::class)
@@ -39,7 +38,4 @@ Route::resource('order-items', App\Http\Controllers\API\OrderItemAPIController::
     ->except(['create', 'edit']);
 
 Route::resource('comments', App\Http\Controllers\API\CommentAPIController::class)
-    ->except(['create', 'edit']);
-
-Route::resource('products', App\Http\Controllers\API\ProductAPIController::class)
     ->except(['create', 'edit']);

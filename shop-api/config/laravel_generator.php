@@ -148,8 +148,7 @@ return [
 
         'tests' => false, // generate test cases for your APIs
 
-        'excluded_fields' => [], // Array of columns that doesn't required while creating module
-        // 'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
+        'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
     ],
 
     /*

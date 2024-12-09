@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @OA\Schema(
  *      schema="CreditCard",
- *      required={"user_id","card_number","cardholder_name","expiration_date","cvv","balance"},
+ *      required={},
  *      @OA\Property(
  *          property="card_number",
  *          description="16-digit card number",
@@ -17,19 +17,18 @@ use Illuminate\Database\Eloquent\Model;
  *      ),
  * 	@OA\Property(
  * 		property="credit_card_id",
- * 		description="Credit card ID",
- * 		readOnly=false,
+ * 		description="Credit card id",
+ * 		readOnly=true,
  * 		nullable=false,
- * 		type="number",
+ * 		type="integer",
  * 	),
  * 	@OA\Property(
  * 		property="user_id",
- * 		description="User ID",
+ * 		description="User id",
  * 		readOnly=false,
  * 		nullable=false,
- * 		type="number",
+ * 		type="integer",
  * 	),
- 
  *      @OA\Property(
  *          property="cardholder_name",
  *          description="Name on the card",

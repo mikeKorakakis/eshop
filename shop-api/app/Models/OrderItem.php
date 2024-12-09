@@ -7,35 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @OA\Schema(
  *      schema="OrderItem",
- *      required={"order_id","product_id","quantity","price_at_purchase"},
- * 	@OA\Property(
- * 		property="order_item_id",
- * 		description="Order item ID",
- * 		readOnly=false,
- * 		nullable=false,
- * 		type="number",
- * 	),
- * 	@OA\Property(
- * 		property="order_id",
- * 		description="Order ID",
- * 		readOnly=false,
- * 		nullable=false,
- * 		type="number",
- * 	),
- * 	@OA\Property(
- * 		property="product_id",
- * 		description="Product ID",
- * 		readOnly=false,
- * 		nullable=false,
- * 		type="number",
- * 	),
- * 	@OA\Property(
- * 		property="quantity",
- * 		description="Quantity of product",
- * 		readOnly=false,
- * 		nullable=false,
- * 		type="number",
- * 	),
+ *      required={},
  *      @OA\Property(
  *          property="price_at_purchase",
  *          description="Price at the time of purchase",
@@ -43,7 +15,36 @@ use Illuminate\Database\Eloquent\Model;
  *          nullable=false,
  *          type="number",
  *          format="number"
- *      )
+ *      ),
+ *    @OA\Property(
+ * 		property="order_item_id",
+ * 		description="Order item id",
+ * 		readOnly=true,
+ * 		nullable=false,
+ * 		type="integer",
+ * 	),
+ * 	@OA\Property(
+ * 		property="order_id",
+ * 		description="Order id",
+ * 		readOnly=false,
+ * 		nullable=false,
+ * 		type="integer",
+ * 	),
+ * 	@OA\Property(
+ * 		property="product_id",
+ * 		description="Product id",
+ * 		readOnly=false,
+ * 
+ * 		nullable=false,
+ * 		type="integer",
+ * 	),
+ * 	@OA\Property(
+ * 		property="quantity",
+ * 		description="Quantity of product",
+ * 		readOnly=false,
+ * 		nullable=false,
+ * 		type="integer",
+ * 	),
  * )
  */class OrderItem extends Model
 {

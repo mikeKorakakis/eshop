@@ -48,19 +48,19 @@ export default function CommentList({ product_id, dictionary }: Props) {
 							{filteredComments?.map((comment) => (
 								<div key={comment.comment_id} className="py-12">
 									<div className="flex items-center">
-										<UserAvatar user_id={comment.user_id} />
+										<UserAvatar user_id={comment.user_id!} />
 										<div className="ml-4">
-											<UserInfo user_id={comment.user_id} />
+											<UserInfo user_id={comment.user_id!} />
 											<div className="mt-1 flex items-center">
-												{new Date(comment.created_date).toLocaleDateString()} &nbsp;
-												{new Date(comment.created_date).toLocaleTimeString()}
+												{new Date(comment.created_date!).toLocaleDateString()} &nbsp;
+												{new Date(comment.created_date!).toLocaleTimeString()}
 											</div>
 											<p className="sr-only">{comment.content}</p>
 										</div>
 									</div>
 
 									<div
-										dangerouslySetInnerHTML={{ __html: comment.content }}
+										dangerouslySetInnerHTML={{ __html: comment.content! }}
 										className="mt-4 space-y-6 text-base italic text-gray-600"
 									/>
 								</div>

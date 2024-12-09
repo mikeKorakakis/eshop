@@ -28,6 +28,6 @@ export default function UserAvatar({ user_id, className }: Props) {
 
 
 	return (
-		<Image src={imageUrl(user?.avatar_url)} alt={user.full_name} className={clsx("size-12 rounded-full", className)} width={400} height={400} />
+		<Image src={imageUrl(user?.avatar_url)} alt={user.full_name!} className={clsx("size-12 rounded-full", className)} width={400} height={400} />
 	)
 }

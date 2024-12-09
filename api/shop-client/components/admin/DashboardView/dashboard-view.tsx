@@ -38,20 +38,20 @@ const DashboardView: FC<Props> = ({ dictionary, customers, products, orders, lng
 	let mappedCustomers = filteredCustomers?.map((customer) => {
 		return {
 			id: customer.user_id!,
-			name: customer.full_name
+			name: customer.full_name!
 		};
 	});
 	let mappedProducts = products?.map((product) => {
 		return {
 			id: product.product_id!,
-			name: product.name
+			name: product.name!
 		};
 	});
 	let mappedOrders = orders?.map((order) => {
 		return {
 			id: order.order_id!,
-			customer_id: order.user_id,
-			total_amount: order.total_amount,
+			customer_id: order.user_id!,
+			total_amount: order.total_amount!,
 
 		};
 	});

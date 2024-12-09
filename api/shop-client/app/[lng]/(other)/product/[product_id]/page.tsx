@@ -76,7 +76,7 @@ export default async function Product({ params: { product_id, lng } }: Props) {
 						navigation={[
 							{ name: common_dictionary.home!, href: '/' },
 							{ name: common_dictionary.shop, href: link_search },
-							{ name: product.name, href: '#' }
+							{ name: product.name!, href: '#' }
 						]}
 					/>
 				</div>

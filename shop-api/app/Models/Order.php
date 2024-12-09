@@ -7,7 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @OA\Schema(
  *      schema="Order",
- *      required={"user_id","order_date","total_amount","order_status"},
+ *      required={},
+ *	  @OA\Property(
+ * 		property="order_id",
+ * 
+ * 		description="Order id",
+ * 		readOnly=true,
+ * 		nullable=false,
+ * 		type="integer",
+ * 	),
+ * 	@OA\Property(
+ * 		property="user_id",
+ * 		description="User id",
+ * 
+ * 		readOnly=false,
+ * 		nullable=false,
+ * 		type="integer",
+ * 	),
+
  *      @OA\Property(
  *          property="order_date",
  *          description="Date and time the order was placed",
@@ -16,20 +33,6 @@ use Illuminate\Database\Eloquent\Model;
  *          type="string",
  *          format="date-time"
  *      ),
- * 	@OA\Property(
- * 		property="order_id",
- * 		description="Order ID",
- * 		readOnly=false,
- * 		nullable=false,
- * 		type="number",
- * 	),
- * 	@OA\Property(
- * 		property="user_id",
- * 		description="User ID",
- * 		readOnly=false,
- * 		nullable=false,
- * 		type="number",
- * 	),
  *      @OA\Property(
  *          property="total_amount",
  *          description="Total amount for the order",

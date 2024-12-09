@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @OA\Schema(
  *      schema="Comment",
- *      required={"content","created_date","product_id","user_id"},
+ *      required={},
  *      @OA\Property(
  *          property="content",
  *          description="Comment text",
@@ -15,35 +15,35 @@ use Illuminate\Database\Eloquent\Model;
  *          nullable=false,
  *          type="string",
  *      ),
- * 	@OA\Property(
- * 		property="comment_id",
- * 		description="Comment ID",
- * 		readOnly=false,
+  *	  @OA\Property(
+ *          property="comment_id",
+ * 		description="Comment id",
+ * 		readOnly=true,
  * 		nullable=false,
- * 		type="number",
+ * 		type="integer",
  * 	),
  * 	@OA\Property(
  * 		property="product_id",
- * 		description="Product ID",
+ * 		description="Product id",
  * 		readOnly=false,
  * 		nullable=false,
- * 		type="number",
+ * 		type="integer",
  * 	),
  * 	@OA\Property(
  * 		property="user_id",
- * 		description="User ID",
- * 	
+ * 		description="User id",
  * 		readOnly=false,
  * 		nullable=false,
- * 		type="number",
+ * 		type="integer",
  * 	),
+
  *      @OA\Property(
  *          property="created_date",
  *          description="Date comment was created",
  *          readOnly=false,
  *          nullable=false,
  *          type="string",
- *          format="date"
+ *          format="date-time"
  *      )
  * )
  */class Comment extends Model
@@ -63,7 +63,7 @@ use Illuminate\Database\Eloquent\Model;
 
     protected $casts = [
         'content' => 'string',
-        'created_date' => 'date'
+        'created_date' => 'datetime'
     ];
 
     public static array $rules = [

@@ -25,7 +25,7 @@
     },
     {
         "name": "created_date",
-        "dbType": "date",
+        "dbType": "datetime",
         "htmlType": "date",
         "validations": "required",
         "searchable": true,

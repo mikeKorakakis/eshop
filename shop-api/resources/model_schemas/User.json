@@ -73,7 +73,7 @@
     },
     {
         "name": "registration_date",
-        "dbType": "date",
+        "dbType": "datetime",
         "htmlType": "date",
         "validations": "required",
         "searchable": true,
@@ -97,15 +97,15 @@
     },
     {
         "type": "relation",
-        "relation": "mtm,Product,comments"
-    },
-    {
-        "type": "relation",
         "relation": "mtm,Category,products"
     },
     {
         "type": "relation",
         "relation": "1tm,Order,user_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mtm,Product,comments"
     },
     {
         "type": "relation",

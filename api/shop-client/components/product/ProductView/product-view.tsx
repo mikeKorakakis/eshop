@@ -26,7 +26,7 @@ export default function ProductView({
 
 	const photos = [{
 		//   src: placeholderImg,
-		src: imageUrl(product.image_url),
+		src: imageUrl(product.image_url!),
 		key: `${index}`,
 		alt: `product image ${product.name}`
 	}]
@@ -68,7 +68,7 @@ export default function ProductView({
 									width={500}
 									height={500}
 									//   src={placeholderImg}
-									src={imageUrl(product.image_url)}
+									src={imageUrl(product.image_url!)}
 									alt=""
 									className="h-[500px]  object-contain object-center" // hover:scale-110 transition ease-in-out duration-500"
 								/>

@@ -7,20 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @OA\Schema(
  *      schema="User",
- *      required={"username","email","full_name","group_id", "avatar_url"},
- *	  @OA\Property(
- * 		property="user_id",
- * 		description="User ID",
- * 		readOnly=false,
- * 		nullable=false,
- * 		type="number",
+ *      required={},
+ *    @OA\Property(
+ * 	  property="user_id",
+ * 	  description="User id",
+ * 	  readOnly=true,
+ * 	  nullable=false,
+ * 	  type="integer",
  * 	),
  * 	@OA\Property(
  * 		property="group_id",
- * 		description="Group ID",
+ * 		description="Group id",
  * 		readOnly=false,
  * 		nullable=false,
- * 		type="number",
+ * 		type="integer",
  * 	),
  *      @OA\Property(
  *          property="username",
@@ -56,7 +56,7 @@ use Illuminate\Database\Eloquent\Model;
  *          readOnly=false,
  *          nullable=false,
  *          type="string",
- *          format="date"
+ *          format="date-time"
  *      ),
  *      @OA\Property(
  *          property="avatar_url",
@@ -89,24 +89,19 @@ use Illuminate\Database\Eloquent\Model;
         'password' => 'string',
         'email' => 'string',
         'full_name' => 'string',
-        'registration_date' => 'date',
+        'registration_date' => 'datetime',
         'avatar_url' => 'string'
     ];
 
     public static array $rules = [
         'username' => 'required|string|max:255',
-        'password' => 'string|max:255',
+        'password' => 'required|string|max:255',
         'email' => 'required|string|max:255',
         'full_name' => 'required|string|max:255',
         'group_id' => 'required',
-        'registration_date' => '',
+        'registration_date' => 'required',
         'avatar_url' => 'required|string|max:255'
     ];
-
-    public function products(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany(\App\Models\Product::class, 'comments');
-    }
 
     public function categories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
@@ -116,6 +111,11 @@ use Illuminate\Database\Eloquent\Model;
     public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(\App\Models\Order::class, 'user_id');
+    }
+
+    public function products(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\Product::class, 'comments');
     }
 
     public function creditCards(): \Illuminate\Database\Eloquent\Relations\HasMany

@@ -7,28 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @OA\Schema(
  *      schema="Category",
- *      required={"name","description"},
- *   @OA\Property(
- *          property="category_id",
- *          description="Category ID",
- *          readOnly=false,
- *          nullable=false,
- *          type="number",
- *      ),
- * 	@OA\Property(
- * 		property="parent_id",
- * 		description="Parent category ID",
- * 		readOnly=false,
- * 		nullable=true,
- * 		type="number",
- * 	),
- * 	@OA\Property(
- * 		property="ordering",
- * 		description="Category ordering",
- * 		readOnly=false,
- * 		nullable=true,
- * 		type="number",
- * 	),
+ *      required={},
  *      @OA\Property(
  *          property="name",
  *          description="Category name",
@@ -36,6 +15,27 @@ use Illuminate\Database\Eloquent\Model;
  *          nullable=false,
  *          type="string",
  *      ),
+ * 	@OA\Property(
+ * 		property="parent_id",
+ * 		description="Parent category id",
+ * 		readOnly=false,
+ * 		nullable=true,
+ * 		type="integer",
+ * 	),
+ * 	@OA\Property(
+ * 		property="ordering",
+ * 		description="Category ordering",
+ * 		readOnly=false,
+ * 		nullable=true,
+ * 		type="integer",
+ * 	),
+ * 	@OA\Property(
+ * 		property="category_id",
+ * 		description="Category id",
+ * 		readOnly=true,
+ * 		nullable=false,
+ * 		type="integer",
+ * 	),
  *      @OA\Property(
  *          property="description",
  *          description="Category description",

@@ -7,28 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @OA\Schema(
  *      schema="Product",
- *      required={"name","description","price","country_of_origin","category_id","owner_id","image_url"},
- * 	@OA\Property(
+ *      required={},
+ *      @OA\Property(
  * 		property="product_id",
- * 		description="Product ID",
- * 		readOnly=false,
+ *  	  description="Product id",
+ * 		readOnly=true,
  * 		nullable=false,
- * 		type="number",
+ * 		type="integer",
  * 	),
  * 	@OA\Property(
  * 		property="category_id",
- * 		description="Category ID",
+ * 		description="Category id",
  * 		readOnly=false,
  * 		nullable=false,
- * 		type="number",
+ * 		type="integer",
  * 	),
  * 	@OA\Property(
  * 		property="owner_id",
- * 		description="Owner ID",
+ * 		description="Owner id",
  * 		readOnly=false,
  * 		nullable=false,
- * 		type="number",
+ * 		type="integer",
  * 	),
+
  *      @OA\Property(
  *          property="name",
  *          description="Name of the product",
@@ -57,7 +58,7 @@ use Illuminate\Database\Eloquent\Model;
  *          readOnly=false,
  *          nullable=false,
  *          type="string",
- *          format="date"
+ *          format="date-time"
  *      ),
  *      @OA\Property(
  *          property="country_of_origin",
@@ -97,7 +98,7 @@ use Illuminate\Database\Eloquent\Model;
         'name' => 'string',
         'description' => 'string',
         'price' => 'decimal:2',
-        'added_date' => 'date',
+        'added_date' => 'datetime',
         'country_of_origin' => 'string',
         'image_url' => 'string'
     ];

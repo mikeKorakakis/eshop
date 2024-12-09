@@ -191,7 +191,7 @@ export const Orders = ({ order_id }: { order_id: number }) => {
 			const orderOrderItems = ords?.filter((order) => (order.order_id === order_id));
 			if (!orderOrderItems) return
 
-			setProductIds(orderOrderItems.map((order) => order.product_id));
+			setProductIds(orderOrderItems.map((order) => order.product_id!));
 		}
 		getOrds();
 	}, [order_id]);
