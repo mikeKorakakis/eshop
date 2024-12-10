@@ -31,6 +31,7 @@
 		"expiration_date": "Expiration date (MM/YY)"
 	},
 	"common": {
+		"login_to_continue": "Please signin to continue.",
 		"latest_6": "Latest 6",
 		"view_all": "View All",
 		"dashboard": "Dashboard",
@@ -59,6 +60,8 @@
 		"have_account": "Do you have an account?",
 		"signup_info": "Passwords must be longer than 7 chars and include numbers.",
 		"signup": "Sign Up",
+		"signup_success": "Signup successful",
+		"signup_error": "Error signing up",
 		"forget_password": "Did you forget your password?",
 		"wrong_password": "Wrong email or password",
 		"login_success": "Login successful",

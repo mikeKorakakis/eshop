@@ -17,8 +17,8 @@ import { emailPattern, passwordPattern } from './helpers';
 import { Dictionary } from '@/lib/get-dictionary';
 import { signup } from '@/lib/actions';
 import { client } from '@/lib/client';
+import { set } from 'zod';
 
-const { link_verify } = LINKS;
 interface Props {
 	dictionary: Dictionary;
 }
@@ -51,33 +51,30 @@ const SignUpView: FC<Props> = ({ dictionary }: Props) => {
 	const handleSignup = async (data: SignUpType) => {
 		try {
 			setLoading(true);
-			//   setMessage('')
-			await client.POST('/users', {
-				body: {
-				  username: data?.username,
-				  password: data?.password,
-				  email: data?.email,
-				  full_name: data?.full_name,
-				  group_id: 1,
-				  avatar_url: 'none',
-				}
-			  });
-			// await signup({
-			// 	email: data?.email,
-			// 	username: data?.username,
-			// 	full_name: data?.full_name,
-			// 	password: data?.password,
-			// 	avatar_url: '',
-			// 	group_id: 1
-			// });
+		
+			await signup({
+				email: data?.email,
+				username: data?.username,
+				full_name: data?.full_name,
+				password: data?.password,
+				avatar_url: 'empty',
+				group_id: 1
+			});
 			setLoading(false);
+
+			toast.success(common_dictionary.signup_success);
+			
 			closeModal();
+
+			setTimeout(() => {
+				window.location.reload();
+			}, 1000);
 
 
 
 		} catch (err) {
 			console.error(err);
-			toast.error(common_dictionary.error);
+			toast.error(common_dictionary.signup_error);
 			setLoading(false);
 			setDisabled(false);
 		}

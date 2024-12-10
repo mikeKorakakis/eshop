@@ -134,22 +134,7 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 								Language
 							</label>
 							<I18nWidget />
-							{/* {SHOP_ENABLED && (
-                <>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-white hover:text-gray-100"
-                  >
-                    Sign in
-                  </a>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-white hover:text-gray-100"
-                  >
-                    Create an account
-                  </a>
-                </>
-              )} */}
+		
 						</div>
 					</div>
 				</div>
@@ -180,7 +165,7 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 											{/* {navigation.categories && navigation.categories.featured && */}
 											{/* navigation.categories.featured.map((category) => ( */}
 											{isAdmin ?
-												navigation.admin.map((page) => (
+												navigation?.admin?.map((page) => (
 													<Link
 														key={page.name}
 														href={page.href}
@@ -193,7 +178,7 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 														{page.name}
 													</Link>
 												))
-												: <Popover key={navigation.categories?.name} className="flex">
+												: <Popover key={navigation?.categories?.name} className="flex">
 													{({ open }) => (
 														<>
 															<div className="relative flex">
@@ -236,7 +221,7 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 																			<div className="relative bg-white">
 																				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 																					<div className="grid grid-cols-4 gap-x-8 gap-y-10 py-16">
-																						{navigation.categories.featured.map((item) => (
+																						{navigation?.categories?.featured?.map((item) => (
 																							<div key={item.name} className="group relative">
 																								<div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-100 group-hover:opacity-75">
 																									<Image

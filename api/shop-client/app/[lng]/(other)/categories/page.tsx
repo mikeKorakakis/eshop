@@ -32,7 +32,7 @@ export default async function CategoryPage({ params: { lng } }: Props) {
 			<div className="z-0">
 				<div id="racing_preparation" />
 				<div className="overflow-hidden bg-white ">
-					{categories.map((category) =>
+					{categories?.map((category) =>
 						<section
 							key={category.category_id}
 							aria-labelledby="collection-heading"

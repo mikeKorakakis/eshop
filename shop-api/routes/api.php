@@ -1,7 +1,15 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\CategoryAPIController;
+use App\Http\Controllers\API\ProductAPIController;
+use App\Http\Controllers\API\UserAPIController;
+use App\Http\Controllers\API\OrderAPIController;
+use App\Http\Controllers\API\CommentAPIController;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CreditCardAPIController;
+use App\Http\Controllers\API\OrderItemAPIController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,28 +22,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::resource('categories', CategoryAPIController::class)
+	->except(['create', 'edit']);
+
+Route::resource('products', ProductAPIController::class)
+	->except(['create', 'edit']);
+
+Route::resource('comments', CommentAPIController::class)
+	->except(['create', 'edit']);
+
+Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
+
+
+Route::middleware('jwt.auth')->group(function () {
+	Route::resource('users', UserAPIController::class)
+		->except(['create', 'edit']);
+
+	Route::get('me', [AuthController::class, 'me']);
+	Route::post('logout', [AuthController::class, 'logout']);
+	Route::post('refresh', [AuthController::class, 'refresh']);
+	//Categories
+
+	Route::resource('credit-cards', CreditCardAPIController::class)
+		->except(['create', 'edit']);
+
+	Route::resource('orders', OrderAPIController::class)
+		->except(['create', 'edit']);
+
+	Route::resource('order-items', OrderItemAPIController::class)
+		->except(['create', 'edit']);
 });
-
-
-Route::resource('users', App\Http\Controllers\API\UserAPIController::class)
-    ->except(['create', 'edit']);
-
-Route::resource('categories', App\Http\Controllers\API\CategoryAPIController::class)
-    ->except(['create', 'edit']);
-
-Route::resource('credit-cards', App\Http\Controllers\API\CreditCardAPIController::class)
-    ->except(['create', 'edit']);
-
-Route::resource('products', App\Http\Controllers\API\ProductAPIController::class)
-    ->except(['create', 'edit']);
-
-Route::resource('orders', App\Http\Controllers\API\OrderAPIController::class)
-    ->except(['create', 'edit']);
-
-Route::resource('order-items', App\Http\Controllers\API\OrderItemAPIController::class)
-    ->except(['create', 'edit']);
-
-Route::resource('comments', App\Http\Controllers\API\CommentAPIController::class)
-    ->except(['create', 'edit']);

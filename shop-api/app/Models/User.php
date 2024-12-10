@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * @OA\Schema(
@@ -66,7 +68,7 @@ use Illuminate\Database\Eloquent\Model;
  *          type="string",
  *      )
  * )
- */class User extends Model
+ */class User extends Authenticatable implements JWTSubject//Model
 {
     public $table = 'users';
 
@@ -95,11 +97,11 @@ use Illuminate\Database\Eloquent\Model;
 
     public static array $rules = [
         'username' => 'required|string|max:255',
-        'password' => 'required|string|max:255',
+        'password' => 'string|max:255',
         'email' => 'required|string|max:255',
         'full_name' => 'required|string|max:255',
         'group_id' => 'required',
-        'registration_date' => 'required',
+        'registration_date' => '',
         'avatar_url' => 'required|string|max:255'
     ];
 
@@ -121,5 +123,18 @@ use Illuminate\Database\Eloquent\Model;
     public function creditCards(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(\App\Models\CreditCard::class, 'user_id');
+    }
+
+	public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
     }
 }

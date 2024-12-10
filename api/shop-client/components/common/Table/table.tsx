@@ -157,7 +157,7 @@ const Category = ({ category_id }: { category_id: number }) => {
 }
 
 
-export const Customer = async ({ customer_id }: { customer_id: number }) => {
+export const Customer = ({ customer_id }: { customer_id: number }) => {
 	const [customerName, setCustomerName] = useState<string | undefined>(undefined);
 	useEffect(() => {
 		const getCustomerName = async () => {
@@ -170,7 +170,7 @@ export const Customer = async ({ customer_id }: { customer_id: number }) => {
 	return <span>{customerName}</span>
 }
 
-const Product = async ({ product_id }: { product_id: number }) => {
+const Product = ({ product_id }: { product_id: number }) => {
 	const [productName, setProductName] = useState<string | undefined>(undefined);
 	useEffect(() => {
 		const getProductName = async () => {

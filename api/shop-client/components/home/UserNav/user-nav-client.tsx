@@ -9,14 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { LINKS, SHOP_ENABLED } from '@/lib/constants';
 import React, { Fragment, useState } from 'react';
-// import { useTranslation } from 'next-i18next';
-// import { useCart } from '@framework/cart';
-// import { useCustomer } from '@framework/customer';
 import { useUI } from '@/components/ui/ui-context';
-// import useLogout from '@framework/auth/use-logout'
-
-// import type { LineItem } from '@commerce/types/cart' must_fix_type
-import Link from 'next/link';
 import clsx from 'clsx';
 import { Menu, Transition } from '@headlessui/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -24,17 +17,15 @@ import { ArrowLeftOnRectangleIcon } from '@heroicons/react/20/solid';
 import { Dictionary } from '@/lib/get-dictionary';
 import { i18n } from '@/i18n-config';
 import { useCart } from '@/components/ui/cart-context';
+import { User } from '@/types/types';
+import { logout } from '@/lib/actions';
 
 const { link_profile } = LINKS;
 
-// const countItem = (
-//   count: number,
-//   item: any //LineItem must_fix_type
-// ) => count + item.quantity;
 
 interface Props {
 	dictionary: Dictionary;
-	customer: any;
+	customer: User | null;
 }
 export default function UserNavClient({ dictionary, customer }: Props) {
 	const router = useRouter();
@@ -42,16 +33,13 @@ export default function UserNavClient({ dictionary, customer }: Props) {
 	const pathname = usePathname();
 	const locales = i18n.locales.map((locale) => locale) as string[];
 	const isRoot = pathname === '/' || locales.some(loc => pathname === "/" + loc);
-	//   const { t } = useTranslation('common');
 	const common_dictionary = dictionary.common;
 	const [openSearch, setOpenSearch] = useState(false);
 	const totalItems = items.length || 0;
-	//   console.log(items)
-	//   const { data } = useCart(); must_fix_framework
 
-	const logout = async () => {
-		// await logoutMutation();
-		router.refresh();
+	const handleLogout = async () => {
+		await logout();
+		window.location.reload();
 	};
 	const {
 		// toggleSidebar,
@@ -72,7 +60,7 @@ export default function UserNavClient({ dictionary, customer }: Props) {
 			name: common_dictionary.logout,
 			icon: ArrowLeftOnRectangleIcon,
 			onClick: async () => {
-				await logout();
+				await handleLogout();
 				router.push(pathname);
 			}
 		}

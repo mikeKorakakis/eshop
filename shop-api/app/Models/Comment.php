@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * 		readOnly=false,
  * 		nullable=false,
  * 		type="integer",
+
  * 	),
 
  *      @OA\Property(

@@ -9,7 +9,9 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
 import { Category } from '@/types/types';
-import { createCategory, getCategory, updateCategory } from '@/lib/actions';
+import { createCategory, getCategories, getCategory, updateCategory } from '@/lib/actions';
+import FormSelect from '@/components/ui/FormSelect';
+import { Options } from '@/components/ui/FormSelect/form-select';
 
 
 interface Props {
@@ -24,6 +26,7 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 	const common_dictionary = dictionary.common;
 	const admin_dictionary = dictionary.admin;
 	const [loading, setLoading] = useState(false);
+	const [options, setOptions] = useState<Options[]>([]);
 	//   const [message, setMessage] = useState('')
 	const [disabled, setDisabled] = useState(false);
 	const {
@@ -53,6 +56,24 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		getCat();
 	}, [id]);
 
+	useEffect(() => {
+		const getCats = async () => {
+			// get category by id
+			const categories = await getCategories();
+			if (!categories) return;
+			const values = categories.map((category) => {
+				return {
+					label: category.name!,
+					value: category.category_id!
+				};
+			});
+			setOptions(values);
+
+		}
+		getCats();
+
+	}, []);
+
 
 	const { closeModal } = useUI();
 
@@ -60,14 +81,14 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		try {
 			setLoading(true);
 			if (id) {
-					await updateCategory({
-							category_id: id,
-							name: data?.name,
-							description: data?.description,
-							ordering: data?.ordering,
-							parent_id: data?.parent_id
-						});
-				}
+				await updateCategory({
+					category_id: id,
+					name: data?.name,
+					description: data?.description,
+					ordering: data?.ordering,
+					parent_id: data?.parent_id
+				});
+			}
 			else {
 				await createCategory({
 					category_id: id,
@@ -123,12 +144,15 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					})}
 					error={errors.ordering && errors.ordering?.message}
 				/>
-				<FormInput
-					type="text"
+				
+				<FormSelect
+					dictionary={dictionary}
 					label={admin_dictionary.parent!}
 					{...register('parent_id', {
 						required: common_dictionary.not_empty!
 					})}
+					options={[...options, {value: 0, label: ""}]}
+
 					error={errors.parent_id && errors.parent_id?.message}
 				/>
 

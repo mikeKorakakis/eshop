@@ -6,7 +6,7 @@ import { Fragment, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { LINKS, SHOP_ENABLED } from '@/lib/constants';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Dictionary } from '@/lib/get-dictionary';
 import { getCategories } from '@/lib/actions';
 import { Category } from '@/types/types';
@@ -26,40 +26,75 @@ interface Props {
 
 const MobileMenu = ({ dictionary, lng }: Props) => {
 	const { displayMobileMenu, openMobileMenu, closeMobileMenu } = useUI();
-	// const [categories, setCategories] = useState<Category[]>([]); // Initialize as an empty array
+	const [categories, setCategories] = useState<Category[]>([]); // Initialize as an empty array
+	const pathname = usePathname();
+	const isAdmin = pathname.includes('admin');
+	useEffect(() => {
+		const getCats = async () => {
+			try {
+				const categories = await getCategories();
+				setCategories(categories!);
+			} catch (error) {
+				console.error("Error fetching categories:", error);
+			}
+		};
 
-	// useEffect(() => {
-	// 	const getCats = async () => {
-	// 		try {
-	// 			const categories = await getCategories();
-	// 			setCategories(categories!);
-	// 		} catch (error) {
-	// 			console.error("Error fetching categories:", error);
-	// 		}
-	// 	};
-
-	// 	getCats();
-	// }, []);
+		getCats();
+	}, []);
 
 	const common_dictionary = dictionary.common;
 	const router = useRouter();
 	const navigation = {
 		// categories: [],
-		// categories: [
-		// 	{
-		// 		name: common_dictionary.categories,
-		// 		tag: "categories",
-		// 		featured: categories?.map(cat => (
-		// 			{
-		// 				name: cat.name,
-		// 				href: `/${lng}/categories/${cat.category_id}`,
-		// 				imageSrc: preparation,
-		// 				imageAlt: common_dictionary.menu_services_race_prep
-		// 			}
-		// 		))
-		// 	}
+		categories: [
+			{
+				name: common_dictionary.categories,
+				tag: "categories",
+				featured: categories?.map(cat => (
+					{
+						name: cat.name,
+						href: `/${lng}/categories/${cat.category_id}`,
+						imageSrc: preparation,
+						imageAlt: common_dictionary.menu_services_race_prep
+					}
+				))
+			},
+		
+		],
+		admin: [
+			{
+				name: common_dictionary.dashboard,
+				tag: "dashboard",
+				href: `/${lng}/admin/dashboard`
+			},
+			{
+				name: common_dictionary.categories,
+				tag: "categories",
+				href: `/${lng}/admin/categories`
+			},
 
-		// ],
+			{
+				name: common_dictionary.products,
+				tag: "products",
+				href: `/${lng}/admin/products`
+			},
+			{
+				name: common_dictionary.orders,
+				tag: "orders",
+				href: `/${lng}/admin/orders`
+			},
+			{
+				name: common_dictionary.customers,
+				tag: "customers",
+				href: `/${lng}/admin/customers`
+			},
+			{
+				name: common_dictionary.comments,
+				tag: "comments",
+				href: `/${lng}/admin/comments`
+			},
+
+		],
 		pages: [
 			//   { name: common_dictionary.menu_home, href: '/' },
 			//   { name: common_dictionary.menu_about, href: '/' },
@@ -106,9 +141,9 @@ const MobileMenu = ({ dictionary, lng }: Props) => {
 							</div>
 
 							{/* Links */}
-							<Tab.Group as="div" className="mt-2">
+							{!isAdmin &&<Tab.Group as="div" className="mt-2">
 								<div className="overflow-auto border-b border-gray-200">
-									{/* <Tab.List className=" flex space-x-8 px-4">
+									<Tab.List className=" flex space-x-8 px-4">
 										{navigation.categories &&
 											navigation.categories.map((category) => (
 												<Tab
@@ -125,10 +160,10 @@ const MobileMenu = ({ dictionary, lng }: Props) => {
 													{category.name}
 												</Tab>
 											))}
-									</Tab.List> */}
+									</Tab.List>
 								</div>
-								{/* <Tab.Panels as={Fragment}>
-									{navigation.categories &&
+								<Tab.Panels as={Fragment}>
+									 {navigation.categories &&
 										navigation.categories.map((category) => (
 											<Tab.Panel key={category.name} className="space-y-12 px-4 py-4">
 												<div className="grid grid-cols-2 gap-x-4 gap-y-10">
@@ -152,16 +187,16 @@ const MobileMenu = ({ dictionary, lng }: Props) => {
 																<span className="absolute inset-0 z-10" aria-hidden="true" />
 																{item.name}
 															</div>
-									
+
 														</div>
 													))}
 												</div>
 											</Tab.Panel>
 										))}
-								</Tab.Panels> */}
-							</Tab.Group>
+								</Tab.Panels>
+							</Tab.Group>}
 
-							{SHOP_ENABLED && (
+							{false && (
 								<div className="space-y-6 border-t border-gray-200 px-4 py-4">
 									<div className="flow-root">
 										<div
@@ -186,7 +221,21 @@ const MobileMenu = ({ dictionary, lng }: Props) => {
 								</div>
 							)}
 							<div className="space-y-6 border-t border-gray-200 px-4 py-4">
-								{navigation.pages.map((page) => (
+								{navigation?.pages?.map((page) => (
+									<div key={page.name} className="flow-root">
+										<div
+											onClick={() => {
+												openMobileMenu();
+												router.push(page.href);
+											}}
+											// href={page.href}
+											className="-m-2 block cursor-pointer p-2 font-medium text-gray-900"
+										>
+											{page.name}
+										</div>
+									</div>
+								))}
+								{isAdmin && navigation.admin.map((page) => (
 									<div key={page.name} className="flow-root">
 										<div
 											onClick={() => {

@@ -48,7 +48,7 @@ const CategoriesView: FC<Props> = ({ dictionary }) => {
 		};
 		getCats({ take, skip });
 		// setOrders(res.);
-	}, [refresh]);
+	}, [refresh, skip, take]);
 	//   const orders = data?.activeCustomer?.orders?.items
 
 	const headers = [

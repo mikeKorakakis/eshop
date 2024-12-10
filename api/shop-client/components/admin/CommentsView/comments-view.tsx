@@ -56,6 +56,7 @@ const CommentsView: FC<Props> = ({ dictionary }) => {
 		admin_dictionary.user,
 		admin_dictionary.product,
 		admin_dictionary.added_date,
+		""
 	];
 
 

@@ -13,6 +13,7 @@ import { createCustomer, createProduct, getCustomer, getProduct, updateCustomer,
 import { test_user_id } from '@/lib/constants';
 import { emailPattern, passwordPattern } from '@/components/auth';
 import { client } from '@/lib/client';
+import FormSelect from '@/components/ui/FormSelect';
 
 
 interface Props {
@@ -21,6 +22,16 @@ interface Props {
 	onSuccess?: () => void;
 }
 
+const groupOptions = [
+	{
+		label: 'User',
+		value: 0
+	},
+	{
+		label: 'Admin',
+		value: 1
+	},
+]
 
 const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 
@@ -71,7 +82,7 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		try {
 			setLoading(true);
 			if (id) {
-				if (data.password) {
+				if (data?.password) {
 
 					await updateCustomer({
 						user_id: id,
@@ -94,8 +105,8 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 				}
 			}
 			else {
-				if (data.password) {
-					
+				if (data?.password) {
+
 					await createCustomer({
 						user_id: id,
 						username: data?.username,
@@ -169,7 +180,7 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					type="password"
 					label={common_dictionary.password!}
 					{...register('password', {
-						required:!id && common_dictionary.not_empty!,
+						required: !id && common_dictionary.not_empty!,
 						minLength: { value: 7, message: common_dictionary.longer_7! },
 						pattern: {
 							value: passwordPattern,
@@ -178,16 +189,18 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					})}
 					error={errors.password && errors.password?.message}
 				/>
-				<FormInput
-					type="number"
+				<FormSelect
+					dictionary={dictionary}
 					label={admin_dictionary.group!}
 					{...register('group_id', {
 						required: common_dictionary.not_empty!
 					})}
+					options={groupOptions}
+
 					error={errors.group_id && errors.group_id?.message}
 				/>
+			
 
-				
 				<FormInput
 					type="text"
 					label={admin_dictionary.avatar!}

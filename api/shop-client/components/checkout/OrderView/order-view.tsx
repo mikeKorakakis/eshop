@@ -68,7 +68,7 @@ const OrderView: FC<Props> = ({ dictionary }) => {
 							))}
 						</ul>
 						<div>
-							<div className="bg-accent-0 sticky bottom-0 left-0 right-0 z-20 w-full flex-shrink-0 border-t px-6 py-6 text-sm sm:px-6">
+							<div className="bg-accent-0 sticky bottom-0 left-0 right-0 w-full flex-shrink-0 border-t px-6 py-6 text-sm sm:px-6">
 								<ul className="pb-2">
 									<li className="flex justify-between py-1">
 										<span>{common_dictionary.subtotal}</span>

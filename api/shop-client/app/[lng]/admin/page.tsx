@@ -1,18 +1,19 @@
+import DashboardView from '@/components/admin/DashboardView';
+import { getCustomers, getProducts, getOrders } from '@/lib/actions';
 import { getDictionary } from '@/lib/get-dictionary';
-import { LanguageProps } from '@/lib/types';
-import dynamic from 'next/dynamic';
-import HeroSection from '@/components/home/hero-section';
+import { LanguageProps } from '@/lib/types'
+import React, { Suspense } from 'react'
 
-const ProductsSection = dynamic(() => import('@/components/home/products-section'));
-const HPSection = dynamic(() => import('@/components/home/hp-section'));
+export default async function CategoriesAdminPage({ params: { lng } }: LanguageProps) {
+	const dictionary = await getDictionary(lng);
+	const customers = await getCustomers();
+	const products = await getProducts();
+	const orders = await getOrders();
 
-export default async function HomePage({ params: { lng } }: LanguageProps) {
-  const dictionary = await getDictionary(lng);
-  return (
-    <>
-      <HeroSection dictionary={dictionary} />
-      <ProductsSection dictionary={dictionary} />
-      <HPSection dictionary={dictionary} /> 
-    </>
-  );
+
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<DashboardView dictionary={dictionary} customers={customers} orders={orders} products={products} lng={lng}/>
+		</Suspense>
+	)
 }

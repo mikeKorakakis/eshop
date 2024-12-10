@@ -14,6 +14,8 @@ import DashboardTable from './table';
 import CustomerForm from '../CustomersView/customer-form';
 import ProductForm from '../ProductsView/product-form';
 import DashboardOrdersTable from './orders-table';
+import { Router } from 'next/router';
+import { useRouter } from 'next/navigation';
 interface Props {
 	dictionary: Dictionary;
 	customers: User[];
@@ -27,12 +29,14 @@ const DashboardView: FC<Props> = ({ dictionary, customers, products, orders, lng
 	const customersCount = customers?.length;
 	const productsCount = products?.length;
 	const ordersCount = orders?.length;
+	const router = useRouter();
 	const { openModal, setModalComponent } = useUI();
-	const [refresh, setRefresh] = useState(false);
 
 	const handleRefresh = () => {
-		setRefresh(refresh => !refresh);
+		router.push('/' + lng + '/admin');
 	}
+
+
 
 	let filteredCustomers = customers?.filter((customer) => customer.group_id === 0);
 	let mappedCustomers = filteredCustomers?.map((customer) => {
@@ -92,6 +96,7 @@ const DashboardView: FC<Props> = ({ dictionary, customers, products, orders, lng
 								setModalComponent(<CustomerForm id={id} dictionary={dictionary} onSuccess={handleRefresh} />)
 								openModal()
 							}}
+							
 							header={admin_dictionary.customers}
 							values={mappedCustomers} />
 						<DashboardTable

@@ -99,45 +99,6 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Create the 'cache' table if it does not already exist
-CREATE TABLE IF NOT EXISTS `cache` (
-    `key` VARCHAR(255) NOT NULL PRIMARY KEY,
-    `value` MEDIUMTEXT NOT NULL,
-    `expiration` INT NOT NULL
-);
-
--- Create the 'cache_locks' table if it does not already exist
-CREATE TABLE IF NOT EXISTS `cache_locks` (
-    `key` VARCHAR(255) NOT NULL PRIMARY KEY,
-    `owner` VARCHAR(255) NOT NULL,
-    `expiration` INT NOT NULL
-);
-
--- Create the 'personal_access_tokens' table if it does not already exist
-CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
-    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `tokenable_type` VARCHAR(255) NOT NULL,
-    `tokenable_id` BIGINT UNSIGNED NOT NULL,
-    `name` VARCHAR(255) NOT NULL,
-    `token` CHAR(64) NOT NULL UNIQUE,
-    `abilities` TEXT NULL,
-    `last_used_at` TIMESTAMP NULL,
-    `expires_at` TIMESTAMP NULL,
-    `created_at` TIMESTAMP NULL DEFAULT NULL,
-    `updated_at` TIMESTAMP NULL DEFAULT NULL,
-    INDEX `tokenable_index` (`tokenable_type`, `tokenable_id`)
-);
-
--- Create the 'media' table if it does not already exist
-CREATE TABLE IF NOT EXISTS `media` (
-    `media_id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) DEFAULT NULL,
-    `path` VARCHAR(255) NOT NULL,
-    `size` INT DEFAULT NULL,
-    `created_at` TIMESTAMP NULL DEFAULT NULL,
-    `updated_at` TIMESTAMP NULL DEFAULT NULL
-);
-
 
 -- Insert data into `users`
 INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `full_name`, `group_id`, `registration_date`, `avatar_url`) VALUES

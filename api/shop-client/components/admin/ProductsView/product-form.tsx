@@ -9,8 +9,9 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
 import { Product } from '@/types/types';
-import { createProduct, getProduct, updateProduct } from '@/lib/actions';
+import { createProduct, getCategories, getProduct, updateProduct } from '@/lib/actions';
 import { test_user_id } from '@/lib/constants';
+import FormSelect, { Options } from '@/components/ui/FormSelect/form-select';
 
 
 interface Props {
@@ -25,6 +26,8 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 	const common_dictionary = dictionary.common;
 	const admin_dictionary = dictionary.admin;
 	const [loading, setLoading] = useState(false);
+	const [options, setOptions] = useState<Options[]>([]);
+
 	//   const [message, setMessage] = useState('')
 	const [disabled, setDisabled] = useState(false);
 	const {
@@ -63,6 +66,24 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		}
 		getProd();
 	}, [id]);
+
+	useEffect(() => {
+		const getCats = async () => {
+			// get category by id
+			const categories = await getCategories();
+			if (!categories) return;
+			const values = categories.map((category) => {
+				return {
+					label: category.name!,
+					value: category.category_id!
+				};
+			});
+			setOptions(values);
+
+		}
+		getCats();
+
+	}, []);
 
 
 	const { closeModal } = useUI();
@@ -148,12 +169,14 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					})}
 					error={errors.country_of_origin && errors.country_of_origin?.message}
 				/>
-				<FormInput
-					type="number"
+				<FormSelect
+					dictionary={dictionary}
 					label={admin_dictionary.category!}
 					{...register('category_id', {
 						required: common_dictionary.not_empty!
 					})}
+					options={[...options, {value: 0, label: ""}]}
+
 					error={errors.category_id && errors.category_id?.message}
 				/>
 				<FormInput

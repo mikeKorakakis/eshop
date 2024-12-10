@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { forwardRef, InputHTMLAttributes } from 'react';
 import { Dictionary } from '@/lib/get-dictionary';
 
-interface Options {
+export interface Options {
   label: string;
   value: string | number;
 }
@@ -63,7 +63,8 @@ const FormSelect = forwardRef<HTMLSelectElement, Props & InputHTMLAttributes<HTM
                   // }
                 >
                   {/*  @ts-ignore */}
-                  {common_dictionary[label]}
+                  {/* {common_dictionary[label]} */}
+				  {label}
                 </option>
               );
             })}

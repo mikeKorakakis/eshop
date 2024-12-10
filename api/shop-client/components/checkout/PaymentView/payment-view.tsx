@@ -7,19 +7,13 @@ import React, { useState } from 'react';
 import Button from '@/components/ui/Button';
 // import dynamic from 'next/dynamic';
 import { Dictionary } from '@/lib/get-dictionary';
-import StripePayments from '../StripePayments';
 import { usePathname, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { refreshCart } from '../actions';
 import { LINKS, test_user_id } from '@/lib/constants';
-import PaymentRadioGroup from './payment-radio-group';
 import { FieldErrors, useForm, UseFormRegister } from 'react-hook-form';
 import FormInput from '@/components/ui/FormInput';
-import { client } from '@/lib/client';
-import { CartContext, useCart } from '@/components/ui/cart-context';
-import { CreditCard, Order } from '@/types/types';
-import { createOrder, createOrderItem, getOrders, getUserCreditCard, makePurchase, updateCreditCardBalance } from '@/lib/actions';
-import test from 'node:test';
+import { useCart } from '@/components/ui/cart-context';
+import { makePurchase } from '@/lib/actions';
 
 const { link_order_confirmation, link_checkout_shipping, link_checkout_general } = LINKS;
 
@@ -59,10 +53,9 @@ export default function PaymentView({ dictionary }: Props) {
 
 
 			const order = await makePurchase({
-				cardNumber: data.cardNumber,
+				card_number: data.cardNumber,
 				products: items,
-				totalAmount: totalAmount,
-				userId: test_user_id
+				total_amount: totalAmount,
 			})
 
 			router.push(`${link_order_confirmation}/${order?.order_id}?redirect_status=succeeded`);
