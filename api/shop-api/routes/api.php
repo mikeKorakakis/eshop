@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
@@ -35,6 +36,9 @@ Route::middleware('jwt.auth')->group(function () {
     Route::put('/orders/cost/update', [OrderController::class, 'updateCost']);
     //Order Items
     Route::apiResource('/orderItems', OrderItemController::class);
+    //Comments
+    Route::apiResource('/comments', CommentController::class);
+    Route::get('/comments/product/{product_id}', [CommentController::class, "getProductComments"]);
 });
 
 
