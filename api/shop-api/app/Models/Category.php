@@ -16,7 +16,8 @@ class Category extends Model
         'ordering',
         'is_visible',
         'allow_comments',
-        'allow_ads'
+        'allow_ads',
+        'media_id'
     ];
 
     protected $casts = [
@@ -24,7 +25,8 @@ class Category extends Model
         'description' => 'string',
         'is_visible' => 'boolean',
         'allow_comments' => 'boolean',
-        'allow_ads' => 'boolean'
+        'allow_ads' => 'boolean',
+        'media_id' => 'integer'
     ];
 
     public static array $rules = [
@@ -34,7 +36,8 @@ class Category extends Model
         'ordering' => 'nullable',
         'is_visible' => 'required|boolean',
         'allow_comments' => 'required|boolean',
-        'allow_ads' => 'required|boolean'
+        'allow_ads' => 'required|boolean',
+        'media_id' => 'nullable|integer'
     ];
     public function parentCategory()
     {

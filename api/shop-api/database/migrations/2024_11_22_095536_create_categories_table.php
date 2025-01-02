@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->boolean('is_visible')->default(true); // Visibility flag
             $table->boolean('allow_comments')->default(true); // Allow comments flag
             $table->boolean('allow_ads')->default(true); // Allow ads flag
+            $table->integer('media_id')->nullable();
             $table->timestamps(); // Created at and updated at timestamps
         });
     }

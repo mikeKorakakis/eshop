@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->boolean('registration_status');
             $table->timestamp('registration_date');
             $table->string('avatar_url', 255);
+            $table->integer('media_id')->nullable();
             $table->timestamps();
         });
     }

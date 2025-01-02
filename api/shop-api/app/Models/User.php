@@ -21,7 +21,8 @@ class User extends Authenticatable implements JWTSubject//Model
         'trust_status',
         'registration_status',
         'registration_date',
-        'avatar_url'
+        'avatar_url',
+        'media_id'
     ];
 
     protected $casts = [
@@ -31,7 +32,8 @@ class User extends Authenticatable implements JWTSubject//Model
         'full_name' => 'string',
         'registration_status' => 'boolean',
         'registration_date' => 'date',
-        'avatar_url' => 'string'
+        'avatar_url' => 'string',
+        'media_id' => 'integer'
     ];
 
     public static array $rules = [
@@ -43,7 +45,8 @@ class User extends Authenticatable implements JWTSubject//Model
         'trust_status' => 'required',
         'registration_status' => 'required|boolean',
         'registration_date' => 'required',
-        'avatar_url' => 'required|string|max:255'
+        'avatar_url' => 'required|string|max:255',
+        'media_id' => 'nullable|integer'
     ];
 
     protected $hidden = ['password'];

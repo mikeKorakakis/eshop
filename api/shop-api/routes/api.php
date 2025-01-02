@@ -29,6 +29,8 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('media/{media_id}/url', [MediaController::class, 'stream']);
     Route::get('media/{media_id}', [MediaController::class, 'show']);
     Route::post('media/product/assign', [MediaController::class, 'assignToProduct']);
+    Route::post('media/category/assign', [MediaController::class, 'assignToCategory']);
+    Route::post('media/user/assign', [MediaController::class, 'assignToUser']);
     //Products
     Route::apiResource('/products', ProductController::class);
     Route::get('products/{product_id}/gallery', [ProductGalleryController::class, 'getMediaOfProduct']);

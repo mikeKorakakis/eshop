@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Classes\ApiResponseClass;
 use App\Http\Requests\MediaRequest;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\MediaResource;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\UserResource;
 use App\Interfaces\IMediaRepository;
 use App\Interfaces\IProductRepository;
+use App\Interfaces\IUserRepository;
+use App\Interfaces\CategoryRepositoryInterface;
 use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,10 +21,14 @@ class MediaController extends Controller
 {
     private IMediaRepository $mediaRepository;
     private IProductRepository $productRepository;
-    public function __construct(IMediaRepository $mediaRepository, IProductRepository $productRepository)
+    private IUserRepository $userRepository;
+    private CategoryRepositoryInterface $categoryRepository;
+    public function __construct(IMediaRepository $mediaRepository, IProductRepository $productRepository, IUserRepository $userRepository, CategoryRepositoryInterface $categoryRepository)
     {
         $this->mediaRepository = $mediaRepository;
         $this->productRepository = $productRepository;
+        $this->userRepository = $userRepository;
+        $this->categoryRepository = $categoryRepository;
     }
     public function index()
     {
@@ -126,5 +134,58 @@ class MediaController extends Controller
             ApiResponseClass::error('Not found', 'Product or media not found', ApiResponseClass::HTTP_NOT_FOUND);
         }
 
+    }
+
+    public function assignToCategory(Request $request)
+    {
+        $request->validate([
+            'media_id' => 'required',
+            'category_id' => 'required',
+        ]);
+        $media_id = $request->input('media_id');
+        $category_id = $request->input('category_id');
+
+        try {
+            $media = $this->mediaRepository->getById($media_id);
+            if (!$media) {
+                return ApiResponseClass::error('Not found', 'Media not found', ApiResponseClass::HTTP_NOT_FOUND);
+            }
+            $category = $this->categoryRepository->getById($category_id);
+            if (!$category) {
+                return ApiResponseClass::error('Not found', 'Category not found', ApiResponseClass::HTTP_NOT_FOUND);
+            }
+
+            $category->media_id = $media->media_id;
+            $category->save();
+            return ApiResponseClass::sendResponse(new CategoryResource($category), 'Media assigned to category', ApiResponseClass::HTTP_OK);
+        } catch (\Exception $ex) {
+            ApiResponseClass::error('Not found', 'Category or media not found', ApiResponseClass::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function assignToUser(Request $request)
+    {
+        $request->validate([
+            'media_id' => 'required',
+            'user_id' => 'required',
+        ]);
+        $media_id = $request->input('media_id');
+        $user_id = $request->input('user_id');
+
+        try {
+            $media = $this->mediaRepository->getById($media_id);
+            if (!$media) {
+                return ApiResponseClass::error('Not found', 'Media not found', ApiResponseClass::HTTP_NOT_FOUND);
+            }
+            $user = $this->userRepository->getById($user_id);
+            if (!$user) {
+                return ApiResponseClass::error('Not found', 'User not found', ApiResponseClass::HTTP_NOT_FOUND);
+            }
+            $user->media_id = $media->media_id;
+            $user->save();
+            return ApiResponseClass::sendResponse(new UserResource($user), 'Media assigned to user', ApiResponseClass::HTTP_OK);
+        } catch (\Exception $ex) {
+            ApiResponseClass::error('Not found', 'User or media not found', ApiResponseClass::HTTP_NOT_FOUND);
+        }
     }
 }
