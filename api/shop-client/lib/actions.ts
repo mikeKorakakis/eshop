@@ -46,14 +46,13 @@ export async function signup({ username, email, full_name, password, group_id, a
     body: {
       username,
       email,
-	  password,
+      password,
       full_name,
       group_id,
       avatar_url
     }
   });
 
-  console.log(res);
 
   const register_res = res.data as any[];
   const { access_token } = register_res;
@@ -74,7 +73,6 @@ export async function me() {
   const user = res.data as User;
   return user;
 }
-
 
 export async function login({ username, password }: { username: string; password: string }) {
   const bearer = '';
@@ -139,7 +137,6 @@ export async function getCustomers() {
   const bearer = await getToken();
   const res = await client(bearer).GET('/users');
   const customers = res.data?.data as User[];
-  console.log('customers',customers);
   return customers;
 }
 
@@ -227,7 +224,6 @@ export async function getOrders() {
   const bearer = await getToken();
   const ordersRes = await client(bearer).GET(`/orders`);
   const allOrders = ordersRes.data?.data as Order[];
-  console.log('allOrders',allOrders);
   return allOrders;
 }
 
@@ -241,21 +237,44 @@ export async function getUserOrders({ user_id }: { user_id: number }) {
 
 export async function getProduct({ product_id }: { product_id: number }) {
   const bearer = await getToken();
-  const res = await client(bearer).GET(`/products/{id}`, {
+  const res = await client('bearer').GET(`/products/{id}`, {
     params: {
       path: { id: product_id! }
     }
   });
-  const product = res.data?.data as Product;
+  const product = res.data as Product;
   return product;
 }
 
 export async function getProducts() {
   const bearer = await getToken();
   const res = await client(bearer).GET(`/products`);
-  const products = res.data?.data as Product[];
-  console.log('products',products);
+  const products = res.data as Product[];
   return products;
+}
+
+export async function getProductsByCategory({ category_id }: { category_id: number }) {
+  const bearer = await getToken();
+  // @ts-ignore
+  const res = await client(bearer).GET(`/categories/{id}/products`, {
+    params: {
+      path: { id: category_id }
+    }
+  });
+  const productsByCategory = res.data as Product[];
+  return productsByCategory;
+}
+
+export async function getProductComments({ product_id }: { product_id: number }) {
+	  const bearer = await getToken();
+  const res = await client(bearer).GET(`/products/{id}/comments`, {
+	params: {
+		path: { id: product_id }
+	}
+  });
+  const comments = res.data as Comment[];
+  console.log('comments', comments);
+  return comments;
 }
 
 export async function createProduct({
@@ -320,8 +339,7 @@ export async function deleteProduct({ product_id }: { product_id: number }) {
 export async function getCategories() {
   const bearer = await getToken();
   const res = await client(bearer).GET('/categories');
-  const categories = res.data?.data;
-  console.log('categories',categories);
+  const categories = res.data as Category[];
   return categories;
 }
 
@@ -382,7 +400,6 @@ export async function getComments() {
   const bearer = await getToken();
   const res = await client(bearer).GET('/comments');
   const comments = res.data?.data;
-  console.log('comments',comments);
   return comments;
 }
 
@@ -518,7 +535,7 @@ export async function makePurchase({
 }) {
   const user = await me();
   const user_id = user.user_id;
-  if (!user_id) throw 'user_not_found';	
+  if (!user_id) throw 'user_not_found';
   const userCreditCard = await getUserCreditCard({ user_id });
   if (!userCreditCard?.balance || card_number.replaceAll(' ', '') !== userCreditCard.card_number) {
     throw 'payment_failed';

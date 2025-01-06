@@ -16,14 +16,17 @@ use App\Http\Controllers\AuthController;
 Route::post('/login', [AuthController::class, 'login']);
 //Users
 Route::apiResource('/users', UserController::class);
+Route::apiResource('/categories', CategoryController::class);
+Route::get('/categories/{category_id}/products', [ProductController::class, 'getProductsOfCategory']);
+Route::apiResource('/products', ProductController::class);
+Route::get('/products/{product_id}/comments', [CommentController::class, "getProductComments"]);
+
 
 Route::middleware('jwt.auth')->group(function () {
-    Route::get('me', [AuthController::class, 'me']);
+	Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     //Categories
-    Route::apiResource('/categories', CategoryController::class);
-    Route::get('/categories/{category_id}/products', [ProductController::class, 'getProductsOfCategory']);
     //Media
     Route::apiResource('/media', MediaController::class);
     Route::get('media/{media_id}/url', [MediaController::class, 'stream']);
@@ -32,10 +35,8 @@ Route::middleware('jwt.auth')->group(function () {
     Route::post('media/category/assign', [MediaController::class, 'assignToCategory']);
     Route::post('media/user/assign', [MediaController::class, 'assignToUser']);
     //Products
-    Route::apiResource('/products', ProductController::class);
     Route::get('products/{product_id}/gallery', [ProductGalleryController::class, 'getMediaOfProduct']);
     //Route::get('/items/category/{category_id}', [ProductController::class, 'getProductsOfCategory']);
-    Route::get('/products/{product_id}/comments', [CommentController::class, "getProductComments"]);
     //Orders
     Route::apiResource('/orders', OrderController::class);
     Route::get('/orders/products/{order_id}', [OrderController::class, 'getItemsOfOrder']);
@@ -43,9 +44,9 @@ Route::middleware('jwt.auth')->group(function () {
     //Order Items
     Route::apiResource('/orderItems', OrderItemController::class);
     //Comments
-    Route::apiResource('/comments', CommentController::class);
     //Route::get('/comments/product/{product_id}', [CommentController::class, "getProductComments"]);
     //Product Gallery
+	Route::apiResource('/comments', CommentController::class);
     Route::apiResource('/gallery', ProductGalleryController::class);
 });
 

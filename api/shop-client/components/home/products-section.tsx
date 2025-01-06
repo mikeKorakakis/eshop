@@ -12,6 +12,7 @@ interface Props {
 export default async function CollectionSection({ dictionary }: Props) {
 	
 	const categories = await getCategories();
+	console.log(categories);
 
 	return (
 		<div>

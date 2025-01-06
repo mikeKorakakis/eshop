@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { Dictionary } from '@/lib/get-dictionary';
 import { client } from '@/lib/client';
 import { ProductList } from '../product/ProductList';
-import { getProducts } from '@/lib/actions';
+import { getProducts, getProductsByCategory } from '@/lib/actions';
 
 interface Props {
 	dictionary: Dictionary;
@@ -11,7 +11,7 @@ interface Props {
 
 export default async function CategoryProductsSection({ dictionary, category_id }: Props) {
 
-	const products = await getProducts();
+	const products = await getProductsByCategory({category_id});
 
 	
 

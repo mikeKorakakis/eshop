@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 import Comment from './comment'
-import { getComments } from '@/lib/actions';
+import { getComments, getProductComments } from '@/lib/actions';
 import { Comment as CommentType } from '@/types/types';
 import UserAvatar from './user-avatar';
 import UserInfo from './user-info';
@@ -24,7 +24,7 @@ export default function CommentList({ product_id, dictionary }: Props) {
 	useEffect(() => {
 		// setIsLoading(true);
 		const getCommnts = async () => {
-			const commnts = await getComments();
+			const commnts = await getProductComments({ product_id });
 			if(!commnts) return
 			setComments(commnts);
 		};

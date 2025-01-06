@@ -9,6 +9,10 @@ class Category extends Model
 {
     public $table = 'categories';
 
+	protected $primaryKey = 'category_id';
+
+	protected $hidden = ['description'];
+
     public $fillable = [
         'name',
         'description',

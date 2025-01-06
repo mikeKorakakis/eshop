@@ -6,6 +6,8 @@ import { LanguageProps } from '@/lib/types';
 import { Metadata } from 'next/types';
 import { notFound } from 'next/navigation';
 import { getProduct, getProducts } from '@/lib/actions';
+import { client } from '@/lib/client';
+import { Product } from '@/types/types';
 
 const { link_search } = LINKS;
 
@@ -16,8 +18,16 @@ type Props = {
 } & LanguageProps;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const res = await client('').GET(`/products/{id}`,
+		{
+			params: {
+				path: { id: params.product_id! }
+			}
+		});
 
-	const product = await getProduct({ product_id: params.product_id })
+	const product = res.data as Product;
+
+
 
 	if (!product) return notFound();
 
@@ -52,8 +62,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-	
-	const products = await getProducts();
+	const res = await client('').GET(`/products`);
+	const products = res.data as Product[];
 
 	return products.map((product) => ({
 		params: {
@@ -63,9 +73,9 @@ export async function generateStaticParams() {
 
 }
 
-export default async function Product({ params: { product_id, lng } }: Props) {
+export default async function ProductPage({ params: { product_id, lng } }: Props) {
 	const dictionary = await getDictionary(lng);
-	const product = await getProduct({product_id})
+	const product = await getProduct({ product_id })
 	const common_dictionary = dictionary.common;
 
 	return (

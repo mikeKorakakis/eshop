@@ -7,6 +7,14 @@ DROP TABLE IF EXISTS `categories`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `orders`;
 DROP TABLE IF EXISTS `order_items`;
+DROP TABLE IF EXISTS `media`;
+DROP TABLE IF EXISTS `cache`;
+DROP TABLE IF EXISTS `cache_locks`;
+DROP TABLE IF EXISTS `migrations`;
+DROP TABLE IF EXISTS `personal_access_tokens`;
+DROP TABLE IF EXISTS `product_gallery`;
+
+
 
 
 SET FOREIGN_KEY_CHECKS = 1;
