@@ -1,4 +1,5 @@
 'use client';
+import 'swiper/css';
 import image1 from '@/assets/images/slider/shop-1.jpg';
 import image2 from '@/assets/images/slider/shop-2.jpg';
 import image3 from '@/assets/images/slider/shop-3.jpg';
@@ -9,7 +10,6 @@ import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
 import { Autoplay } from 'swiper/modules';
-import 'swiper/css';
 
 export default function Slider() {
   SwiperCore.use([Autoplay]);
@@ -22,7 +22,7 @@ export default function Slider() {
         enabled: true
       }}
       autoplay={{
-        delay: 5000
+        delay: 30000
       }}
       loop={true}
       navigation={true}
@@ -45,7 +45,7 @@ export default function Slider() {
           className="-z-10 h-full w-full  object-cover object-center"
         />
       </SwiperSlide>
-      <SwiperSlide>
+      {/* <SwiperSlide>
         <Image
           width={1920}
           height={1080}
@@ -53,16 +53,25 @@ export default function Slider() {
           alt="image1"
           className="-z-10 h-full w-full  object-cover object-center"
         />
-      </SwiperSlide>
-      <SwiperSlide>
+      </SwiperSlide> */}
+	  {/* <SwiperSlide>
         <Image
           width={1920}
           height={1080}
           src={image4}
           alt="image1"
-          className="-z-10 h-full w-full  object-cover object-top"
+          className="-z-10 h-full w-full  object-cover object-center"
         />
-      </SwiperSlide>
+      </SwiperSlide> */}
+      {/* <SwiperSlide>
+        <Image
+          width={1920}
+          height={1080}
+          src={image4}
+          alt="image1"
+          className="-z-10 h-full w-full  object-cover object-center"
+        />
+      </SwiperSlide> */}
       {/* <SwiperSlide>
         <Image
           width={1920}
