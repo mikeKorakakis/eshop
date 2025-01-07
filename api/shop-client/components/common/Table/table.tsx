@@ -133,12 +133,12 @@ const formatValue =  (value: any, key: string, dictionary: Dictionary) => {
 		return <Customer customer_id={value} />
 
 	}
-	if (key === "product_id") {
-		return <Product product_id={value} />
-	}
-	if (key === "order_id") {
-		return <Orders order_id={value} />
-	}
+	// if (key === "product_id") {
+	// 	return <Product product_id={value} />
+	// }
+	// if (key === "order_id") {
+	// 	return <Orders order_id={value} />
+	// }
 
 
 	return value;

@@ -10,6 +10,7 @@ use App\Interfaces\IOrderRepository;
 use App\Interfaces\IProductGalleryRepository;
 use App\Interfaces\IProductRepository;
 use App\Interfaces\IUserRepository;
+use App\Interfaces\ICreditCardRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\CommentRepository;
 use App\Repositories\MediaRepository;
@@ -18,7 +19,10 @@ use App\Repositories\OrderRepository;
 use App\Repositories\ProductGalleryRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\CreditCardRepository;
+
 use Illuminate\Support\ServiceProvider;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     public function register(): void
@@ -31,6 +35,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(IOrderItemRepository::class, OrderItemRepository::class);
         $this->app->bind(ICommentRepository::class, CommentRepository::class);
         $this->app->bind(IProductGalleryRepository::class, ProductGalleryRepository::class);
+		$this->app->bind(ICreditCardRepository::class, CreditCardRepository::class);
     }
 
     public function boot(): void

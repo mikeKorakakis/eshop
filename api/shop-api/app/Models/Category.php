@@ -12,6 +12,7 @@ class Category extends Model
 	protected $primaryKey = 'category_id';
 
 	protected $hidden = ['description'];
+    public $timestamps = false;
 
     public $fillable = [
         'name',

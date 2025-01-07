@@ -11,6 +11,10 @@ use App\Classes\ApiResponseClass;
 use Illuminate\Support\Facades\DB;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Models\CreditCard;
+use App\Models\OrderItem;
+use App\Models\Product;
+use AWS\CRT\Log;
 
 class OrderController extends Controller
 {
@@ -53,6 +57,36 @@ class OrderController extends Controller
         $order = $this->orderRepository->getById($order_id);
         return ApiResponseClass::sendResponse(new OrderResource($order), '', ApiResponseClass::HTTP_OK);
     }
+
+	public function showByUser($user_id)
+    {
+        $orders = $this->orderRepository->getByUserId($user_id);
+
+        // Return a collection of orders as resources
+        return ApiResponseClass::sendResponse(
+            OrderResource::collection($orders), 
+            '', 
+            ApiResponseClass::HTTP_OK
+        );
+    }
+
+	public function showByCurrentUser()
+    {
+		$user = auth()->user();
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        $orders = $this->orderRepository->getByUserId($user->user_id);
+
+        // Return a collection of orders as resources
+        return ApiResponseClass::sendResponse(
+            OrderResource::collection($orders), 
+            '', 
+            ApiResponseClass::HTTP_OK
+        );
+    }
+
+
     public function edit(Order $order)
     {
 
@@ -113,5 +147,74 @@ class OrderController extends Controller
             ApiResponseClass::error('Not found', 'Order not found', ApiResponseClass::HTTP_NOT_FOUND);
         }
 
+
+
     }
+
+	public function makePurchase(Request $request)
+    {
+        $request->validate([
+            'card_number' => 'required|string',
+            'total_amount' => 'required|numeric|min:0',
+            'products' => 'required|array',
+            'products.*.product_id' => 'required|exists:products,product_id',
+            'products.*.quantity' => 'required|numeric|min:1'
+        ]);
+
+
+        // Extract request data
+        $card_number = $request->card_number;
+        $total_amount = $request->total_amount;
+        $products = $request->products;
+
+        // Fetch the current user (assuming you have user authentication)
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        // Retrieve the user's credit card
+        $userCreditCard = CreditCard::where('user_id', $user->user_id)
+            ->where('card_number', str_replace(' ', '', $card_number))
+            ->first();
+
+        if (!$userCreditCard || $userCreditCard->balance < $total_amount) {
+            return response()->json(['message' => 'Payment failed or declined'], 400);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            // Deduct the balance
+            $new_balance = $userCreditCard->balance - $total_amount;
+            $userCreditCard->balance = $new_balance;
+            $userCreditCard->save();
+
+            // Create the order
+            $order = Order::create([
+                'user_id' => $user->user_id,
+                'total_amount' => $total_amount,
+                'order_date' => now(),
+                'order_status' => 'pending'
+            ]);
+
+            // Add the products to the order
+            foreach ($products as $product) {
+                $productDetails = Product::find($product['product_id']);
+                OrderItem::create([
+                    'order_id' => $order->order_id,
+                    'product_id' => $product['product_id'],
+                    'price_at_purchase' => $productDetails->price,
+                    'quantity' => $product['quantity']
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json( $order, 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Something went wrong. Please try again.', 'error' => $e->getMessage()], 500);
+        }
+	}
 }

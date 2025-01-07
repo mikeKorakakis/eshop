@@ -48,7 +48,10 @@ const LoginView = ({ dictionary }: Props) => {
 			setLoading(true);
 			setMessage('');
 
-			await login(data);
+			const access_token = await login(data);
+			if (!access_token) {
+				throw new Error('Invalid login');
+			}
 
 			toast.success(common_dictionary.login_success!);
 			setTimeout(() => {

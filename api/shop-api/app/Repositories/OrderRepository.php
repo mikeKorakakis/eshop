@@ -27,4 +27,8 @@ class OrderRepository implements IOrderRepository
     {
         return Order::destroy($id);
     }
+	public function getByUserId($id)
+	{
+		return Order::where('user_id', $id)->with(['items.product'])->get();
+	}
 }

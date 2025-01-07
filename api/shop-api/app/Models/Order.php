@@ -8,6 +8,7 @@ class Order extends Model
 {
     public $table = 'orders';
     protected $primaryKey = 'order_id';
+    public $timestamps = false;
 
     public $fillable = [
         'user_id',
@@ -30,5 +31,10 @@ class Order extends Model
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
+
+	public function items()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
 }

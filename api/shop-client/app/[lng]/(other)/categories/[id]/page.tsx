@@ -26,7 +26,7 @@ export default async function CategoryPage({ params: { lng, id  }}: Props) {
 						navigation={[
 							{ name: common_dictionary.home!, href: '/' },
 							{ name: common_dictionary.category, href: '/categories' },
-							{ name: category.name, href: '#' }
+							{ name: category.name!, href: '#' }
 						]}
 					/>
 				</div>

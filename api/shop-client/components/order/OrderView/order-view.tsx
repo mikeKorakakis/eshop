@@ -86,7 +86,7 @@ export default async function OrderView({ dictionary, order, lng, redirect_statu
 							</dt>
 							<dd className="font-medium text-gray-900">
 								<time dateTime="2021-03-22">
-									{new Date(order?.order_date).toLocaleDateString(lng, dateOptions)}
+									{new Date(order?.order_date!).toLocaleDateString(lng, dateOptions)}
 								</time>
 							</dd>
 						</dl>
@@ -107,7 +107,7 @@ export default async function OrderView({ dictionary, order, lng, redirect_statu
 									key={orderItem.order_item_id}
 									className="grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-8"
 								>
-									<ProductView id={orderItem.product_id} />
+									<ProductView id={orderItem.product_id!} />
 									<div className="sm:col-span-12 md:col-span-7">
 										{/* <dl className="grid grid-cols-1 gap-y-8 border-b border-gray-200 py-8 sm:grid-cols-2 sm:gap-x-6 sm:py-6 md:py-10">
 											<div>

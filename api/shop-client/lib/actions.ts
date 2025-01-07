@@ -48,11 +48,12 @@ export async function signup({ username, email, full_name, password, group_id, a
       email,
       password,
       full_name,
-      group_id,
-      avatar_url
+      group_id
+      //   media_id: avatar_url
     }
   });
 
+  console.log('resaaaaaaaaaaaa', res);
 
   const register_res = res.data as any[];
   const { access_token } = register_res;
@@ -70,6 +71,7 @@ export async function signup({ username, email, full_name, password, group_id, a
 export async function me() {
   const bearer = await getToken();
   const res = await client(bearer).GET('/me');
+  console.log('res', res.data);
   const user = res.data as User;
   return user;
 }
@@ -83,8 +85,8 @@ export async function login({ username, password }: { username: string; password
     }
   });
 
-  const login_res = res.data as any[];
-  const { access_token } = login_res;
+  const login_res = res as any;
+  const { access_token } = login_res.data;
 
   await setCookieServer({
     name: 'authToken',
@@ -94,6 +96,7 @@ export async function login({ username, password }: { username: string; password
     sameSite: 'strict',
     days: 1
   });
+  return access_token;
 }
 
 export async function logout() {
@@ -114,6 +117,8 @@ export async function register({ username, email, full_name, group_id, avatar_ur
       avatar_url
     }
   });
+
+  console.log('res', res);
 
   const login_res = res.data as any[];
   const { access_token } = login_res;
@@ -175,10 +180,27 @@ export async function updateCustomer({
       avatar_url
     }
   });
-  console.log(res);
 }
 
 export async function changePassword({
+  currentPassword,
+  newPassword
+}: {
+  currentPassword: string;
+  newPassword: string;
+}) {
+  const bearer = await getToken();
+  const res = await client(bearer).PUT('/change-password', {
+    body: {
+      current_password: currentPassword,
+      new_password: newPassword
+    }
+  });
+  console.log('res', res);
+  if (!(res.response.status === 200)) throw new Error('password_error');
+}
+
+export async function changeOtherUserPassword({
   user_id,
   newPassword
 }: {
@@ -187,7 +209,7 @@ export async function changePassword({
 }) {
   const customer = await getCustomer({ customer_id: user_id });
   const bearer = await getToken();
-  await client(bearer).PUT('/users/{id}', {
+  const res = await client(bearer).PUT('/users/{id}', {
     params: {
       path: { id: user_id! }
     },
@@ -196,6 +218,7 @@ export async function changePassword({
       password: newPassword
     }
   });
+  if (!(res.response.status === 200)) throw new Error('password_error');
 }
 
 export async function getCustomer({ customer_id }: { customer_id: number }) {
@@ -205,7 +228,7 @@ export async function getCustomer({ customer_id }: { customer_id: number }) {
       path: { id: customer_id }
     }
   });
-  const customer = res.data?.data as User;
+  const customer = res.data as User;
   return customer;
 }
 
@@ -216,24 +239,34 @@ export async function getOrder({ order_id }: { order_id: number }) {
       path: { id: order_id }
     }
   });
-  const order = ordersRes.data?.data as Order;
+  const order = ordersRes.data as Order;
   return order;
 }
 
 export async function getOrders() {
   const bearer = await getToken();
   const ordersRes = await client(bearer).GET(`/orders`);
-  const allOrders = ordersRes.data?.data as Order[];
+  const allOrders = ordersRes.data as Order[];
   return allOrders;
 }
 
 export async function getUserOrders({ user_id }: { user_id: number }) {
   const bearer = await getToken();
-  const ordersRes = await client(bearer).GET(`/orders`);
-  const allOrders = ordersRes.data?.data as Order[];
-  const orders = allOrders.filter((order) => (order.user_id = user_id));
+  const ordersRes = await client(bearer).GET(`/users/{id}/orders`, {
+    params: {
+      path: { id: user_id }
+    }
+  });
+  const orders = ordersRes.data as Order[];
   return orders;
 }
+export async function getCurrentUserOrders() {
+	const bearer = await getToken();
+	const ordersRes = await client(bearer).GET(`/me/orders`);
+	const orders = ordersRes.data as Order[];
+	return orders;
+  }
+  
 
 export async function getProduct({ product_id }: { product_id: number }) {
   const bearer = await getToken();
@@ -266,14 +299,14 @@ export async function getProductsByCategory({ category_id }: { category_id: numb
 }
 
 export async function getProductComments({ product_id }: { product_id: number }) {
-	  const bearer = await getToken();
+  const bearer = await getToken();
+  // @ts-ignore
   const res = await client(bearer).GET(`/products/{id}/comments`, {
-	params: {
-		path: { id: product_id }
-	}
+    params: {
+      path: { id: product_id }
+    }
   });
   const comments = res.data as Comment[];
-  console.log('comments', comments);
   return comments;
 }
 
@@ -350,7 +383,7 @@ export async function getCategory({ category_id }: { category_id: number }) {
       path: { id: category_id }
     }
   });
-  const category = res.data?.data;
+  const category = res.data as Category;
   return category;
 }
 
@@ -439,24 +472,32 @@ export async function createComment({ product_id, user_id, content }: Comment) {
 export async function getOrderItems() {
   const bearer = await getToken();
   const orderProductsRes = await client(bearer).GET(`/order-items`);
-  const allOrderProducts = orderProductsRes.data?.data as OrderItem[];
+  const allOrderProducts = orderProductsRes.data as OrderItem[];
   return allOrderProducts;
 }
 
 export async function getOrderItemsByOrder({ order_id }: { order_id: number }) {
-  const allOrderProducts = await getOrderItems();
-  const orderProducts = allOrderProducts?.filter((x) => x.order_id === order_id);
+  const bearer = await getToken();
+
+  const orderProductsRes = await client(bearer).GET(`/orders/{id}/order-items`, {
+    params: {
+      path: { id: order_id }
+    }
+  });
+
+  const orderProducts = orderProductsRes.data as OrderItem[];
   return orderProducts;
 }
 
 export async function getUserCreditCard({ user_id }: { user_id: number }) {
   const bearer = await getToken();
-  const userBalanceRes = await client(bearer).GET('/credit-cards');
-  const allUserBalance = userBalanceRes.data?.data as CreditCard[];
   // @ts-ignore
-  const userBalance = allUserBalance.findLast((x) => x.user_id === user_id);
-
-  return userBalance;
+  const userBalanceRes = await client(bearer).GET('/users/{user_id}/credit_card', {
+    params: {
+      path: { user_id }
+    }
+  });
+  return userBalanceRes.data as CreditCard;
 }
 
 export async function updateCreditCardBalance({
@@ -492,7 +533,7 @@ export async function createOrder({
   order_status: string;
 }) {
   const bearer = await getToken();
-  await client(bearer).POST('/orders', {
+  const res = await client(bearer).POST('/orders', {
     body: {
       user_id: user_id,
       total_amount: total_amount,
@@ -500,6 +541,7 @@ export async function createOrder({
       order_status: order_status
     }
   });
+  return res.data as Order;
 }
 
 export async function createOrderProduct({
@@ -514,7 +556,7 @@ export async function createOrderProduct({
   order_id: number;
 }) {
   const bearer = await getToken();
-  client(bearer).POST('/order-items', {
+  const res = await client(bearer).POST('/order-items', {
     body: {
       product_id: product_id,
       price_at_purchase: price_at_purchase,
@@ -524,7 +566,7 @@ export async function createOrderProduct({
   });
 }
 
-export async function makePurchase({
+export async function makePurchase2({
   card_number,
   total_amount,
   products
@@ -538,12 +580,13 @@ export async function makePurchase({
   if (!user_id) throw 'user_not_found';
   const userCreditCard = await getUserCreditCard({ user_id });
   if (!userCreditCard?.balance || card_number.replaceAll(' ', '') !== userCreditCard.card_number) {
-    throw 'payment_failed';
+    throw new Error('payment_failed');
     // toast.error(common_dictionary.PAYMENT_FAILED_ERROR)
     // return
   }
+
   if (userCreditCard?.balance < total_amount) {
-    throw 'payment_declined';
+    throw new Error('payment_declined');
     // toast.error(common_dictionary.PAYMENT_DECLINED_ERROR);
   }
 
@@ -554,16 +597,13 @@ export async function makePurchase({
     new_balance
   });
 
-  await createOrder({
-    user_id: test_user_id,
+  const order = await createOrder({
+    user_id: user_id,
     total_amount: total_amount,
     order_date: new Date().toISOString(),
     order_status: 'pending'
   });
 
-  const orders = await getOrders();
-
-  const order = orders[orders.length - 1];
   for (const product of products) {
     await createOrderProduct({
       product_id: product.id,
@@ -573,5 +613,32 @@ export async function makePurchase({
     });
   }
 
+  return order;
+}
+
+export async function makePurchase({
+  card_number,
+  total_amount,
+  products
+}: {
+  card_number: string;
+  total_amount: number;
+  products: CartItem[];
+}) {
+  const bearer = await getToken();
+  const mappedProducts = products.map((product) => ({
+    product_id: product.id,
+    quantity: product.quantity
+  }));
+  const res = await client(bearer).POST('/make-purchase', {
+    body: {
+      card_number,
+      total_amount,
+      products: mappedProducts
+    }
+  });
+
+  const order = res.data as Order;
+  if (!order) throw new Error('payment_failed');
   return order;
 }

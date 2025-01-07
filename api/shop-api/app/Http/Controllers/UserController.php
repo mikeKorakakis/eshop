@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\UserResource;
 use App\Interfaces\IUserRepository;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
@@ -31,15 +33,18 @@ class UserController extends Controller
     {
         $details = [
             'username' => $request->username,
-            'password' => $request->password,
             'email' => $request->email,
             'full_name' => $request->full_name,
             'group_id' => $request->group_id,
             'trust_status' => $request->trust_status,
             'registration_status' => $request->registration_status,
-            'registration_date' => $request->registration_date,
-            'avatar_url' => $request->avatar_url,
+            'registration_date' => date('Y-m-d', strtotime($request->registration_date)),
+            'media_id' => $request->media_id,
         ];
+
+		if (!empty($request->password)) {
+			$userData['password'] = Hash::make($request->password);
+		}
         DB::beginTransaction();
 
         try {
@@ -62,20 +67,25 @@ class UserController extends Controller
     {
         $updateDetails = [
             'username' => $request->username,
-            'password' => $request->password,
+            
             'email' => $request->email,
             'full_name' => $request->full_name,
             'group_id' => $request->group_id,
-            'trust_status' => $request->trust_status,
-            'registration_status' => $request->registration_status,
-            'registration_date' => $request->registration_date,
-            'avatar_url' => $request->avatar_url,
+            'registration_date' => date('Y-m-d', strtotime($request->registration_date)),
+            'media_id' => $request->media_id,
         ];
+
+		if (!empty($request->password)) {
+			$userData['password'] = Hash::make($request->password);
+		}
+		
+
+
         DB::beginTransaction();
         try {
             $user = $this->userRepository->update($updateDetails, $user_id);
             DB::commit();
-            return ApiResponseClass::sendResponse('User Updated', '', ApiResponseClass::HTTP_NO_CONTENT);
+            return ApiResponseClass::sendResponse('User Updated', '', ApiResponseClass::HTTP_OK);
         } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);
         }
@@ -84,6 +94,6 @@ class UserController extends Controller
     public function destroy($user_id)
     {
         $this->userRepository->delete($user_id);
-        return ApiResponseClass::sendResponse('Deleted', '', ApiResponseClass::HTTP_NO_CONTENT);
+        return ApiResponseClass::sendResponse('Deleted', '', ApiResponseClass::HTTP_OK);
     }
 }

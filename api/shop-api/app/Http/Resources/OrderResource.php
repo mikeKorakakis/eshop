@@ -14,7 +14,8 @@ class OrderResource extends JsonResource
             'user_id' => $this->user_id,
             'order_date' => $this->order_date,
             'total_amount' => $this->total_amount,
-            'order_status' => $this->order_status
+            'order_status' => $this->order_status,
+			'items' => OrderItemResource::collection($this->items) // Include items
         ];
     }
 }

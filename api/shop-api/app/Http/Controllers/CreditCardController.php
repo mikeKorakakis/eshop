@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classes\ApiResponseClass;
 use App\Http\Resources\CreditCardResource;
 use App\Interfaces\ICreditCardRepository;
+use App\Interfaces\IUserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -59,16 +60,22 @@ class CreditCardController extends Controller
         return ApiResponseClass::sendResponse(new CreditCardResource($creditCard), '', ApiResponseClass::HTTP_OK);
     }
 
+	public function showByUserId($user_id){
+        $creditCard = $this->creditCardRepository->getByUserId($user_id);
+        return ApiResponseClass::sendResponse(new CreditCardResource($creditCard), '', ApiResponseClass::HTTP_OK);
+    }
+
     public function update(CreditCardRequest $request, $credit_card_id)
     {
         $updateDetails = [
             'user_id' => $request->user_id,
             'card_number' => $request->card_number,
             'cardholder_name' => $request->cardholder_name,
-            'expiration_date' => $request->expiration_date,
+            'expiration_date' => date('Y-m-d', strtotime($request->expiration_date)), // Convert to MySQL-compatible format,
             'cvv' => $request->cvv,
             'balance' => $request->balance
         ];
+		
         DB::beginTransaction();
         try {
             $creditCard = $this->creditCardRepository->update($updateDetails, $credit_card_id);

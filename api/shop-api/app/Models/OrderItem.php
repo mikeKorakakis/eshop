@@ -12,7 +12,7 @@ class OrderItem extends Model
 
     public $fillable = [
         'order_id',
-        'item_id',
+        'product_id',
         'quantity',
         'price_at_purchase'
     ];
@@ -23,8 +23,13 @@ class OrderItem extends Model
 
     public static array $rules = [
         'order_id' => 'required',
-        'item_id' => 'required',
+        'product_id' => 'required',
         'quantity' => 'required',
         'price_at_purchase' => 'required|numeric'
     ];
+
+	public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

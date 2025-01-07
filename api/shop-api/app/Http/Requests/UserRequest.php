@@ -20,14 +20,13 @@ class UserRequest extends FormRequest
             'email' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
             'group_id' => 'required',
-            'trust_status' => 'required',
-            'registration_status' => 'required|boolean',
             'registration_date' => 'required',
-            'avatar_url' => 'string|max:255'
+            'media_id' => 'nullable|exists:media,media_id'
         ];
     }
     public function failedValidation(Validator $validator)
     {
+		\Log::info('Validation failed:', $validator->errors());
         throw new HttpResponseException(response()->json([
             'success' => false,
             'message' => 'Validation errors',

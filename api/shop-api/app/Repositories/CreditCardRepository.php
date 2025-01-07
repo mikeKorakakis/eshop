@@ -18,6 +18,11 @@ class CreditCardRepository implements ICreditCardRepository
         return CreditCard::findOrFail($id);
     }
 
+	public function getByUserId($id)
+    {
+        return CreditCard::where("user_id", $id)->get()->first();
+    }
+
     public function store(array $data)
     {
         return CreditCard::create($data);

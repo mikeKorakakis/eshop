@@ -12,9 +12,10 @@ class OrderItemResource extends JsonResource
         return [
             'order_item_id' => $this->order_item_id,
             'order_id' => $this->order_id,
-            'item_id' => $this->item_id,
+            'product_id' => $this->product_id,
             'quantity' => $this->quantity,
             'price_at_purchase' => $this->price_at_purchase,
+			'product' => new ProductResource($this->product) // Include product
         ];
     }
 }

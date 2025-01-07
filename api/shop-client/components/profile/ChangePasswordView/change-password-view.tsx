@@ -51,7 +51,7 @@ export default function ChangePasswordView({ dictionary, customer }: Props) {
 	const onSubmit = async (data: ChangePasswordType) => {
 		try {
 			await changePassword({
-				user_id: customer.user_id!,
+				currentPassword: data.currentPassword,
 				newPassword: data.newPassword
 			});
 

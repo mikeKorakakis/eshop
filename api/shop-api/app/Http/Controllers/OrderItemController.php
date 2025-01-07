@@ -30,7 +30,7 @@ class OrderItemController extends Controller
     {
         $details = [
             'order_id' => $request->order_id,
-            'item_id' => $request->item_id,
+            'product_id' => $request->product_id,
             'quantity' => $request->quantity,
             'price_at_purchase' => $request->price_at_purchase,
         ];
@@ -58,7 +58,7 @@ class OrderItemController extends Controller
     {
         $updateDetails = [
             'order_id' => $request->order_id,
-            'item_id' => $request->item_id,
+            'product_id' => $request->product_id,
             'quantity' => $request->quantity,
             'price_at_purchase' => $request->price_at_purchase,
         ];

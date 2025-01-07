@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable implements JWTSubject//Model
 {
@@ -12,6 +13,7 @@ class User extends Authenticatable implements JWTSubject//Model
 
     protected $primaryKey = "user_id";
 
+    public $timestamps = false;
     public $fillable = [
         'username',
         'password',
@@ -61,6 +63,8 @@ class User extends Authenticatable implements JWTSubject//Model
     }
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = bcrypt($value);
+        $this->attributes['password'] = Hash::make($value, [
+			'rounds' => 10
+		]);
     }
 }

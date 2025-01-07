@@ -39,6 +39,7 @@ Route::post('register', [AuthController::class, 'register']);
 Route::middleware('jwt.auth')->group(function () {
 	Route::resource('users', UserAPIController::class)
 		->except(['create', 'edit']);
+	
 
 	Route::get('me', [AuthController::class, 'me']);
 	Route::post('logout', [AuthController::class, 'logout']);

@@ -4,13 +4,13 @@ import { LanguageProps } from '@/lib/types';
 import { Suspense } from 'react';
 import Spinner from '@/components/ui/Spinner'
 import { test_user_id } from '@/lib/constants';
-import { getCustomer } from '@/lib/actions';
+import { getCustomer, me } from '@/lib/actions';
 
 type Props = LanguageProps;
 
 export default async function ProfileAddresesPage({ params: { lng } }: Props) {
   const dictionary = await getDictionary(lng);
-  const customer = await getCustomer({ customer_id:  test_user_id })
+  const customer = await me()
   return (
     <Suspense fallback={<Spinner centered/>}>
       <OrdersView dictionary={dictionary} customer={customer}  />
