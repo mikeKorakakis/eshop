@@ -19,9 +19,9 @@ class ProductRepository implements IProductRepository
     {
         return Product::create($data);
     }
-    public function update(array $data, $id): bool
+    public function update(array $data, $product_id): bool
     {
-        return Product::where("id", $id)->update($data);
+        return Product::where("product_id", $product_id)->update($data);
     }
     public function delete($id)
     {
@@ -29,6 +29,6 @@ class ProductRepository implements IProductRepository
     }
     public function getByCategory($categoryId)
     {
-        return Product::where("category_id", $categoryId)->get();
+        return Product::where("category_id", $categoryId)->with(['category'])->get();
     }
 }

@@ -19,18 +19,14 @@ class Category extends Model
         'description',
         'parent_id',
         'ordering',
-        'is_visible',
-        'allow_comments',
-        'allow_ads',
+
         'media_id'
     ];
 
     protected $casts = [
         'name' => 'string',
         'description' => 'string',
-        'is_visible' => 'boolean',
-        'allow_comments' => 'boolean',
-        'allow_ads' => 'boolean',
+
         'media_id' => 'integer'
     ];
 
@@ -39,9 +35,7 @@ class Category extends Model
         'description' => 'required|string|max:65535',
         'parent_id' => 'nullable',
         'ordering' => 'nullable',
-        'is_visible' => 'required|boolean',
-        'allow_comments' => 'required|boolean',
-        'allow_ads' => 'required|boolean',
+
         'media_id' => 'nullable|integer'
     ];
     public function parentCategory()

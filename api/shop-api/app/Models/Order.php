@@ -28,9 +28,9 @@ class Order extends Model
         'order_status' => 'required|string|max:50'
     ];
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user()
     {
-        return $this->belongsTo(\App\Models\User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 	public function items()

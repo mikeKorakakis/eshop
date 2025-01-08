@@ -79,24 +79,31 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 
 	const submit = async (data: Category) => {
 		try {
+			let status;
 			setLoading(true);
 			if (id) {
-				await updateCategory({
+				status = await updateCategory({
 					category_id: id,
 					name: data?.name,
 					description: data?.description,
 					ordering: data?.ordering,
 					parent_id: data?.parent_id
 				});
+				
 			}
 			else {
-				await createCategory({
+				status = await createCategory({
 					category_id: id,
 					name: data?.name,
 					description: data?.description,
 					ordering: data?.ordering,
 					parent_id: data?.parent_id
 				});
+				
+			}
+			
+			if (status !== 201) {
+				throw new Error('Error updating category');
 			}
 			onSuccess && onSuccess();
 			toast.success(common_dictionary.success);

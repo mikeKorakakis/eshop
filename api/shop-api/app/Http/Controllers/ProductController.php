@@ -29,21 +29,29 @@ class ProductController extends Controller
     }
     public function store(StoreProductRequest $request)
     {
+		$user = auth()->user();
+		Log::info($user);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
         $details = [
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'added_date' => $request->added_date,
+            'added_date' => date('Y-m-d', strtotime(now())),
             'country_of_origin' => $request->country_of_origin,
-            'status' => $request->status,
-            'rating' => $request->rating,
-            'is_approved' => $request->is_approved,
             'category_id' => $request->category_id,
-            'owner_id' => $request->owner_id,
-            'image_url' => $request->image_url,
-            'contact_info' => $request->contact_info,
-            'media_id' => $request->media_id
+            'owner_id' => $user->user_id,
+			
+           
         ];
+
+		
+
+		if ($request->has('media_id')) {
+			$details['media_id'] = $request->image_url;
+		}
+		
         DB::beginTransaction();
 
         try {
@@ -66,26 +74,25 @@ class ProductController extends Controller
     }
     public function update(UpdateProductRequest $request, $id)
     {
-        $updateDetails = [
+		$updateDetails = [
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'added_date' => $request->added_date,
             'country_of_origin' => $request->country_of_origin,
-            'status' => $request->status,
-            'rating' => $request->rating,
-            'is_approved' => $request->is_approved,
             'category_id' => $request->category_id,
             'owner_id' => $request->owner_id,
-            'image_url' => $request->image_url,
-            'contact_info' => $request->contact_info,
-            'media_id' => $request->media_id
+           
         ];
+
+		if ($request->has('media_id')) {
+			$details['media_id'] = $request->image_url;
+		}
+		
         DB::beginTransaction();
         try {
             $product = $this->productRepository->update($updateDetails, $id);
             DB::commit();
-            return ApiResponseClass::sendResponse('Product updated', '', ApiResponseClass::HTTP_NO_CONTENT);
+            return ApiResponseClass::sendResponse('Product updated', '', ApiResponseClass::HTTP_CREATED);
         } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);
         }

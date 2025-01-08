@@ -111,10 +111,10 @@ const formatValue =  (value: any, key: string, dictionary: Dictionary) => {
 			return admin_dictionary.customer;
 		}
 	}
-	if (key === "category_id" || key === "parent_id") {
+	// if (key === "category_id" || key === "parent_id") {
 		
-		return <Category category_id={value} />
-	}
+	// 	return <Category category_id={value} />
+	// }
 	if (key.includes("image") || key.includes("avatar_url") && value) {
 		return <Image
 			src={imageUrl(value)}
@@ -129,10 +129,30 @@ const formatValue =  (value: any, key: string, dictionary: Dictionary) => {
 	if (key.includes("price") || key.includes("amount")) {
 		return formatPrice(value, "EUR");
 	}
-	if (key === "user_id") {
-		return <Customer customer_id={value} />
-
+	if (key === "items") {
+		return value.map((product: any) => <div className='flex items-center'>
+		<Image
+			src={imageUrl(product?.media_id!)}
+			width={40}
+			height={40}
+			alt="image"
+			className="w-8 mr-2" />
+		<span className="mr-2">{product?.name}</span>
+		<span >{formatPrice(product?.price, "EUR")}</span>
+	</div >)
 	}
+	if (key === "user"){
+		return <>{value.full_name}</>
+	}
+	// if (key === "user_id") {
+	// 	return <Customer customer_id={value} />
+
+	// }
+	// if (key === "user_id") {
+	// 	return <Customer customer_id={value} />
+
+	// }
+	
 	// if (key === "product_id") {
 	// 	return <Product product_id={value} />
 	// }
@@ -170,61 +190,62 @@ export const Customer = ({ customer_id }: { customer_id: number }) => {
 	return <span>{customerName}</span>
 }
 
-const Product = ({ product_id }: { product_id: number }) => {
-	const [productName, setProductName] = useState<string | undefined>(undefined);
-	useEffect(() => {
-		const getProductName = async () => {
-			const product = await getProduct({ product_id });
-			setProductName(product?.name);
-		}
-		getProductName();
-	}, [product_id]);
 
-	return <span>{productName}</span>
-}
+// const Product = ({ product_id }: { product_id: number }) => {
+// 	const [productName, setProductName] = useState<string | undefined>(undefined);
+// 	useEffect(() => {
+// 		const getProductName = async () => {
+// 			const product = await getProduct({ product_id });
+// 			setProductName(product?.name);
+// 		}
+// 		getProductName();
+// 	}, [product_id]);
 
-export const Orders = ({ order_id }: { order_id: number }) => {
-	const [productIds, setProductIds] = useState<number[]>([]);
-	useEffect(() => {
-		const getOrds = async () => {
-			const ords = await getOrderItems();
-			const orderOrderItems = ords?.filter((order) => (order.order_id === order_id));
-			if (!orderOrderItems) return
+// 	return <span>{productName}</span>
+// }
 
-			setProductIds(orderOrderItems.map((order) => order.product_id!));
-		}
-		getOrds();
-	}, [order_id]);
+// export const Orders = ({ order_id }: { order_id: number }) => {
+// 	const [productIds, setProductIds] = useState<number[]>([]);
+// 	useEffect(() => {
+// 		const getOrds = async () => {
+// 			const ords = await getOrderItems();
+// 			const orderOrderItems = ords?.filter((order) => (order.order_id === order_id));
+// 			if (!orderOrderItems) return
+
+// 			setProductIds(orderOrderItems.map((order) => order.product_id!));
+// 		}
+// 		getOrds();
+// 	}, [order_id]);
 
 
-	return (<ul>
-		{productIds.map(productId => (
-			<li><OrderProduct productId={productId} /></li>
-		))}
-	</ul>
-	)
+// 	return (<ul>
+// 		{productIds.map(productId => (
+// 			<li><OrderProduct productId={productId} /></li>
+// 		))}
+// 	</ul>
+// 	)
 
-}
+// }
 
-export const OrderProduct = ({ productId }: { productId: number }) => {
-	const [product, setProduct] = useState<ProductType>();
-	useEffect(() => {
-		const getProds = async () => {
-			const orderProduct = await getProduct({ product_id: productId });
-			if (!orderProduct) return
-			setProduct(orderProduct);
-		}
-		getProds();
-	}, [productId]);
+// export const OrderProduct = ({ productId }: { productId: number }) => {
+// 	const [product, setProduct] = useState<ProductType>();
+// 	useEffect(() => {
+// 		const getProds = async () => {
+// 			const orderProduct = await getProduct({ product_id: productId });
+// 			if (!orderProduct) return
+// 			setProduct(orderProduct);
+// 		}
+// 		getProds();
+// 	}, [productId]);
 
-	return <div className='flex items-center'>
-		<Image
-			src={imageUrl(product?.image_url!)}
-			width={40}
-			height={40}
-			alt="image"
-			className="w-8 mr-2" />
-		<span className="mr-2">{product?.name}</span>
-		<span >{formatPrice(product?.price, "EUR")}</span>
-	</div >
-}
+// 	return <div className='flex items-center'>
+// 		<Image
+// 			src={imageUrl(product?.image_url!)}
+// 			width={40}
+// 			height={40}
+// 			alt="image"
+// 			className="w-8 mr-2" />
+// 		<span className="mr-2">{product?.name}</span>
+// 		<span >{formatPrice(product?.price, "EUR")}</span>
+// 	</div >
+// }

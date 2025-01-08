@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { SetHttpCookieType } from './types';
+import { OrderWithItemsAndUser, SetHttpCookieType } from './types';
 import { getDictionary } from './get-dictionary';
 import { client } from './client';
 import {
@@ -141,26 +141,29 @@ export async function getDictionaryServer({ lng }: { lng: 'el' | 'en' }) {
 export async function getCustomers() {
   const bearer = await getToken();
   const res = await client(bearer).GET('/users');
-  const customers = res.data?.data as User[];
+  const customers = res.data as User[];
   return customers;
 }
 
-export async function createCustomer({ username, email, full_name, group_id, avatar_url }: User) {
+export async function createCustomer({ username, email, password, full_name, group_id, avatar_url }: User) {
   const bearer = await getToken();
-  await client(bearer).POST('/users', {
+  const res = await client(bearer).POST('/users', {
     body: {
       username,
       email,
+	  password,
       full_name,
       group_id,
       avatar_url
     }
   });
+  return res.response.status;
 }
 
 export async function updateCustomer({
   user_id,
   username,
+  password,
   email,
   full_name,
   group_id,
@@ -174,13 +177,26 @@ export async function updateCustomer({
     body: {
       user_id,
       username,
+	  password,
       email,
       full_name,
       group_id,
       avatar_url
     }
   });
+  return res.response.status;
 }
+
+export async function deleteCustomer({ user_id }: { user_id: number }) {
+	const bearer = await getToken();
+	const res = await client(bearer).DELETE('/users/{id}', {
+	  params: {
+		path: { id: user_id }
+	  }
+	});
+	console.log('res', res);
+	return res.response.status;
+  }
 
 export async function changePassword({
   currentPassword,
@@ -246,7 +262,8 @@ export async function getOrder({ order_id }: { order_id: number }) {
 export async function getOrders() {
   const bearer = await getToken();
   const ordersRes = await client(bearer).GET(`/orders`);
-  const allOrders = ordersRes.data as Order[];
+  const allOrders = ordersRes.data as OrderWithItemsAndUser[];
+  console.log('allOrders', ordersRes);
   return allOrders;
 }
 
@@ -256,14 +273,14 @@ export async function getUserOrders({ user_id }: { user_id: number }) {
     params: {
       path: { id: user_id }
     }
-  });
+});
   const orders = ordersRes.data as Order[];
   return orders;
 }
 export async function getCurrentUserOrders() {
 	const bearer = await getToken();
 	const ordersRes = await client(bearer).GET(`/me/orders`);
-	const orders = ordersRes.data as Order[];
+	const orders = ordersRes.data as OrderWithItemsAndUser[];
 	return orders;
   }
   
@@ -320,7 +337,7 @@ export async function createProduct({
   owner_id
 }: Product) {
   const bearer = await getToken();
-  await client(bearer).POST('/products', {
+  const res = await client(bearer).POST('/products', {
     body: {
       name,
       description,
@@ -331,6 +348,7 @@ export async function createProduct({
       owner_id
     }
   });
+  return res.response.status;
 }
 
 export async function updateProduct({
@@ -344,7 +362,7 @@ export async function updateProduct({
   owner_id
 }: Product) {
   const bearer = await getToken();
-  await client(bearer).PUT('/products/{id}', {
+  const res = await client(bearer).PUT('/products/{id}', {
     params: {
       path: { id: product_id! }
     },
@@ -358,15 +376,17 @@ export async function updateProduct({
       owner_id
     }
   });
+  return res.response.status;
 }
 
 export async function deleteProduct({ product_id }: { product_id: number }) {
   const bearer = await getToken();
-  await client(bearer).DELETE('/products/{id}', {
+  const res = await client(bearer).DELETE('/products/{id}', {
     params: {
       path: { id: product_id }
     }
   });
+  return res.response.status;
 }
 
 export async function getCategories() {
@@ -389,7 +409,7 @@ export async function getCategory({ category_id }: { category_id: number }) {
 
 export async function createCategory({ name, description, ordering, parent_id }: Category) {
   const bearer = await getToken();
-  await client(bearer).POST('/categories', {
+  const res = await client(bearer).POST('/categories', {
     body: {
       name,
       description,
@@ -397,6 +417,9 @@ export async function createCategory({ name, description, ordering, parent_id }:
       parent_id
     }
   });
+  console.log('res', res);
+  return res.response.status;
+
 }
 
 export async function updateCategory({
@@ -407,7 +430,7 @@ export async function updateCategory({
   parent_id
 }: Category) {
   const bearer = await getToken();
-  await client(bearer).PUT('/categories/{id}', {
+  const res = await client(bearer).PUT('/categories/{id}', {
     body: {
       name,
       description,
@@ -418,21 +441,24 @@ export async function updateCategory({
       path: { id: category_id! }
     }
   });
+  return res.response.status;
+
 }
 
 export async function deleteCategory({ category_id }: { category_id: number }) {
   const bearer = await getToken();
-  await client(bearer).DELETE('/categories/{id}', {
+  const res = await client(bearer).DELETE('/categories/{id}', {
     params: {
       path: { id: category_id }
     }
   });
+  return res.response.status;
 }
 
 export async function getComments() {
   const bearer = await getToken();
   const res = await client(bearer).GET('/comments');
-  const comments = res.data?.data;
+  const comments = res.data;
   return comments;
 }
 
@@ -450,11 +476,12 @@ export async function getComment({ comment_id }: { comment_id: number }) {
 
 export async function deleteComment({ comment_id }: { comment_id: number }) {
   const bearer = await getToken();
-  await client(bearer).DELETE('/comments/{id}', {
+  const res = await client(bearer).DELETE('/comments/{id}', {
     params: {
       path: { id: comment_id }
     }
   });
+  return res.response.status;
 }
 
 export async function createComment({ product_id, user_id, content }: Comment) {

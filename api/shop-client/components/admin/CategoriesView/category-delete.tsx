@@ -36,9 +36,12 @@ const CategoryDelete: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		try {
 			setLoading(true);
 			if (id) {
-				await deleteCategory({
+				const status = await deleteCategory({
 					category_id: id
 				});
+				if (status !== 204) {
+					throw new Error('Error deleting category');
+				}
 			}
 
 			onSuccess && onSuccess();

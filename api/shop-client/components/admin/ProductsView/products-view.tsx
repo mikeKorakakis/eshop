@@ -42,7 +42,8 @@ const ProductsView: FC<Props> = ({ dictionary }) => {
 				price: product.price,
 				added_date: product.added_date,
 				country_of_origin: product.country_of_origin,
-				category_id: product.category_id,
+				// category_id: product.category_id,
+				category: product.category.name,
 				
 			}));
 			if (!mappedProds) return

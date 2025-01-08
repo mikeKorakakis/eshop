@@ -20,9 +20,7 @@ class StoreCategoryRequest extends FormRequest
             'description' => 'required|string|max:65535',
             'parent_id' => 'nullable',
             'ordering' => 'nullable',
-            'is_visible' => 'required|boolean',
-            'allow_comments' => 'required|boolean',
-            'allow_ads' => 'required|boolean'
+          
         ];
     }
 

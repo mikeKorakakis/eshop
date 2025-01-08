@@ -16,10 +16,9 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'mediaId' => 'required|integer',
-            'parentId' => 'nullable|integer',
-            'isParent' => 'required|boolean',
+            'name' => 'required|string|max:255',
+            'media_id' => 'nullable|integer',
+            'parent_id' => 'nullable|integer',
         ];
     }
 

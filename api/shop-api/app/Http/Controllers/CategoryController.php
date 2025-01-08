@@ -9,6 +9,8 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Classes\ApiResponseClass;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Spatie\FlareClient\Api;
 
 class CategoryController extends Controller
 {
@@ -36,9 +38,6 @@ class CategoryController extends Controller
             'description' => $request->description,
             'parent_id' => $request->parent_id,
             'ordering' => $request->ordering,
-            'is_visible' => $request->is_visible,
-            'allow_comments' => $request->allow_comments,
-            'allow_ads' => $request->allow_ads
         ];
         DB::beginTransaction();
         try {
@@ -55,7 +54,7 @@ class CategoryController extends Controller
     {
         $category = $this->categoryRepositoryInterface->getById($id);
 
-        return ApiResponseClass::sendResponse(new CategoryResource($category), '', 200);
+        return ApiResponseClass::sendResponse(new CategoryResource($category), '', 201);
     }
     public function edit(Category $category)
     {
@@ -64,24 +63,29 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, $id)
     {
+		Log::error($request);
+		try {
         $updateDetails = [
             'name' => $request->name,
             'description' => $request->description,
             'parent_id' => $request->parent_id,
             'ordering' => $request->ordering,
-            'is_visible' => $request->is_visible,
-            'allow_comments' => $request->allow_comments,
-            'allow_ads' => $request->allow_ads
         ];
+
+		if($request->media_id){
+			$updateDetails['media_id'] = $request->media_id;
+		}
+
         DB::beginTransaction();
-        try {
             $category = $this->categoryRepositoryInterface->update($updateDetails, $id);
             DB::commit();
-            return ApiResponseClass::sendResponse('Category updated', '', 201);
+            return ApiResponseClass::sendResponse('Category updated', '', 200);
 
         } catch (\Exception $ex) {
+			Log::error($ex);
             return ApiResponseClass::rollback($ex);
         }
+		// return ApiResponseClass::sendResponse('Category updated', '', 200);
     }
     public function destroy($id)
     {

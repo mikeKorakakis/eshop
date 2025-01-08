@@ -16,17 +16,16 @@ class UserRequest extends FormRequest
     {
         return [
             'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
+            'password' => 'nullable|string|max:255',
             'email' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
             'group_id' => 'required',
-            'registration_date' => 'required',
+            'registration_date' => 'nullable',
             'media_id' => 'nullable|exists:media,media_id'
         ];
     }
     public function failedValidation(Validator $validator)
     {
-		\Log::info('Validation failed:', $validator->errors());
         throw new HttpResponseException(response()->json([
             'success' => false,
             'message' => 'Validation errors',

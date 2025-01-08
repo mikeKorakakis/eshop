@@ -21,9 +21,8 @@ class ProductResource extends JsonResource
             'is_approved' => $this->is_approved,
             'category_id' => $this->category_id,
             'owner_id' => $this->owner_id,
-            'image_url' => $this->image_url,
-            'contact_info' => $this->contact_info,
-            'media_id' => $this->media_id
+            'media_id' => $this->media_id,
+			'category' => new CategoryResource($this->category)
         ];
     }
 }

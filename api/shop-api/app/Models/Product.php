@@ -17,13 +17,8 @@ class Product extends Model
         'price',
         'added_date',
         'country_of_origin',
-        'status',
-        'rating',
-        'is_approved',
         'category_id',
         'owner_id',
-        'image_url',
-        'contact_info',
         'media_id'
     ];
     protected $casts = [
@@ -32,10 +27,6 @@ class Product extends Model
         'price' => 'decimal:2',
         'added_date' => 'date',
         'country_of_origin' => 'string',
-        'status' => 'string',
-        'is_approved' => 'boolean',
-        'image_url' => 'string',
-        'contact_info' => 'string',
         'media_id' => 'integer'
     ];
 
@@ -45,13 +36,13 @@ class Product extends Model
         'price' => 'required|numeric',
         'added_date' => 'required',
         'country_of_origin' => 'required|string|max:255',
-        'status' => 'required|string|max:50',
-        'rating' => 'required',
-        'is_approved' => 'required|boolean',
         'category_id' => 'required',
         'owner_id' => 'required',
-        'image_url' => 'required|string|max:255',
-        'contact_info' => 'required|string|max:255',
         'media_id' => 'nullable|integer'
     ];
+
+	public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 }

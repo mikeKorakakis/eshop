@@ -8,6 +8,10 @@ import Negotiator from 'negotiator';
 import { AUTH_TOKEN } from './lib/constants';
 import { me } from './lib/actions';
 
+const isPrivateUrl = (pathname: string) => {
+	  return pathname.includes('admin') || pathname.includes('profile');
+}
+
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
@@ -66,6 +70,10 @@ export async function middleware(request: NextRequest) {
 
   if (pathname.includes('admin') && (!user || user.group_id !== 1 )) {
     return NextResponse.redirect(new URL(`/`, request.url));
+  }
+
+  if (!user && isPrivateUrl(pathname)) {
+	return NextResponse.redirect(new URL(`/`, request.url));
   }
 
   const res = NextResponse.next({

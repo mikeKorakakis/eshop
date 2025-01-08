@@ -68,7 +68,7 @@ class CommentController extends Controller
         try {
             $comment = $this->commentRepository->update($updateDetails, $comment_id);
             DB::commit();
-            return ApiResponseClass::sendResponse('Comment updated', '', ApiResponseClass::HTTP_NO_CONTENT);
+            return ApiResponseClass::sendResponse('Comment updated', '', ApiResponseClass::HTTP_CREATED);
         } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);
         }

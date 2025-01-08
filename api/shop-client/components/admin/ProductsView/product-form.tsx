@@ -90,9 +90,10 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 
 	const submit = async (data: Product) => {
 		try {
+			let status;
 			setLoading(true);
 			if (id) {
-				await updateProduct({
+				status = await updateProduct({
 					product_id: id,
 					name: data?.name,
 					description: data?.description,
@@ -104,7 +105,7 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 				});
 			}
 			else {
-				await createProduct({
+				status = await createProduct({
 					name: data?.name,
 					description: data?.description,
 					price: data?.price,
@@ -113,6 +114,9 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					image_url: data?.image_url,
 					owner_id: test_user_id
 				});
+			}
+			if (status !== 201){
+				throw new Error('Error creating product');
 			}
 			onSuccess && onSuccess();
 			toast.success(common_dictionary.success);
@@ -183,7 +187,7 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					type="text"
 					label={admin_dictionary.image!}
 					{...register('image_url', {
-						required: common_dictionary.not_empty!
+						// required: common_dictionary.not_empty!
 					})}
 					error={errors.image_url && errors.image_url?.message}
 				/>

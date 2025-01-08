@@ -19,7 +19,7 @@ const OrdersView: FC<Props> = ({ dictionary, customer }) => {
 
 	const [take, setTake] = useState(10);
 	const [skip, setSkip] = useState(0);
-	const [orders, setOrders] = useState<Omit<Order, 'owner_id'>&{items: any}[]>([]);
+	const [orders, setOrders] = useState<Omit<Order, 'owner_id'> & { items: any }[]>([]);
 	const [totalItems, setTotalItems] = useState(0);
 	// const { openModal, setModalComponent } = useUI();
 	const [refresh, setRefresh] = useState(false);
@@ -35,21 +35,20 @@ const OrdersView: FC<Props> = ({ dictionary, customer }) => {
 			const ords = await getCurrentUserOrders();
 			let orders = ords?.map((order, index) => ({
 				id: order.order_id,
-				user_id: order.user_id,
+				user: order.user,
+				// user_id: order.user_id,
 				order_date: order.order_date,
 				total_amount: order.total_amount,
 				order_status: order.order_status,
-				order_id: order.order_id,
+				// order_id: order.order_id,
 				items: order.items.map((item) => ({
 					id: item.product_id,
 					name: item.product.name,
 					quantity: item.quantity,
 					price: item.price_at_purchase,
 					media_id: item.product.media_id
-				})
-
-
-				)
+				}),
+				),
 			}));
 
 			if (!orders) return

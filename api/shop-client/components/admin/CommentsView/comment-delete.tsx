@@ -36,9 +36,12 @@ const CommentDelete: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		try {
 			setLoading(true);
 			if (id) {
-				await deleteComment({
+				const status = await deleteComment({
 					comment_id: id
 				});
+				if (status !== 204){
+					throw new Error('Invalid delete')
+				}
 			}
 
 			onSuccess && onSuccess();

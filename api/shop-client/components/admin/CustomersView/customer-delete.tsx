@@ -5,7 +5,7 @@ import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
-import { deleteProduct } from '@/lib/actions';
+import { deleteCustomer, deleteProduct } from '@/lib/actions';
 
 
 interface Props {
@@ -24,13 +24,16 @@ const CustomerDelete: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 
 	const { closeModal } = useUI();
 
-	const handleDeleteProduct = async () => {
+	const handleDeleteCustomer = async () => {
 		try {
 			setLoading(true);
 			if (id) {
-				await deleteProduct({
-					product_id: id
+				const status = await deleteCustomer({
+					user_id: id
 				});
+				if (status !== 204){
+					throw new Error('Invalid delete')
+				}
 			}
 
 			onSuccess && onSuccess();
@@ -62,7 +65,7 @@ const CustomerDelete: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 						type="submit"
 						loading={loading}
 						disabled={disabled}
-						onClick={handleDeleteProduct}
+						onClick={handleDeleteCustomer}
 					>
 						{common_dictionary.delete}
 					</Button>

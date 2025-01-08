@@ -15,9 +15,7 @@ class CategoryResource extends JsonResource
             'description' => $this->description,
             'parent_id' => $this->parent_id,
             'ordering' => $this->ordering,
-            'is_visible' => $this->is_visible,
-            'allow_comments' => $this->allow_comments,
-            'allow_ads' => $this->allow_ads,
+
             'media_id' => $this->media_id
         ];
     }

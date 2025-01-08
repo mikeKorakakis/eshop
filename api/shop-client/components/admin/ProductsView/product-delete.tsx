@@ -28,9 +28,13 @@ const ProductDelete: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		try {
 			setLoading(true);
 			if (id) {
-				await deleteProduct({
+				const status = await deleteProduct({
 					product_id: id
 				});
+
+				if (status !== 204) {
+					throw new Error('Invalid delete');
+				}
 			}
 
 			onSuccess && onSuccess();

@@ -32,18 +32,26 @@ const OrdersView: FC<Props> = ({ dictionary }) => {
 		// setIsLoading(true);
 		const getOrds = async ({ take, skip }: { take: number; skip: number }) => {
 			const ords = await getOrders();
-			const mappedOrders = ords?.map((order, index) => ({
+			let orders = ords?.map((order, index) => ({
 				id: order.order_id,
-				user_id: order.user_id,
+				user: order.user,
+				// user_id: order.user_id,
 				order_date: order.order_date,
 				total_amount: order.total_amount,
 				order_status: order.order_status,
-				order_id: order.order_id,			
-
+				// order_id: order.order_id,
+				items: order.items.map((item) => ({
+					id: item.product_id,
+					name: item.product.name,
+					quantity: item.quantity,
+					price: item.price_at_purchase,
+					media_id: item.product.media_id
+				}),
+				),
 			}));
-			if (!mappedOrders) return
-			setOrders(mappedOrders);
-			setTotalItems(mappedOrders.length ?? 0);
+			if (!orders) return
+			setOrders(orders);
+			setTotalItems(orders.length ?? 0);
 			// setIsLoading(false);
 		};
 		getOrds({ take, skip });

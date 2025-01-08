@@ -24,12 +24,12 @@ Route::get('/products/{product_id}/comments', [CommentController::class, "getPro
 
 
 Route::middleware('jwt.auth')->group(function () {
+	Route::get('/users/{user_id}/orders', [OrderController::class, 'showByUser']);
 
 	Route::get('me', [AuthController::class, 'me']);
 	Route::get('users/{user_id}/credit_card', [CreditCardController::class, 'showByUserId']);
     Route::post('logout', [AuthController::class, 'logout']);
 	Route::put('change-password', [AuthController::class, 'changePassword']);
-	Route::get('/users/{user_id}/orders', [OrderController::class, 'showByUser']);
 	Route::get('/me/orders', [OrderController::class, 'showByCurrentUser']);
 
     Route::post('refresh', [AuthController::class, 'refresh']);

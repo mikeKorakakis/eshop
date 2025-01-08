@@ -9,7 +9,7 @@ class OrderRepository implements IOrderRepository
 {
     public function index()
     {
-        return Order::all();
+        return Order::with(['items.product', 'user'])->get();;
     }
     public function getById($id)
     {
@@ -29,6 +29,6 @@ class OrderRepository implements IOrderRepository
     }
 	public function getByUserId($id)
 	{
-		return Order::where('user_id', $id)->with(['items.product'])->get();
+		return Order::where('user_id', $id)->with(['items.product', 'user'])->get();
 	}
 }

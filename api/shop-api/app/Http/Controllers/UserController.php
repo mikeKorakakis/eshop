@@ -12,6 +12,7 @@ use App\Interfaces\IUserRepository;
 use Illuminate\Support\Facades\Hash;
 
 
+
 class UserController extends Controller
 {
     private IUserRepository $userRepository;
@@ -31,19 +32,18 @@ class UserController extends Controller
     }
     public function store(UserRequest $request)
     {
+		Log::info($request);
         $details = [
             'username' => $request->username,
             'email' => $request->email,
             'full_name' => $request->full_name,
             'group_id' => $request->group_id,
-            'trust_status' => $request->trust_status,
-            'registration_status' => $request->registration_status,
-            'registration_date' => date('Y-m-d', strtotime($request->registration_date)),
+            'registration_date' => date('Y-m-d', strtotime(now())),
             'media_id' => $request->media_id,
         ];
 
 		if (!empty($request->password)) {
-			$userData['password'] = Hash::make($request->password);
+			$details['password'] = Hash::make($request->password);
 		}
         DB::beginTransaction();
 
@@ -71,12 +71,11 @@ class UserController extends Controller
             'email' => $request->email,
             'full_name' => $request->full_name,
             'group_id' => $request->group_id,
-            'registration_date' => date('Y-m-d', strtotime($request->registration_date)),
             'media_id' => $request->media_id,
         ];
 
 		if (!empty($request->password)) {
-			$userData['password'] = Hash::make($request->password);
+			$updateDetails['password'] = Hash::make($request->password);
 		}
 		
 
@@ -85,7 +84,7 @@ class UserController extends Controller
         try {
             $user = $this->userRepository->update($updateDetails, $user_id);
             DB::commit();
-            return ApiResponseClass::sendResponse('User Updated', '', ApiResponseClass::HTTP_OK);
+            return ApiResponseClass::sendResponse('User Updated', '', ApiResponseClass::HTTP_CREATED);
         } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);
         }

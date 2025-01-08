@@ -80,11 +80,12 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 
 	const submit = async (data: User) => {
 		try {
+			let status;
 			setLoading(true);
 			if (id) {
 				if (data?.password) {
 
-					await updateCustomer({
+					status = await updateCustomer({
 						user_id: id,
 						username: data?.username,
 						avatar_url: data?.avatar_url,
@@ -94,7 +95,31 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 						password: data?.password
 					});
 				} else {
-					await updateCustomer({
+					status = await updateCustomer({
+						user_id: id,
+						username: data?.username,
+						avatar_url: data?.avatar_url,
+						full_name: data?.full_name,
+						email: data?.email,
+						group_id: data?.group_id
+					});
+				}
+
+			}
+			else {
+				if (data?.password) {
+
+					status = await createCustomer({
+						user_id: id,
+						username: data?.username,
+						avatar_url: data?.avatar_url,
+						full_name: data?.full_name,
+						email: data?.email,
+						group_id: data?.group_id,
+						password: data?.password
+					});
+				} else {
+					status = await createCustomer({
 						user_id: id,
 						username: data?.username,
 						avatar_url: data?.avatar_url,
@@ -104,28 +129,8 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					});
 				}
 			}
-			else {
-				if (data?.password) {
-
-					await createCustomer({
-						user_id: id,
-						username: data?.username,
-						avatar_url: data?.avatar_url,
-						full_name: data?.full_name,
-						email: data?.email,
-						group_id: data?.group_id,
-						password: data?.password
-					});
-				} else {
-					await createCustomer({
-						user_id: id,
-						username: data?.username,
-						avatar_url: data?.avatar_url,
-						full_name: data?.full_name,
-						email: data?.email,
-						group_id: data?.group_id
-					});
-				}
+			if (status !== 201) {
+				throw new Error('Invalid create');
 			}
 			onSuccess && onSuccess();
 			toast.success(common_dictionary.success);
@@ -205,7 +210,7 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					type="text"
 					label={admin_dictionary.avatar!}
 					{...register('avatar_url', {
-						required: common_dictionary.not_empty!
+						// required: common_dictionary.not_empty!
 					})}
 					error={errors.avatar_url && errors.avatar_url?.message}
 				/>
