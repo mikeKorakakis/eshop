@@ -62,4 +62,9 @@ class User extends Authenticatable implements JWTSubject//Model
 			'rounds' => 10
 		]);
     }
+
+	public function media()
+    {
+        return $this->belongsTo(Media::class, 'media_id');
+    }
 }

@@ -9,8 +9,8 @@ import { AUTH_TOKEN } from './lib/constants';
 import { me } from './lib/actions';
 
 const isPrivateUrl = (pathname: string) => {
-	  return pathname.includes('admin') || pathname.includes('profile');
-}
+  return pathname.includes('admin') || pathname.includes('profile');
+};
 
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
@@ -32,14 +32,13 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const user = await me();
 
- 
   const pathnameIsMissingLocale = i18n.locales.every(
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
 
   // Redirect if there is no locale
+  const locale = getLocale(request);
   if (pathnameIsMissingLocale) {
-    const locale = getLocale(request);
     const searchParams = new URLSearchParams(request.nextUrl.search);
     // e.g. incoming request is /products
     // The new URL is now /en-US/products
@@ -68,12 +67,16 @@ export async function middleware(request: NextRequest) {
   //     }))
   //   }
 
-  if (pathname.includes('admin') && (!user || user.group_id !== 1 )) {
-    return NextResponse.redirect(new URL(`/`, request.url));
+  if (pathname.includes('admin') && (!user || user.group_id !== 1)) {
+    return NextResponse.redirect(new URL(`/${locale}`, request.url));
+  }
+
+  if (user && user.group_id === 1 && (!pathname.includes('admin') && !pathname.includes('profile'))) {
+	return NextResponse.redirect(new URL(`/${locale}/admin/dashboard`, request.url));
   }
 
   if (!user && isPrivateUrl(pathname)) {
-	return NextResponse.redirect(new URL(`/`, request.url));
+    return NextResponse.redirect(new URL(`/${locale}`, request.url));
   }
 
   const res = NextResponse.next({

@@ -1,10 +1,15 @@
-import { Customer, Orders } from "@/components/common/Table/table";
 import { Dictionary } from "@/lib/get-dictionary";
+import { formatImage } from "@/lib/helpers";
+import { OrderWithItemsAndUser, Product } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
+import { OrderItem, User } from "@/types/types";
+import Image from "next/image";
+import placeholderImg from '@/assets/images/product-img-placeholder.svg';
+
 
 
 interface Props {
-	values: { customer_id: number, total_amount: number, id: number }[];
+	values: { user: string, items: OrderItem[], total_amount: number, id: number }[];
 	dictionary: Dictionary;
 	header: string;
 }
@@ -31,16 +36,23 @@ export default function DashboardOrdersTable({ values, header, dictionary, }: Pr
 									{values?.map((value) => (
 										<tr key={value?.id}>
 											<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-												<Customer customer_id={value?.customer_id} />
+												<span>{value.user}</span>
 											</td>
 											<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
 												{formatPrice(value?.total_amount, "EUR")}
 											</td>
 											<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-												<Orders order_id={value?.id} />
+												{value.items.map(({product}: any) => <div className='flex items-center'>
+													<Image
+														src={product?.media?.path ? formatImage(product?.media?.path!) : placeholderImg}
+														width={40}
+														height={40}
+														alt="image"
+														className="w-8 mr-2" />
+													<span className="mr-2">{product?.name}</span>
+													<span >{formatPrice(product?.price, "EUR")}</span>
+												</div >)}
 											</td>
-
-
 										</tr>
 									))}
 								</tbody>

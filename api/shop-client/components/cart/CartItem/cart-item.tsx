@@ -11,7 +11,7 @@ import { Dictionary } from '@/lib/get-dictionary';
 import { formatPrice } from '@/lib/utils';
 import { CartItem as CartContextItem } from '@/types/types';
 import { useCart } from '@/components/ui/cart-context';
-import { imageUrl } from '@/lib/helpers';
+import { formatImage } from '@/lib/helpers';
 
 type ItemOption = {
 	name: string;
@@ -137,7 +137,7 @@ const CartItem = ({
 								height={500}
 
 								//   src={placeholderImg}
-								src={imageUrl(item.imageUrl) || placeholderImg}
+								src={formatImage(item.formatImage) || placeholderImg}
 								
 								alt={'Product Image'}
 							/>

@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\CreditCard;
 use App\Models\OrderItem;
 use App\Models\Product;
-use AWS\CRT\Log;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -29,6 +29,7 @@ class OrderController extends Controller
     public function index()
     {
         $data = $this->orderRepository->index();
+		Log::info($data);
         return ApiResponseClass::sendResponse(OrderResource::collection($data), "", ApiResponseClass::HTTP_OK);
     }
     public function create()
@@ -77,7 +78,6 @@ class OrderController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
         $orders = $this->orderRepository->getByUserId($user->user_id);
-
         // Return a collection of orders as resources
         return ApiResponseClass::sendResponse(
             OrderResource::collection($orders), 

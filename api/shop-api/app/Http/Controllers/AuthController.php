@@ -8,17 +8,24 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\ApiResponseClass;
-
-
+use App\Interfaces\IUserRepository;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
+
+	private IUserRepository $userRepository;
+
+	public function __construct(IUserRepository $userRepository)
+	{
+		$this->userRepository = $userRepository;
+	}
 	public function login(Request $request)
 	{
 		$credentials = $request->only("username", "password");
 		$credentials = $request->only("username", "password");
-		
-	
+
+
 		if (!$token = auth()->attempt($credentials)) {
 			return response()->json(['error' => 'Unauthorized'], 401);
 		}
@@ -27,7 +34,10 @@ class AuthController extends Controller
 
 	public function me()
 	{
-		return response()->json(auth()->user());
+		$user = auth()->user();
+		$userWithImage = $this->userRepository->getById($user->user_id);
+		Log::info($userWithImage);
+		return response()->json($userWithImage);
 	}
 
 	public function logout()
@@ -76,16 +86,18 @@ class AuthController extends Controller
 			'group_id' => $request->group_id,
 			'registration_date' => date("Y/m/d"),
 		];
-		
+
 		if (!empty($request->media_id)) {
 			$userData['media_id'] = $request->media_id;
 		}
-		
-		$user = User::create($userData);
-	
 
-		// Automatically log in the user and issue a token
-		$token = auth()->login($user);
+		$user = User::create($userData);
+
+		$image_url =
+
+
+			// Automatically log in the user and issue a token
+			$token = auth()->login($user);
 
 		return $this->respondWithToken($token);
 	}

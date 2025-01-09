@@ -16,7 +16,8 @@ class CategoryResource extends JsonResource
             'parent_id' => $this->parent_id,
             'ordering' => $this->ordering,
 
-            'media_id' => $this->media_id
+            'media_id' => $this->media_id,
+			'media' => new MediaResource($this->media)
         ];
     }
 }

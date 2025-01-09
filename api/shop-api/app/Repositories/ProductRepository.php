@@ -13,7 +13,7 @@ class ProductRepository implements IProductRepository
     }
     public function getById($id)
     {
-        return Product::findOrFail($id);
+        return Product::with('media')->findOrFail($id);
     }
     public function store(array $data)
     {

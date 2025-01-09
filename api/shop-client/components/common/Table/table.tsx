@@ -1,17 +1,14 @@
 'use client';
-import React, { Suspense, use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { formatPrice, isValidDate } from '@/lib/utils';
 import { Dictionary } from '@/lib/get-dictionary';
 import { useRouter } from 'next/navigation';
 import ImageButton from '@/components/ui/ImageButton';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { imageUrl } from '@/lib/helpers';
+import { formatImage } from '@/lib/helpers';
 import Image from 'next/image';
-import { get } from 'http';
-import { getCategory, getCustomer, getOrderItems, getOrders, getProduct, getProducts } from '@/lib/actions';
-import { Product as ProductType } from '@/types/types';
-import Spinner from '@/components/ui/Spinner';
-import Link from 'next/link';
+import { getCustomer } from '@/lib/actions';
+import placeholderImg from '@/assets/images/product-img-placeholder.svg';
 
 // generate generic typescript props from transactions interface
 type Props = {
@@ -115,9 +112,17 @@ const formatValue =  (value: any, key: string, dictionary: Dictionary) => {
 		
 	// 	return <Category category_id={value} />
 	// }
-	if (key.includes("image") || key.includes("avatar_url") && value) {
+	// if (key.includes("image") || key.includes("avatar_url")&& value) {
+	// 	return <Image
+	// 		src={formatImage(value)}
+	// 		width={40}
+	// 		height={40}
+	// 		alt="image"
+	// 		className="w-10" />
+	// }
+	if (key.includes("media") || key.includes("avatar_url") && value) {
 		return <Image
-			src={imageUrl(value)}
+			src={value?.path ? formatImage(value?.path) : placeholderImg}
 			width={40}
 			height={40}
 			alt="image"
@@ -132,7 +137,7 @@ const formatValue =  (value: any, key: string, dictionary: Dictionary) => {
 	if (key === "items") {
 		return value.map((product: any) => <div className='flex items-center'>
 		<Image
-			src={imageUrl(product?.media_id!)}
+			src={product?.media?.path ? formatImage(product?.media?.path!) : placeholderImg}
 			width={40}
 			height={40}
 			alt="image"
@@ -164,17 +169,6 @@ const formatValue =  (value: any, key: string, dictionary: Dictionary) => {
 	return value;
 }
 
-const Category = ({ category_id }: { category_id: number }) => {
-	const [categoryName, setCategoryName] = useState<string | undefined>(undefined);
-	useEffect(() => {
-		const getCategoryName = async () => {
-			const category = await getCategory({ category_id });
-			setCategoryName(category?.name);
-		}
-		getCategoryName();
-	}, [category_id]);
-	return <span>{categoryName}</span>
-}
 
 
 export const Customer = ({ customer_id }: { customer_id: number }) => {
@@ -240,7 +234,7 @@ export const Customer = ({ customer_id }: { customer_id: number }) => {
 
 // 	return <div className='flex items-center'>
 // 		<Image
-// 			src={imageUrl(product?.image_url!)}
+// 			src={formatImage(product?.image_url!)}
 // 			width={40}
 // 			height={40}
 // 			alt="image"

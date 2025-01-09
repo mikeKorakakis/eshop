@@ -35,17 +35,19 @@ const ProductsView: FC<Props> = ({ dictionary }) => {
 		const getProds = async ({ take, skip }: { take: number; skip: number }) => {
 			const prods = await getProducts();
 			const mappedProds = prods?.map((product, index) => ({
-				image_url: product.image_url,
 				id: product.product_id,
+				// image_url: product.image_url,
+				media: product?.media,
 				name: product.name,
 				description: product.description,
 				price: product.price,
 				added_date: product.added_date,
 				country_of_origin: product.country_of_origin,
 				// category_id: product.category_id,
-				category: product.category.name,
+				category: product?.category?.name,
 				
 			}));
+			console.log(mappedProds);
 			if (!mappedProds) return
 			setProducts(mappedProds);
 			setTotalItems(mappedProds.length ?? 0);
@@ -58,7 +60,7 @@ const ProductsView: FC<Props> = ({ dictionary }) => {
 
 	const headers = [
 		'#',
-		"",
+		"####",
 		admin_dictionary.name,
 		admin_dictionary.description,
 		admin_dictionary.price,

@@ -1,5 +1,5 @@
 'use client'
-import { FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useUI } from '@/components/ui/ui-context';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
@@ -29,6 +29,47 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 	const [options, setOptions] = useState<Options[]>([]);
 	//   const [message, setMessage] = useState('')
 	const [disabled, setDisabled] = useState(false);
+	const [file, setFile] = useState<File | null>(null); // File type for file state
+
+	const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
+		if (e.target.files && e.target.files.length > 0) {
+			e?.target?.files[0] && setFile(e?.target?.files[0]);
+		}
+	};
+
+
+	const handleUpload = async (): Promise<void> => {
+		if (!file) {
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append("name", file.name);
+		formData.append("file", file);
+
+		try {
+			const response = await fetch("http://localhost:8000/api/media", {
+				method: "POST",
+				body: formData,
+			});
+
+
+			if (!response.ok) {
+				throw new Error(`Error: ${response.statusText}`);
+			}
+
+			const data = await response.json();
+			console.log("Upload successful:", data);
+			if (data.media_id) {
+				return data.media_id;
+			}
+		} catch (error: any) {
+			console.error("Error uploading file:", error.message);
+			toast.error(common_dictionary.error);
+		}
+	};
+
+
 	const {
 		register,
 		handleSubmit,
@@ -42,14 +83,13 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 	useEffect(() => {
 		const getCat = async () => {
 			if (id) {
-				// get category by id
 				const category = await getCategory({ category_id: id });
 				if (!category) return;
 				reset({
 					name: category.name,
 					description: category.description,
 					ordering: category.ordering,
-					parent_id: category.parent_id
+					parent_id: category.parent_id,
 				});
 			}
 		}
@@ -81,15 +121,18 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		try {
 			let status;
 			setLoading(true);
+			const uploadedMediaId = await handleUpload();
+
 			if (id) {
 				status = await updateCategory({
 					category_id: id,
 					name: data?.name,
 					description: data?.description,
 					ordering: data?.ordering,
-					parent_id: data?.parent_id
+					parent_id: data?.parent_id,
+					media_id: uploadedMediaId
 				});
-				
+
 			}
 			else {
 				status = await createCategory({
@@ -97,11 +140,12 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					name: data?.name,
 					description: data?.description,
 					ordering: data?.ordering,
-					parent_id: data?.parent_id
+					parent_id: data?.parent_id,
+					media_id: uploadedMediaId
 				});
-				
+
 			}
-			
+
 			if (status !== 201) {
 				throw new Error('Error updating category');
 			}
@@ -151,16 +195,23 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					})}
 					error={errors.ordering && errors.ordering?.message}
 				/>
-				
+
 				<FormSelect
 					dictionary={dictionary}
 					label={admin_dictionary.parent!}
 					{...register('parent_id', {
 						required: common_dictionary.not_empty!
 					})}
-					options={[...options, {value: 0, label: ""}]}
+					options={[...options, { value: 0, label: "" }]}
 
 					error={errors.parent_id && errors.parent_id?.message}
+				/>
+				<FormInput
+					name="image"
+					label={common_dictionary.image}
+					type="file"
+					onChange={handleFileChange}
+
 				/>
 
 				<div className="flex w-full flex-col pt-2">

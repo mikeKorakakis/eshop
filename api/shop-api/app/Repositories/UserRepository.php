@@ -14,7 +14,7 @@ class UserRepository implements IUserRepository
 
     public function getById($user_id)
     {
-        return User::find($user_id);
+        return User::with(['media'])->find($user_id);;
     }
     public function store(array $data): User
     {

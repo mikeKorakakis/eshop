@@ -15,6 +15,7 @@ import {
   Comment
 } from '@/types/types';
 import { test_user_id } from './constants';
+import { activeSlideStatus } from 'yet-another-react-lightbox/*';
 
 export async function setCookieServer(data: SetHttpCookieType) {
   const { name, value, path, httpOnly, secure, sameSite } = data;
@@ -39,8 +40,7 @@ export async function getToken() {
   return bearer;
 }
 
-export async function signup({ username, email, full_name, password, group_id, avatar_url }: User) {
-  console.log(username, email, full_name, group_id, avatar_url);
+export async function signup({ username, email, full_name, password, group_id, media_id }: User) {
   const bearer = await getToken();
   const res = await client(bearer).POST('/register', {
     body: {
@@ -48,12 +48,10 @@ export async function signup({ username, email, full_name, password, group_id, a
       email,
       password,
       full_name,
-      group_id
-      //   media_id: avatar_url
+      group_id,
+      media_id
     }
   });
-
-  console.log('resaaaaaaaaaaaa', res);
 
   const register_res = res.data as any[];
   const { access_token } = register_res;
@@ -66,12 +64,13 @@ export async function signup({ username, email, full_name, password, group_id, a
     sameSite: 'strict',
     days: 1
   });
+
+  return access_token;
 }
 
 export async function me() {
   const bearer = await getToken();
   const res = await client(bearer).GET('/me');
-  console.log('res', res.data);
   const user = res.data as User;
   return user;
 }
@@ -118,7 +117,6 @@ export async function register({ username, email, full_name, group_id, avatar_ur
     }
   });
 
-  console.log('res', res);
 
   const login_res = res.data as any[];
   const { access_token } = login_res;
@@ -145,13 +143,20 @@ export async function getCustomers() {
   return customers;
 }
 
-export async function createCustomer({ username, email, password, full_name, group_id, avatar_url }: User) {
+export async function createCustomer({
+  username,
+  email,
+  password,
+  full_name,
+  group_id,
+  avatar_url
+}: User) {
   const bearer = await getToken();
   const res = await client(bearer).POST('/users', {
     body: {
       username,
       email,
-	  password,
+      password,
       full_name,
       group_id,
       avatar_url
@@ -177,7 +182,7 @@ export async function updateCustomer({
     body: {
       user_id,
       username,
-	  password,
+      password,
       email,
       full_name,
       group_id,
@@ -188,15 +193,14 @@ export async function updateCustomer({
 }
 
 export async function deleteCustomer({ user_id }: { user_id: number }) {
-	const bearer = await getToken();
-	const res = await client(bearer).DELETE('/users/{id}', {
-	  params: {
-		path: { id: user_id }
-	  }
-	});
-	console.log('res', res);
-	return res.response.status;
-  }
+  const bearer = await getToken();
+  const res = await client(bearer).DELETE('/users/{id}', {
+    params: {
+      path: { id: user_id }
+    }
+  });
+  return res.response.status;
+}
 
 export async function changePassword({
   currentPassword,
@@ -212,7 +216,6 @@ export async function changePassword({
       new_password: newPassword
     }
   });
-  console.log('res', res);
   if (!(res.response.status === 200)) throw new Error('password_error');
 }
 
@@ -263,7 +266,6 @@ export async function getOrders() {
   const bearer = await getToken();
   const ordersRes = await client(bearer).GET(`/orders`);
   const allOrders = ordersRes.data as OrderWithItemsAndUser[];
-  console.log('allOrders', ordersRes);
   return allOrders;
 }
 
@@ -273,17 +275,16 @@ export async function getUserOrders({ user_id }: { user_id: number }) {
     params: {
       path: { id: user_id }
     }
-});
+  });
   const orders = ordersRes.data as Order[];
   return orders;
 }
 export async function getCurrentUserOrders() {
-	const bearer = await getToken();
-	const ordersRes = await client(bearer).GET(`/me/orders`);
-	const orders = ordersRes.data as OrderWithItemsAndUser[];
-	return orders;
-  }
-  
+  const bearer = await getToken();
+  const ordersRes = await client(bearer).GET(`/me/orders`);
+  const orders = ordersRes.data as OrderWithItemsAndUser[];
+  return orders;
+}
 
 export async function getProduct({ product_id }: { product_id: number }) {
   const bearer = await getToken();
@@ -407,19 +408,18 @@ export async function getCategory({ category_id }: { category_id: number }) {
   return category;
 }
 
-export async function createCategory({ name, description, ordering, parent_id }: Category) {
+export async function createCategory({ name, description, ordering, parent_id, media_id }: Category) {
   const bearer = await getToken();
   const res = await client(bearer).POST('/categories', {
     body: {
       name,
       description,
       ordering,
-      parent_id
+      parent_id,
+	  media_id
     }
   });
-  console.log('res', res);
   return res.response.status;
-
 }
 
 export async function updateCategory({
@@ -427,7 +427,8 @@ export async function updateCategory({
   name,
   description,
   ordering,
-  parent_id
+  parent_id,
+  media_id
 }: Category) {
   const bearer = await getToken();
   const res = await client(bearer).PUT('/categories/{id}', {
@@ -435,14 +436,14 @@ export async function updateCategory({
       name,
       description,
       ordering,
-      parent_id
+      parent_id,
+	  media_id
     },
     params: {
       path: { id: category_id! }
     }
   });
   return res.response.status;
-
 }
 
 export async function deleteCategory({ category_id }: { category_id: number }) {

@@ -4,7 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link';
 import { formatPrice } from '@/lib/utils';
-import { imageUrl } from '@/lib/helpers';
+import { formatImage } from '@/lib/helpers';
 import { getProduct } from '@/lib/actions';
 
 type Props = {
@@ -20,7 +20,7 @@ export default async function ProductView({ id }: Props) {
 			<div className="sm:col-span-4 md:col-span-5 md:row-span-2 md:row-end-2">
 				<div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-50">
 					<Image
-						src={imageUrl(product?.image_url) || placeholderImg}
+						src={product?.media?.path ? formatImage(product?.media?.path) : placeholderImg}
 						alt={product?.name || 'product image'}
 						className="object-contain object-center"
 						width={500}

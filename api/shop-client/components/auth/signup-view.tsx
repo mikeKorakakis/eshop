@@ -1,5 +1,5 @@
 'use client'
-import { FC, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 // import { validate } from 'email-validator'
 import { Info } from '@/components/icons';
 import { useUI } from '@/components/ui/ui-context';
@@ -18,6 +18,7 @@ import { Dictionary } from '@/lib/get-dictionary';
 import { signup } from '@/lib/actions';
 import { client } from '@/lib/client';
 import { set } from 'zod';
+import { FileUpload } from '../common/FileUpload';
 
 interface Props {
 	dictionary: Dictionary;
@@ -27,6 +28,7 @@ interface SignUpType {
 	password: string;
 	username: string;
 	full_name: string;
+	media_id: number;
 }
 
 const SignUpView: FC<Props> = ({ dictionary }: Props) => {
@@ -36,7 +38,48 @@ const SignUpView: FC<Props> = ({ dictionary }: Props) => {
 	const [loading, setLoading] = useState(false);
 	//   const [message, setMessage] = useState('')
 	const [disabled, setDisabled] = useState(false);
-	const router = useRouter();
+
+	const [file, setFile] = useState<File | null>(null); // File type for file state
+
+	const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
+		if (e.target.files && e.target.files.length > 0) {
+			e?.target?.files[0] && setFile(e?.target?.files[0]);
+		}
+	};
+
+
+
+	const handleUpload = async (): Promise<void> => {
+		if (!file) {
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append("name", file.name);
+		formData.append("file", file);
+
+		try {
+			const response = await fetch("http://localhost:8000/api/media", {
+				method: "POST",
+				body: formData,
+			});
+
+
+			if (!response.ok) {
+				throw new Error(`Error: ${response.statusText}`);
+			}
+
+			const data = await response.json();
+			console.log("Upload successful:", data);
+			if (data.media_id){
+				return data.media_id;
+			}
+		} catch (error: any) {
+			console.error("Error uploading file:", error.message);
+			alert("Error uploading file.");
+		}
+	};
+
 	const {
 		register,
 		handleSubmit,
@@ -51,19 +94,23 @@ const SignUpView: FC<Props> = ({ dictionary }: Props) => {
 	const handleSignup = async (data: SignUpType) => {
 		try {
 			setLoading(true);
-		
-			await signup({
+			const uploadedMediaId = await handleUpload();
+			const status = await signup({
 				email: data?.email,
 				username: data?.username,
 				full_name: data?.full_name,
 				password: data?.password,
-				avatar_url: 'empty',
+				media_id: uploadedMediaId,
 				group_id: 1
 			});
+
+			if (!status) {
+				throw new Error('Invalid signup');
+			}
 			setLoading(false);
 
 			toast.success(common_dictionary.signup_success);
-			
+
 			closeModal();
 
 			setTimeout(() => {
@@ -128,6 +175,7 @@ const SignUpView: FC<Props> = ({ dictionary }: Props) => {
 					})}
 					error={errors.password && errors.password?.message}
 				/>
+				<FormInput label={common_dictionary.image} name="file" type="file" onChange={handleFileChange} />
 
 				<span className="text-accent-8">
 					<span className="inline-block align-middle ">

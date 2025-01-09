@@ -1,9 +1,6 @@
 import { getCustomer } from '@/lib/actions';
-import { imageUrl } from '@/lib/helpers';
 import { User } from '@/types/types';
 import React from 'react'
-import Image from 'next/image';
-import clsx from 'clsx';
 
 interface Props {
 	user_id: number;

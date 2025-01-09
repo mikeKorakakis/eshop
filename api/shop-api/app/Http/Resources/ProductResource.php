@@ -22,7 +22,8 @@ class ProductResource extends JsonResource
             'category_id' => $this->category_id,
             'owner_id' => $this->owner_id,
             'media_id' => $this->media_id,
-			'category' => new CategoryResource($this->category)
+			'category' => new CategoryResource($this->category),
+			'media' => new MediaResource($this->media)
         ];
     }
 }

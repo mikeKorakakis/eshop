@@ -38,7 +38,13 @@ class CategoryController extends Controller
             'description' => $request->description,
             'parent_id' => $request->parent_id,
             'ordering' => $request->ordering,
+			
         ];
+
+		if($request->media_id){
+			$details['media_id'] = $request->media_id;
+		}
+
         DB::beginTransaction();
         try {
             $category = $this->categoryRepositoryInterface->store($details);
@@ -79,7 +85,7 @@ class CategoryController extends Controller
         DB::beginTransaction();
             $category = $this->categoryRepositoryInterface->update($updateDetails, $id);
             DB::commit();
-            return ApiResponseClass::sendResponse('Category updated', '', 200);
+            return ApiResponseClass::sendResponse('Category updated', '', 201);
 
         } catch (\Exception $ex) {
 			Log::error($ex);

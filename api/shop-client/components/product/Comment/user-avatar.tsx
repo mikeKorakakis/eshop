@@ -1,5 +1,5 @@
 import { getCustomer } from '@/lib/actions';
-import { imageUrl } from '@/lib/helpers';
+import { formatImage } from '@/lib/helpers';
 import { User } from '@/types/types';
 import React from 'react'
 import Image from 'next/image';
@@ -28,6 +28,6 @@ export default function UserAvatar({ user_id, className }: Props) {
 
 
 	return (
-		<Image src={imageUrl(user?.avatar_url)} alt={user.full_name!} className={clsx("size-12 rounded-full", className)} width={400} height={400} />
+		<Image src={formatImage(user?.avatar_url)} alt={user.full_name!} className={clsx("size-12 rounded-full", className)} width={400} height={400} />
 	)
 }

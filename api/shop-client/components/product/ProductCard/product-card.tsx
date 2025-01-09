@@ -10,7 +10,7 @@ import { Dictionary } from '@/lib/get-dictionary';
 import { formatPrice } from '@/lib/utils';
 import ProductButton from './product-button';
 import { Product } from '@/types/types';
-import { imageUrl } from '@/lib/helpers';
+import { formatImage } from '@/lib/helpers';
 
 interface Props {
   dictionary: Dictionary;
@@ -36,13 +36,13 @@ const ProductCard: FC<Props> = ({
         <div key={product.product_id} className="relative">         
           <div className="group relative">
             <div className="relative h-72 w-full overflow-hidden rounded-lg">
-              {product?.image_url && (
+              {
                 <>
                   <Image
                     className="h-full w-full object-cover object-center"
                     // loader={cloudinaryImageLoader}
                     // unoptimized
-                    src={ imageUrl(product.image_url) ||  placeholderImg}
+                    src={ product?.media?.path ? formatImage(product?.media?.path) :  placeholderImg}
                     // src={product?.image_url || placeholderImg}
                     alt={'Product Image'}
                     width={500}
@@ -51,7 +51,7 @@ const ProductCard: FC<Props> = ({
                     {...imgProps}
                   />
                 </>
-              )}
+              }
             </div>
             <div className="group relative mt-4">
               <h3 className="text-sm font-medium text-gray-900">{product.name}</h3>

@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default async function CollectionSection({ dictionary }: Props) {
-	
+
 	const categories = await getCategories();
 	console.log(categories);
 
@@ -29,7 +29,7 @@ export default async function CollectionSection({ dictionary }: Props) {
 
 					<div className="mt-10 space-y-12 lg:grid lg:gap-x-8 lg:space-y-0">
 						<CategoryProductsSection category_id={category.category_id!} dictionary={dictionary} />
-					
+
 					</div>
 				</section>))}
 		</div>

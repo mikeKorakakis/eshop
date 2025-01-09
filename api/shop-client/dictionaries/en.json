@@ -236,7 +236,8 @@
 		"products": "Products",
 		"orders": "Orders",
 		"customers": "Customers",
-		"comments": "Comments"
+		"comments": "Comments",
+		"image": "Image"
 	},
 	"contact": {
 		"contact": "Contact",

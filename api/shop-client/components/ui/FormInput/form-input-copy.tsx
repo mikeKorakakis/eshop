@@ -8,24 +8,14 @@ type Props = {
   error?: string;
   loading?: boolean;
   disabled?: boolean;
-  filePreview?: boolean; // Optional prop for file preview
-};
+}
 
 const FormInput = forwardRef<HTMLInputElement, Props & InputHTMLAttributes<HTMLInputElement>>(
-  ({ label, name, error, className, disabled, loading, filePreview, ...rest }, ref) => {
+  ({ label, name, error, className, disabled, loading, ...rest }, ref) => {
     const [show, setShow] = React.useState(false);
-    const [fileName, setFileName] = React.useState<string | null>(null); // To handle file name display
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.files && event.target.files.length > 0) {
-		// @ts-ignore
-        setFileName(event.target.files[0].name);
-      }
-    };
-
     return (
       <>
-        <div className="w-full">
+        <div className="w-full ">
           {label && (
             <label
               className={clsx(
@@ -54,7 +44,7 @@ const FormInput = forwardRef<HTMLInputElement, Props & InputHTMLAttributes<HTMLI
                   className
                 )}
               />
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 ">
                 {show ? (
                   <EyeIcon
                     onClick={() => setShow(false)}
@@ -70,33 +60,6 @@ const FormInput = forwardRef<HTMLInputElement, Props & InputHTMLAttributes<HTMLI
                 )}
               </div>
             </div>
-          ) : rest?.type === 'file' ? (
-            <div className="relative">
-              <input
-                id={name}
-                name={name}
-                {...rest}
-                ref={ref}
-                type="file"
-                disabled={disabled}
-                onChange={(e) => {
-                  handleFileChange(e);
-                  rest?.onChange?.(e); // Call the provided onChange prop if available
-                }}
-                className={clsx(
-                  'block w-full rounded-md border border-zinc-200 bg-white p-2 font-normal shadow-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm',
-                  error && 'ring-2 ring-red-500',
-                  disabled &&
-                    'disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500',
-                  className
-                )}
-              />
-              {filePreview && fileName && (
-                <p className="mt-2 text-sm text-gray-500">
-                  Selected file: <span className="font-medium">{fileName}</span>
-                </p>
-              )}
-            </div>
           ) : (
             <input
               id={name}
@@ -110,7 +73,7 @@ const FormInput = forwardRef<HTMLInputElement, Props & InputHTMLAttributes<HTMLI
                 error && 'ring-2 ring-red-500',
                 disabled &&
                   'disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500',
-                className
+                className,
               )}
             />
           )}

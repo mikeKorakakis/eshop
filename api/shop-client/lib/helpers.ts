@@ -1,2 +1,3 @@
-export const imageUrl = (name: string) =>
-	process.env.NEXT_PUBLIC_FRONTEND_URL + "items/" + name;
+export const formatImage = (path: string) => {
+	return 'http://localhost:9000/shop/' + path;
+}

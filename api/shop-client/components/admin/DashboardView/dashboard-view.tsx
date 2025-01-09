@@ -1,12 +1,8 @@
 'use client';
-import { FC, useEffect, useState } from 'react';
-import { clsx } from 'clsx';
+import { FC } from 'react';
 
 import { Dictionary } from '@/lib/get-dictionary';
-import Table from '@/components/common/Table/table';
-import Pagination from '@/components/common/Table/pagination';
-import { Category, Order, Product, User } from '@/types/types';
-import { getCategories } from '@/lib/actions';
+import { Order, Product, User } from '@/types/types';
 import { useUI } from '@/components/ui/ui-context';
 import Stat from '@/components/ui/Stat';
 import { ShoppingBagIcon, TagIcon, UserGroupIcon } from '@heroicons/react/24/outline';
@@ -14,13 +10,13 @@ import DashboardTable from './table';
 import CustomerForm from '../CustomersView/customer-form';
 import ProductForm from '../ProductsView/product-form';
 import DashboardOrdersTable from './orders-table';
-import { Router } from 'next/router';
 import { useRouter } from 'next/navigation';
+import { OrderWithItemsAndUser } from '@/lib/types';
 interface Props {
 	dictionary: Dictionary;
 	customers: User[];
 	products: Product[];
-	orders: Order[];
+	orders: OrderWithItemsAndUser[];
 	lng: string;
 }
 
@@ -54,8 +50,10 @@ const DashboardView: FC<Props> = ({ dictionary, customers, products, orders, lng
 	let mappedOrders = orders?.map((order) => {
 		return {
 			id: order.order_id!,
-			customer_id: order.user_id!,
+			user: order.user!.full_name!,
+			items: order.items!,
 			total_amount: order.total_amount!,
+			
 
 		};
 	});
@@ -96,7 +94,7 @@ const DashboardView: FC<Props> = ({ dictionary, customers, products, orders, lng
 								setModalComponent(<CustomerForm id={id} dictionary={dictionary} onSuccess={handleRefresh} />)
 								openModal()
 							}}
-							
+
 							header={admin_dictionary.customers}
 							values={mappedCustomers} />
 						<DashboardTable
@@ -109,7 +107,7 @@ const DashboardView: FC<Props> = ({ dictionary, customers, products, orders, lng
 							values={mappedProducts} />
 						<DashboardOrdersTable
 							dictionary={dictionary}
-							
+
 							header={admin_dictionary.orders}
 							values={mappedOrders} />
 					</div>

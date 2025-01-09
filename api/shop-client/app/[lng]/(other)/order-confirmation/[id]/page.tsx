@@ -15,7 +15,6 @@ export default async function CheckoutConfirmation({ params: { lng, id }, search
 	const dictionary = await getDictionary(lng);
 
 	const order = await getOrder({ order_id: id })
-	console.log('dddddddddddd',order)
 
 	const common_dictionary = dictionary.common;
 	const order_dictionary = dictionary.order;

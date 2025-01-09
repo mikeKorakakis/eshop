@@ -39,8 +39,11 @@ class UserController extends Controller
             'full_name' => $request->full_name,
             'group_id' => $request->group_id,
             'registration_date' => date('Y-m-d', strtotime(now())),
-            'media_id' => $request->media_id,
+            
         ];
+		if (!empty($request->media_id)) {
+			$details['media_id'] = $request->media_id;
+		}
 
 		if (!empty($request->password)) {
 			$details['password'] = Hash::make($request->password);

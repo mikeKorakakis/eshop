@@ -6,6 +6,7 @@ import {
 } from './types';
 import { setCookieServer } from './actions';
 
+
 export const createUrl = (pathname: string, params: URLSearchParams | ReadonlyURLSearchParams) => {
   const paramsString = params.toString();
   const queryString = `${paramsString.length ? '?' : ''}${paramsString}`;

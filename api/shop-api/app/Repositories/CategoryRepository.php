@@ -12,7 +12,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
 
     public function getById($id){
-       return Category::findOrFail($id);
+       return Category::with(['media'])->findOrFail($id);
     }
 
     public function store(array $data){

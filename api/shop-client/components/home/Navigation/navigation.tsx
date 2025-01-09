@@ -15,6 +15,7 @@ import { Category } from '@/types/types';
 import { Popover, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import placeholder from '@/assets/images/placeholder.png';
+import { formatImage } from '@/lib/helpers';
 const {
 	link_contact,
 	link_search
@@ -61,7 +62,7 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 				{
 					name: cat.name,
 					href: `/${lng}/categories/${cat.category_id}`,
-					imageSrc: placeholder,
+					imageSrc: formatImage(cat?.media?.path) || placeholder,
 					imageAlt: common_dictionary.menu_services_race_prep
 				}
 			))

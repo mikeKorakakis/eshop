@@ -45,7 +45,7 @@ const OrdersView: FC<Props> = ({ dictionary }) => {
 					name: item.product.name,
 					quantity: item.quantity,
 					price: item.price_at_purchase,
-					media_id: item.product.media_id
+					media: item.product.media
 				}),
 				),
 			}));

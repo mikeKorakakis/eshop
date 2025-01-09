@@ -20,6 +20,7 @@ class StoreCategoryRequest extends FormRequest
             'description' => 'required|string|max:65535',
             'parent_id' => 'nullable',
             'ordering' => 'nullable',
+			'media_id' => 'nullable|integer'
           
         ];
     }

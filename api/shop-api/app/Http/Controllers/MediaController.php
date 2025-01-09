@@ -16,6 +16,7 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class MediaController extends Controller
 {
@@ -55,12 +56,12 @@ class MediaController extends Controller
             $fileName = uniqid() . '_' . $file->getClientOriginalName();
             $filePath = 'uploads/' . $fileName;
 
-            \Log::info('Uploading file to MinIO: ' . $filePath);
+            Log::info('Uploading file to MinIO: ' . $filePath);
             Storage::disk('minio')->put($filePath, file_get_contents($file), 'public');
             $details['path'] = $filePath;
             $media = $this->mediaRepository->store($details);
             $url = Storage::disk('minio')->url($filePath);
-            \Log::info('File URL: ' . $url);
+            Log::info('File URL: ' . $url);
             DB::commit();
             return ApiResponseClass::sendResponse(new MediaResource($media), 'Media Created', ApiResponseClass::HTTP_CREATED);
         } catch (\Exception $ex) {

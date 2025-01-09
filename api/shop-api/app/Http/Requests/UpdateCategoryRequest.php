@@ -19,6 +19,9 @@ class UpdateCategoryRequest extends FormRequest
             'name' => 'required|string|max:255',
             'media_id' => 'nullable|integer',
             'parent_id' => 'nullable|integer',
+			'ordering' => 'nullable|integer',
+			'description' => 'nullable|string|max:65535',
+			'media_id' => 'nullable|integer'
         ];
     }
 

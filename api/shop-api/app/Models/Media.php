@@ -24,4 +24,6 @@ class Media extends Model
         'path' => 'nullable',
         'size' => 'nullable'
     ];
+
+	
 }

@@ -2,7 +2,7 @@ import placeholderImg from '@/assets/images/product-img-placeholder.svg';
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link';
-import { imageUrl } from '@/lib/helpers';
+import { formatImage } from '@/lib/helpers';
 import { Dictionary } from '@/lib/get-dictionary';
 import { getProduct } from '@/lib/actions';
 import ProductButton from './product-button';
@@ -25,7 +25,7 @@ export default async function ProductView({ productId, dictionary }: Props) {
 			<div key={product.product_id} className="py-6 sm:flex">
 				<div className="flex space-x-4 sm:min-w-0 sm:flex-1 sm:space-x-6 lg:space-x-8">
 					<Image
-						src={imageUrl(product?.image_url) || placeholderImg}
+						src={formatImage(product?.image_url) || placeholderImg}
 						alt={product?.name || 'product image'}
 						className="size-20 flex-none rounded-md object-scale-down sm:size-48"
 
