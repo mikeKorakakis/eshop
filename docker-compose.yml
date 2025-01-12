@@ -1,15 +1,56 @@
 services:
+  client:
+    container_name: client
+    build: 
+      context: ./new/shop-client
+      dockerfile: Dockerfile
+    environment:
+      MINIO_URL: https://minio.mscacs.info
+      SECURE_COOKIE: true
+      HTTPONLY_COOKIE: true
+      VIRTUAL_HOST: www.moto-book.com
+      LETSENCRYPT_HOST: www.moto-book.com
+      LETSENCRYPT_EMAIL: mike.korakakis@gmail.com
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./new/shop-api
+      dockerfile: Dockerfile
+    container_name: api
+    volumes:
+      - .:/var/www/html
+      - ./storage:/var/www/html/storage
+    ports:
+      - 8000:8000
+    # environment:
+      # APP_ENV: production
+      # APP_KEY: base64:YourAppKeyHere
+      # APP_DEBUG: false
+      # DB_CONNECTION: mysql
+      # DB_HOST: db
+      # DB_PORT: 3306
+      # DB_DATABASE: laravel
+      # DB_USERNAME: root
+      # DB_PASSWORD: root
+    depends_on:
+      - db
+
+
   web:
     image: php:8.1-apache
     container_name: apache_server
     ports:
       - "8080:80" 
     volumes:
-      - ./php/web:/var/www/html 
+      - ./old:/var/www/html 
     networks:
       - app-network
     environment:
       - MYSQL_ROOT_PASSWORD=rootpassword
+      - MINIO_URL=https://minio.mscacs.info
     command: /bin/bash -c "apt-get update && apt-get install -y libpq-dev libzip-dev unzip && docker-php-ext-install pdo pdo_mysql && apache2-foreground"
     depends_on:
       - db 
@@ -61,9 +102,58 @@ services:
       - minio-data:/data                      # Persistent storage for MinIO data
     command: server /data --console-address ":9001" # Enable Admin Console on port 9001
 
+  proxy:
+    image: jwilder/nginx-proxy
+    container_name: proxy
+    restart: unless-stopped
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+#      - docker_sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs:rw
+      - vhost.d:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    ports:
+      - "80:80"
+      - "443:443"
+
+
+  proxy-letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt
+    restart: unless-stopped
+    environment:
+      NGINX_PROXY_CONTAINER: proxy
+    volumes:
+      - html:/usr/share/nginx/html
+      - vhost.d:/etc/nginx/vhost.d
+      - certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+#      - /var/run/docker.sock:/tmp/docker.sock:ro 
+#     - docker_sock:/var/run/docker.sock:ro
+    depends_on:
+      - "proxy"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+
 volumes:
   db_data:
   minio-data:
+
+  certs:
+  vhost.d:
+  html:
+  portainer:
 
 networks:
   app-network:
