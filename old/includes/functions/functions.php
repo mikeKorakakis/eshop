@@ -42,6 +42,15 @@ function getAll($sql, $parameters = []){
 
 function formatImage($path)
 {
+	$env = getenv('PHP_ENV');
+	if ($env === 'production') {
+		return 'http://localhost:9000/shop/' . $path;
+	}else {
+		$minio = getenv('MINIO_URL');
+		if ($minio) {
+			return $minio . $path;
+		}
+	}
 	return 'http://localhost:9000/shop/' . $path;
 }
 	

@@ -14,6 +14,10 @@ RUN npm install --frozen-lockfile
 COPY . .
 
 # Build the application for production
+ENV DOTENV_CONFIG_PATH=.env.production
+
+# ARG NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+# ENV API_URL=$NEXT_PUBLIC_API_URL
 RUN npm run build
 
 # Stage 2: Production
@@ -32,6 +36,8 @@ COPY --from=builder /app/package*.json ./
 
 # Install only production dependencies
 RUN npm install --production
+# ENV API_URL=http://webserver:80
+
 
 # Expose the port that Next.js will run on
 EXPOSE 3000

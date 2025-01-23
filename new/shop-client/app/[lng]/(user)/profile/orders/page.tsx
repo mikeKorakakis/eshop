@@ -3,8 +3,7 @@ import { getDictionary } from '@/lib/get-dictionary';
 import { LanguageProps } from '@/types';
 import { Suspense } from 'react';
 import Spinner from '@/components/ui/Spinner'
-import { test_user_id } from '@/lib/constants';
-import { getCustomer, me } from '@/lib/actions';
+import { me } from '@/lib/actions';
 
 type Props = LanguageProps;
 

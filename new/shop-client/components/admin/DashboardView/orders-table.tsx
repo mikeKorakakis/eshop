@@ -1,6 +1,5 @@
 import { Dictionary } from "@/lib/get-dictionary";
-import { formatImage } from "@/lib/helpers";
-import { formatPrice } from "@/lib/utils";
+import { formatImage, formatPrice } from "@/lib/helpers";
 import { OrderItem, User } from "@/types";
 import Image from "next/image";
 import placeholderImg from '@/assets/images/product-img-placeholder.svg';

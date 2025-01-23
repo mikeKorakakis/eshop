@@ -1,15 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-// import { StripePayments } from './../StripePayments/index'
-// import BraintreePayments from '../BraintreePayments'
-// const BraintreePayments = dynamic(() => import('../BraintreePayments'));
-// const StripePayments = dynamic(() => import('../StripePayments'));
 import Button from '@/components/ui/Button';
-// import dynamic from 'next/dynamic';
 import { Dictionary } from '@/lib/get-dictionary';
 import { usePathname, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { LINKS, test_user_id } from '@/lib/constants';
+import { LINKS } from '@/lib/constants';
 import { FieldErrors, useForm, UseFormRegister } from 'react-hook-form';
 import FormInput from '@/components/ui/FormInput';
 import { useCart } from '@/lib/context/cart-context';

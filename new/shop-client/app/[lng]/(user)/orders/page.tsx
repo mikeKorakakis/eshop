@@ -1,7 +1,6 @@
 import OrderView from '@/components/order/OrdersView';
 import BreadCrumbs from '@/components/ui/BreadCrumbs';
-import { getUserOrders } from '@/lib/actions';
-import { test_user_id } from '@/lib/constants';
+import { getCurrentUserOrders } from '@/lib/actions';
 import { getDictionary } from '@/lib/get-dictionary';
 import { LanguageProps } from '@/types';
 import React from 'react';
@@ -15,7 +14,7 @@ type Props = {
 
 export default async function OrderPage({ params: { id, lng } }: Props) {
 	const dictionary = await getDictionary(lng);
-	const orders = await getUserOrders({ user_id: test_user_id })
+	const orders = await getCurrentUserOrders()
 	const order_dictionary = dictionary.order;
 	const common_dictionary = dictionary.common;
 

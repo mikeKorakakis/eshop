@@ -105,14 +105,14 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 		],
 
 		pages: SHOP_ENABLED
-			? [
-				{ name: common_dictionary.menu_shop, href: `/${lng}/link_search`, tag: 'search' },
-				{ name: common_dictionary.menu_contact, href: `/${lng}link_contact`, tag: 'contact' }
-			]
-			: [
+		? [
+			{ name: common_dictionary.menu_shop, href: `/${lng}/${link_search}`, tag: 'search' },
+			{ name: common_dictionary.menu_contact, href: `/${lng}/${link_contact}`, tag: 'contact' }
+		]
+		: [
 
-				{ name: common_dictionary.menu_contact, href: `/${lng}link_contact`, tag: 'contact' }
-			]
+			{ name: common_dictionary.menu_contact, href: `/${lng}/${link_contact}`, tag: 'contact' }
+		]
 	};
 
 	return (

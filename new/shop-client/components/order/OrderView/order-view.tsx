@@ -1,15 +1,10 @@
 import { Dictionary } from '@/lib/get-dictionary';
-import { BanknotesIcon, CreditCardIcon } from '@heroicons/react/24/outline';
-import clsx from 'clsx';
-import Image from 'next/image';
-import Link from 'next/link';
-import { formatPrice } from '@/lib/utils';
 import { LINKS } from '@/lib/constants';
 import { redirect } from 'next/navigation';
-import { Order, OrderItem } from '@/types';
-import { client } from '@/lib/client';
+import { Order } from '@/types';
 import ProductView from './product-view';
 import { getOrderItemsByOrder } from '@/lib/actions';
+import { formatPrice } from '@/lib/helpers';
 
 type Props = {
 	dictionary: Dictionary;

@@ -17,7 +17,7 @@ interface Props {
 export default function CommentList({ product_id, dictionary }: Props) {
 	const [comments, setComments] = useState<CommentType[]>();
 	const [refresh, setRefresh] = useState(false);	
-	const { isLoggedIn } = useAuth();
+	const { isLoggedIn, user } = useAuth();
 
 	const handleRefresh = () => {
 		setRefresh(refresh => !refresh);
@@ -39,7 +39,7 @@ export default function CommentList({ product_id, dictionary }: Props) {
 
 	return (
 		<div className='py-16  lg:pt-16 sm:pt-12 lg:pb-24 sm:pb-32 '>
-			{isLoggedIn && <Comment dictionary={dictionary} product_id={product_id} onSuccess={handleRefresh}/>}
+			{isLoggedIn && user && <Comment user_id={user.user_id} dictionary={dictionary} product_id={product_id} onSuccess={handleRefresh}/>}
 			<div className="mx-auto max-w-2xl px-4  sm:px-6  lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-8 lg:px-8">
 
 				<div className="mt-16 col-span-12 lg:mt-0 max-w-xl m-auto">

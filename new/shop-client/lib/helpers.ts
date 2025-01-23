@@ -12,7 +12,7 @@ export const uploadFile = async (file: File): Promise<number | null> => {
   formData.append('file', file);
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/media`, {
+    const response = await fetch(`${process.env.API_URL}/api/media`, {
       method: 'POST',
       body: formData
     });
@@ -33,3 +33,15 @@ export const uploadFile = async (file: File): Promise<number | null> => {
     return null;
   }
 };
+
+export function formatPrice(value = 0, currency: string = 'EUR') {
+	return new Intl.NumberFormat('el-GR', {
+	  style: 'currency',
+	  currency
+	}).format(value);
+  }
+
+  export function isValidDate(dateString: string): boolean {
+    const date = new Date(dateString);
+    return !isNaN(date.getTime());
+}

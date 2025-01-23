@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'; // Forces dynamic rendering
+
 import { ReactNode, Suspense } from 'react';
 
 import { ManagedUIContext } from '@/lib/context/ui-context';

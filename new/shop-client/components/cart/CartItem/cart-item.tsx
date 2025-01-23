@@ -8,10 +8,9 @@ import { useUI } from '@/lib/context/ui-context';
 import Quantity from '@/components/ui/Quantity';
 // import { useTranslation } from 'next-i18next'
 import { Dictionary } from '@/lib/get-dictionary';
-import { formatPrice } from '@/lib/utils';
 import { CartItem as CartContextItem } from '@/types';
 import { useCart } from '@/lib/context/cart-context';
-import { formatImage } from '@/lib/helpers';
+import { formatImage, formatPrice } from '@/lib/helpers';
 
 type ItemOption = {
 	name: string;

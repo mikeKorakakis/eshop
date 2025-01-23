@@ -1,6 +1,5 @@
 import { i18n } from '@/i18n-config';
 import { getProducts } from '@/lib/actions';
-import { validateEnvironmentVariables } from '@/lib/utils';
 import { MetadataRoute } from 'next';
 
 type Route = {
@@ -12,7 +11,6 @@ const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL
   : 'http://localhost:3000';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  validateEnvironmentVariables();
   const locales = i18n.locales;
 
   const routesMap = locales.map((route) => ({

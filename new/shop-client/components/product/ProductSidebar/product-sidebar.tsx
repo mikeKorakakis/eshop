@@ -1,18 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from '@/components/ui/Button';
 import { useUI } from '@/lib/context/ui-context';
 import Rating from '@/components/ui/Rating';
 
 import ErrorMessage from '@/components/ui/ErrorMessage';
 import { RATINGS_ENABLED } from '@/lib/constants';
-import Link from 'next/link';
 import ShareButtons from '@/components/ui/ShareButtons';
 import { Dictionary } from '@/lib/get-dictionary';
 
 import { Product } from '@/types';
 import { useCart } from '@/lib/context/cart-context';
-import { formatPrice } from '@/lib/utils';
 import toast from 'react-hot-toast';
+import { formatPrice } from '@/lib/helpers';
 
 interface Props {
 	product: Product;

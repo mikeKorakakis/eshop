@@ -1,16 +1,11 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import Image, { ImageProps } from 'next/image';
-import //   getProductVariant,
-//   selectDefaultOptionFromProduct,
-//   SelectedOptions,
-'../helpers';
 import placeholderImg from '@/assets/images/product-img-placeholder.svg';
 import { Dictionary } from '@/lib/get-dictionary';
-import { formatPrice } from '@/lib/utils';
 import ProductButton from './product-button';
 import { Product } from '@/types';
-import { formatImage } from '@/lib/helpers';
+import { formatImage, formatPrice } from '@/lib/helpers';
 
 interface Props {
   dictionary: Dictionary;

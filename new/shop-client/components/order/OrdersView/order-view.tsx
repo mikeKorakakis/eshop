@@ -1,55 +1,24 @@
 import { Dictionary } from '@/lib/get-dictionary';
-import { BanknotesIcon, CreditCardIcon } from '@heroicons/react/24/outline';
-import clsx from 'clsx';
-import Image from 'next/image';
 import Link from 'next/link';
-import { formatPrice } from '@/lib/utils';
 import { LINKS } from '@/lib/constants';
 import { redirect } from 'next/navigation';
-import { Order, OrderItem } from '@/types';
-import { client } from '@/lib/client';
-import ProductView from './order-item-view';
+import { OrderWithItemsAndUser } from '@/types';
 import OrderItemView from './order-item-view';
 import { Suspense } from 'react';
 
 type Props = {
 	dictionary: Dictionary;
-	order: Order;
+	order: OrderWithItemsAndUser;
 	lng: string;
 	redirect_status?: string
 };
 
-const dateOptions = {
-	weekday: 'long' as 'long' | 'short' | 'narrow' | undefined,
-	year: 'numeric' as 'numeric' | '2-digit' | undefined,
-	month: 'long' as 'long' | 'short' | 'narrow' | undefined,
-	day: 'numeric' as 'numeric' | '2-digit' | undefined
-};
 
-const getStep = (status: string) => {
-	switch (status) {
-		case 'Created':
-			return 0;
-		case 'Payment settled':
-			return 1;
-		case 'Shipped':
-			return 2;
-		case 'Delivered':
-			return 4;
-		default:
-			return 0;
-	}
-};
+
 
 export default async function OrderView({ dictionary, order, lng, redirect_status }: Props) {
 	const common_dictionary = dictionary.common;
 	const order_dictionary = dictionary.order;
-	//   const customer = await getActiveCustomerQuery();
-
-
-
-
-
 
 	const messageArray = [
 		order_dictionary.created_order,

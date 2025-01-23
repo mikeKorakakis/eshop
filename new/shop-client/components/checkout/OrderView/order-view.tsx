@@ -2,11 +2,9 @@
 import { FC, useState } from 'react';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { Dictionary } from '@/lib/get-dictionary';
-import { formatPrice } from '@/lib/utils';
 import CartItem from '@/components/cart/CartItem';
-import { LINKS } from '@/lib/constants';
-import Link from 'next/link';
 import { useCart } from '@/lib/context/cart-context';
+import { formatPrice } from '@/lib/helpers';
 
 
 interface Props {

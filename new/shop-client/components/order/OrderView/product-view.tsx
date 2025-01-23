@@ -3,8 +3,7 @@ import placeholderImg from '@/assets/images/product-img-placeholder.svg';
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link';
-import { formatPrice } from '@/lib/utils';
-import { formatImage } from '@/lib/helpers';
+import { formatImage, formatPrice } from '@/lib/helpers';
 import { getProduct } from '@/lib/actions';
 
 type Props = {

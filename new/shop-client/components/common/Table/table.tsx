@@ -1,11 +1,10 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { formatPrice, isValidDate } from '@/lib/utils';
 import { Dictionary } from '@/lib/get-dictionary';
 import { useRouter } from 'next/navigation';
 import ImageButton from '@/components/ui/ImageButton';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { formatImage } from '@/lib/helpers';
+import { formatImage, formatPrice, isValidDate } from '@/lib/helpers';
 import Image from 'next/image';
 import { getCustomer } from '@/lib/actions';
 import placeholderImg from '@/assets/images/product-img-placeholder.svg';

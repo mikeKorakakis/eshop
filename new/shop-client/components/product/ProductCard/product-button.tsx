@@ -4,7 +4,6 @@ import Button from '@/components/ui/Button';
 import { useUI } from '@/lib/context/ui-context';
 import { Dictionary } from '@/lib/get-dictionary';
 import { useState } from 'react';
-import { wait } from '@/lib/utils';
 import { Product } from '@/types';
 import { useCart } from '@/lib/context/cart-context';
 import toast from 'react-hot-toast';

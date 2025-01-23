@@ -16,19 +16,6 @@ const dynamicProps = {
 	loading: Loading
 };
 
-// const LoginView = dynamic(() => import('@/components/auth/login-view'), {
-//   ...dynamicProps
-// });
-
-// const SignUpView = dynamic(() => import('@/components/auth/signup-view'), {
-//   ...dynamicProps
-// });
-
-
-// const FeatureBar = dynamic(() => import('@/components/common/FeatureBar'), {
-//   ...dynamicProps
-// });
-
 const Modal = dynamic(() => import('@/components/ui/Modal'), {
 	...dynamicProps,
 	ssr: false

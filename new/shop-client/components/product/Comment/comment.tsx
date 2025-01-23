@@ -3,18 +3,18 @@
 import Button from "@/components/ui/Button"
 import { createComment } from "@/lib/actions";
 import UserAvatar from "./user-avatar";
-import { test_user_id } from "@/lib/constants";
 import { Dictionary } from "@/lib/get-dictionary";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 interface Props {
+	user_id: number;
 	product_id: number;
 	dictionary: Dictionary;
 	onSuccess?: () => void;
 }
 
-export default function Comment({ product_id, dictionary, onSuccess }: Props) {
+export default function Comment({ product_id, dictionary, user_id, onSuccess }: Props) {
 	const product_dictionary = dictionary.product;
 	const [comment, setComment] = useState<string>();
 
@@ -22,7 +22,7 @@ export default function Comment({ product_id, dictionary, onSuccess }: Props) {
 		// add comment
 		if(!comment) return;
 		try {
-			await createComment({ product_id, user_id: test_user_id, content: comment, created_date: new Date().toISOString() });
+			await createComment({ product_id, content: comment });
 			toast.success(product_dictionary.comment_success);
 			setComment('');
 			onSuccess && onSuccess();
@@ -37,7 +37,7 @@ export default function Comment({ product_id, dictionary, onSuccess }: Props) {
 	return (
 		<div className="flex items-start space-x-4 max-w-2xl  m-auto  ">
 			<div className="shrink-0">
-				<UserAvatar user_id={test_user_id} />
+				<UserAvatar user_id={user_id} />
 			</div>
 			<div className="min-w-0 flex-1">
 				<form action="#" className="relative">

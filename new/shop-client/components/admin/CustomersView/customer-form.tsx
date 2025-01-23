@@ -8,11 +8,9 @@ import FormInput from '@/components/ui/FormInput';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
-import { Product, User } from '@/types';
-import { createCustomer, createProduct, getCustomer, getProduct, updateCustomer, updateProduct } from '@/lib/actions';
-import { test_user_id } from '@/lib/constants';
+import { User } from '@/types';
+import { createCustomer, getCustomer, updateCustomer } from '@/lib/actions';
 import { emailPattern, passwordPattern } from '@/components/auth';
-import { client } from '@/lib/client';
 import FormSelect from '@/components/ui/FormSelect';
 
 

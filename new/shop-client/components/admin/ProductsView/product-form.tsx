@@ -10,7 +10,6 @@ import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
 import { Product } from '@/types';
 import { createProduct, getCategories, getProduct, updateProduct } from '@/lib/actions';
-import { test_user_id } from '@/lib/constants';
 import FormSelect, { Options } from '@/components/ui/FormSelect/form-select';
 import { uploadFile } from '@/lib/helpers';
 

@@ -1,4 +1,5 @@
 'use client';
+// import { Address } from '@/lib/vendure/generated/graphql-shop';
 import React, { FC, ReactNode, useCallback, useMemo } from 'react';
 type PayloadType = (() => Promise<void>) | null;
 export interface State {
@@ -7,7 +8,6 @@ export interface State {
 	displayModal: boolean;
 	sidebarView: string;
 	modalView: string;
-	userAvatar: string;
 	displayMobileMenu: boolean;
 	payload: PayloadType;
 	modalComponent: ReactNode;
@@ -20,7 +20,6 @@ const initialState = {
 	displayMobileMenu: false,
 	modalView: 'LOGIN_VIEW',
 	sidebarView: 'CART_VIEW',
-	userAvatar: '',
 	payload: null,
 	modalComponent: null
 };
@@ -56,10 +55,7 @@ type Action =
 		type: 'SET_SIDEBAR_VIEW';
 		view: SIDEBAR_VIEWS;
 	}
-	| {
-		type: 'SET_USER_AVATAR';
-		value: string;
-	}
+	
 	| {
 		type: 'OPEN_MOBILE_MENU';
 	}
@@ -75,13 +71,8 @@ export type MODAL_VIEWS =
 	""
 	| 'SIGNUP_VIEW'
 	| 'LOGIN_VIEW'
-	| 'FORGOT_VIEW'
-	| 'DELETE_ADDRESS_CONFIRMATION_VIEW'
-	| 'CREATE_UPDATE_ADDRESS_VIEW'
-	| 'NEW_SHIPPING_ADDRESS'
-	| 'NEW_PAYMENT_METHOD';
 
-type SIDEBAR_VIEWS = 'CART_VIEW' | 'CHECKOUT_VIEW' | 'PAYMENT_METHOD_VIEW';
+type SIDEBAR_VIEWS = 'CART_VIEW' ;
 
 export const UIContext = React.createContext<State | any>(initialState);
 
@@ -144,12 +135,7 @@ function uiReducer(state: State, action: Action) {
 				sidebarView: action.view
 			};
 		}
-		case 'SET_USER_AVATAR': {
-			return {
-				...state,
-				userAvatar: action.value
-			};
-		}
+		
 		case 'OPEN_MOBILE_MENU': {
 			return {
 				...state,
@@ -197,10 +183,6 @@ export const UIProvider: FC<{ children?: ReactNode }> = (props) => {
 	);
 	const closeModal = useCallback(() => dispatch({ type: 'CLOSE_MODAL' }), [dispatch]);
 
-	const setUserAvatar = useCallback(
-		(value: string) => dispatch({ type: 'SET_USER_AVATAR', value }),
-		[dispatch]
-	);
 
 	const setModalView = useCallback(
 		(view: MODAL_VIEWS) => {
@@ -245,7 +227,6 @@ export const UIProvider: FC<{ children?: ReactNode }> = (props) => {
 			setModalView,
 			setModalComponent,
 			setSidebarView,
-			setUserAvatar,
 			openMobileMenu,
 			closeMobileMenu,
 			setPayload

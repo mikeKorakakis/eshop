@@ -414,12 +414,13 @@ export async function deleteComment({ comment_id }: { comment_id: number }) {
   return res.status;
 }
 
-export async function createComment({ product_id, user_id, content }: Comment) {
+export async function createComment({ product_id, content }: Omit<Comment, 'comment_id' | 'created_date' | 'user_id'>) {
   const bearer = await getToken();
+  const user = await me();
   await client(bearer).post('comments', {
     json: {
       product_id,
-      user_id,
+      user_id: user?.user_id,
       content,
       created_date: new Date().toISOString()
     }

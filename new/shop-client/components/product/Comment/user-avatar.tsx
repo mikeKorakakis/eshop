@@ -24,10 +24,10 @@ export default function UserAvatar({ user_id, className }: Props) {
 	}, [user_id]);
 
 	if (!user) return null;
-	if (!user.avatar_url) return null;
+	if (!user?.media?.path) return null;
 
 
 	return (
-		<Image src={formatImage(user?.avatar_url)} alt={user.full_name!} className={clsx("size-12 rounded-full", className)} width={400} height={400} />
+		<Image src={formatImage(user?.media?.path)} alt={user.full_name!} className={clsx("size-12 rounded-full", className)} width={400} height={400} />
 	)
 }

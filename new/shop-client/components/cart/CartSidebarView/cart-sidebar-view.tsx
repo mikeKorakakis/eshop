@@ -11,8 +11,8 @@ import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { LINKS } from '@/lib/constants';
 import { Dictionary } from '@/lib/get-dictionary';
 import { useState } from 'react';
-import { formatPrice } from '@/lib/utils';
 import { useCart } from '@/lib/context/cart-context';
+import { formatPrice } from '@/lib/helpers';
 
 const { link_cart, link_checkout } = LINKS;
 
