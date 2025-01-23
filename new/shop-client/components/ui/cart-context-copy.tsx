@@ -1,5 +1,5 @@
 'use client';
-import { CartItem, CartState } from '@/types/types';
+import { CartItem, CartState } from '@/types';
 import React, { createContext, useReducer, useContext, FC, ReactNode, useCallback, useMemo } from 'react';
 
 // Define the structure of an item in the order

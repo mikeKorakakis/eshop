@@ -4,7 +4,7 @@ import { EnvelopeIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/outline
 import Link from 'next/link';
 import { Dictionary } from '@/lib/get-dictionary';
 import { getCategories } from '@/lib/actions';
-import { Category } from '@/types/types';
+import { Category } from '@/types';
 
 
 interface Props {

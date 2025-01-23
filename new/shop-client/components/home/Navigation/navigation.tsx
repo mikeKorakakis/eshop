@@ -11,11 +11,13 @@ import { i18n } from '@/i18n-config'
 import { usePathname, useRouter } from 'next/navigation';
 import { LINKS, SHOP_ENABLED } from '@/lib/constants';
 import { getCategories } from '@/lib/actions';
-import { Category } from '@/types/types';
+import { Category } from '@/types';
 import { Popover, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import placeholder from '@/assets/images/placeholder.png';
 import { formatImage } from '@/lib/helpers';
+import { useAuth } from '@/lib/context/auth-context';
+import Loading from '@/components/ui/Loading';
 const {
 	link_contact,
 	link_search
@@ -26,7 +28,6 @@ interface Props {
 	//   setMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	dictionary: Dictionary;
 	search: ReactNode;
-	order: any
 	lng: string
 	//   order: Order
 }
@@ -36,7 +37,8 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 	const router = useRouter();
 	const locales = i18n.locales.map((locale) => locale) as string[];
 	const isRoot = pathname === '/' || locales.some(loc => pathname === "/" + loc);
-	const isAdmin = pathname.includes('admin');
+	const { isAdmin, isLoading } = useAuth();
+	
 	const common_dictionary = dictionary.common;
 	const testPath = pathname?.split("#")[0] || "";
 	const [categories, setCategories] = useState<Category[]>([]); // Initialize as an empty array
@@ -45,7 +47,6 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 		const getCats = async () => {
 			try {
 				const categories = await getCategories();
-				console.log("categories", categories);
 				setCategories(categories!);
 			} catch (error) {
 				console.error("Error fetching categories:", error);
@@ -54,7 +55,6 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 
 		getCats();
 	}, []);
-
 	const navigation = {
 		categories: {
 			name: common_dictionary.categories,
@@ -63,7 +63,7 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 				{
 					name: cat.name,
 					href: `/${lng}/categories/${cat.category_id}`,
-					imageSrc: formatImage(cat?.media?.path) || placeholder,
+					imageSrc: cat?.media?.path ? formatImage(cat?.media?.path) : placeholder,
 					imageAlt: common_dictionary.menu_services_race_prep
 				}
 			))
@@ -106,12 +106,12 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 
 		pages: SHOP_ENABLED
 			? [
-				{ name: common_dictionary.menu_shop, href: link_search, tag: 'search' },
-				{ name: common_dictionary.menu_contact, href: link_contact, tag: 'contact' }
+				{ name: common_dictionary.menu_shop, href: `/${lng}/link_search`, tag: 'search' },
+				{ name: common_dictionary.menu_contact, href: `/${lng}link_contact`, tag: 'contact' }
 			]
 			: [
 
-				{ name: common_dictionary.menu_contact, href: link_contact, tag: 'contact' }
+				{ name: common_dictionary.menu_contact, href: `/${lng}link_contact`, tag: 'contact' }
 			]
 	};
 
@@ -150,7 +150,7 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 								<div className="hidden lg:flex lg:flex-1 lg:items-center">
 									<Logo className={isRoot ? "text-white" : "text-black"} />
 								</div>
-								<div className="hidden h-full space-x-4 lg:flex">
+								{!isLoading && <div className="hidden h-full space-x-4 lg:flex">
 									{/* Home menu link */}
 									{!isAdmin && <Link
 										href="/"
@@ -274,7 +274,7 @@ export default function Navigation({ dictionary, search, lng }: Props) {
 											))}
 										</div>
 									</Popover.Group>
-								</div>
+								</div>}
 
 								{/* Mobile menu and search (lg-) SearchBar*/}
 								{search}

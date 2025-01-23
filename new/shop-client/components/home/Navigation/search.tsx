@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import Searchbar from '@/components/common/Searchbar';
 // import { Searchbar } from '@components/common'
 import { Dictionary } from '@/lib/get-dictionary';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import { i18n } from '@/i18n-config';
 
 type Props = {

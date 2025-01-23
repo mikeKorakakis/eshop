@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from 'next/og';
-import http from 'http';
 const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL
   ? process.env.NEXT_PUBLIC_FRONTEND_URL
   : 'http://localhost:8000';
@@ -34,6 +34,7 @@ export default async function OpengraphImage(props?: Props): Promise<ImageRespon
     (
       <div tw="flex h-full w-full flex-col items-center justify-center bg-black">
         <div tw="flex flex-none items-center justify-center border border-neutral-700 h-[160px] w-[160px] rounded-3xl">
+			
           <img
             src={new URL('./icon-512x512.png', baseUrl).href}
             alt={`UNIWASHOP logo`}

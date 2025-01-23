@@ -1,7 +1,7 @@
 'use client';
 import LoadingDots from '@/components/ui/LoadingDots';
 import Sidebar from '@/components/ui/Sidebar';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import { Dictionary } from '@/lib/get-dictionary';
 // import { Order } from '@/lib/vendure/generated/graphql-shop';
 import dynamic from 'next/dynamic';

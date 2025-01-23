@@ -12,9 +12,9 @@ import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/lib/actions';
-import { User } from '@/types/types';
+import { User } from '@/types';
 import LoginView from './login-view';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 
 const { link_profile_addresses, link_checkout_payment } = LINKS;
 

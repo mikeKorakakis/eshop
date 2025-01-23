@@ -2,8 +2,8 @@ import { ReadonlyURLSearchParams } from 'next/navigation';
 import { ENV_VARIABLES_SCHEMA } from './env';
 import {
   SetHttpCookieType,
-  ShippingAddress
-} from './types';
+  
+} from '@/types';
 import { setCookieServer } from './actions';
 
 
@@ -86,17 +86,6 @@ export const cleanUpParams = (params: Record<string, string>) => {
 export const isEnvVariableEnabled = (envVariable: keyof typeof ENV_VARIABLES_SCHEMA) =>
   ENV_VARIABLES_SCHEMA[envVariable] === 'true';
 
-export const isShippingAddressValid = (orderAddress: ShippingAddress): boolean =>
-  !!(
-    !!orderAddress &&
-    orderAddress.fullName &&
-    orderAddress.streetLine1 &&
-    orderAddress.city &&
-    orderAddress.province &&
-    orderAddress.postalCode &&
-    orderAddress.countryCode &&
-    orderAddress.phoneNumber
-  );
 
 export const formatDateTime = (dateToConvert: Date) => {
   const result = new Date(dateToConvert).toISOString();
@@ -109,22 +98,8 @@ export const formatDateTime = (dateToConvert: Date) => {
   return `${orderedDate} ${hour}:${minutes}`;
 };
 
-export const ischeckout = (url: string) => url.indexOf('/checkout/') >= 0;
 
-export const getCountryCode = (country: string) => {
-  const countryObj = countries.find((c) => c.label === country);
-  return countryObj?.value;
-};
+
 
 export const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const countries = [
-  {
-    value: 'GR',
-    label: 'greece'
-  },
-  {
-    value: 'IT',
-    label: 'italy'
-  }
-];

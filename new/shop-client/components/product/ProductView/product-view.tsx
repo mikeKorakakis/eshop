@@ -7,10 +7,11 @@ import Lightbox from 'yet-another-react-lightbox';
 import Image from 'next/image';
 import ProductSidebar from '../ProductSidebar/product-sidebar';
 import 'yet-another-react-lightbox/styles.css';
-import { Product } from '@/types/types';
+import { Product } from '@/types';
 import { formatImage } from '@/lib/helpers';
 import CommentList from '../Comment/comment-list';
 import { me } from '@/lib/actions';
+import placeholderImg from '@/assets/images/placeholder.png';
 
 type Props = {
 	dictionary: Dictionary;
@@ -24,22 +25,13 @@ export default function ProductView({
 	const product_dictionary = dictionary.product;
 	const [open, setOpen] = useState(false);
 	const [index, setIndex] = useState(0);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-	useEffect(() => {
-		const fetchUser = async () => {
-			const user = await me();
-			setIsLoggedIn(!!user);
-		}
-
-		fetchUser();
-	}, []);
 
 
 
 	const photos = [{
 		//   src: placeholderImg,
-		src: formatImage(product.media.path!),
+		src: formatImage(product?.media?.path!) ?? placeholderImg,
 		key: `${index}`,
 		alt: `product image ${product.name}`
 	}]
@@ -60,11 +52,11 @@ export default function ProductView({
 									<Image
 										fill={true}
 										style={{ objectFit: 'contain' }}
-										src={image.slide.src}
+										src={image.slide.src ?? placeholderImg}
 										quality={100}
 										// width={200}
 										// height={200}
-										alt={image?.slide.alt ?? ''}
+										alt={image?.slide.alt ?? ""}
 									/>
 								</div>
 							);
@@ -80,8 +72,7 @@ export default function ProductView({
 									priority
 									width={500}
 									height={500}
-									//   src={placeholderImg}
-									src={formatImage(product.media.path!)}
+									src={product?.media?.path ? formatImage(product?.media?.path!) : placeholderImg}
 									alt=""
 									className="h-[500px]  object-contain object-center" // hover:scale-110 transition ease-in-out duration-500"
 								/>
@@ -96,7 +87,7 @@ export default function ProductView({
 					</div>
 				</div>
 			</div>
-			{isLoggedIn && <CommentList product_id={product.product_id!} dictionary={dictionary} />}
+			<CommentList product_id={product.product_id!} dictionary={dictionary} />
 		</>
 	);
 }

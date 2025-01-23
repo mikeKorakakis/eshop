@@ -9,9 +9,9 @@ import { LINKS, SHOP_ENABLED } from '@/lib/constants';
 import { usePathname, useRouter } from 'next/navigation';
 import { Dictionary } from '@/lib/get-dictionary';
 import { getCategories } from '@/lib/actions';
-import { Category } from '@/types/types';
+import { Category } from '@/types';
 import preparation from '@/assets/images/placeholder.png';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 
 
 const {
@@ -28,7 +28,7 @@ const MobileMenu = ({ dictionary, lng }: Props) => {
 	const { displayMobileMenu, openMobileMenu, closeMobileMenu } = useUI();
 	const [categories, setCategories] = useState<Category[]>([]); // Initialize as an empty array
 	const pathname = usePathname();
-	const isAdmin = pathname.includes('admin');
+	const adminPath = pathname.includes('admin');
 	useEffect(() => {
 		const getCats = async () => {
 			try {
@@ -141,7 +141,7 @@ const MobileMenu = ({ dictionary, lng }: Props) => {
 							</div>
 
 							{/* Links */}
-							{!isAdmin &&<Tab.Group as="div" className="mt-2">
+							{!adminPath &&<Tab.Group as="div" className="mt-2">
 								<div className="overflow-auto border-b border-gray-200">
 									<Tab.List className=" flex space-x-8 px-4">
 										{navigation.categories &&
@@ -235,7 +235,7 @@ const MobileMenu = ({ dictionary, lng }: Props) => {
 										</div>
 									</div>
 								))}
-								{isAdmin && navigation.admin.map((page) => (
+								{adminPath && navigation.admin.map((page) => (
 									<div key={page.name} className="flow-root">
 										<div
 											onClick={() => {

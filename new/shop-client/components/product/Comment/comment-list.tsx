@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react';
 import Comment from './comment'
 import { getComments, getProductComments } from '@/lib/actions';
-import { Comment as CommentType } from '@/types/types';
+import { Comment as CommentType } from '@/types';
 import UserAvatar from './user-avatar';
 import UserInfo from './user-info';
 import { Dictionary } from '@/lib/get-dictionary';
+import { useAuth } from '@/lib/context/auth-context';
 
 
 interface Props {
@@ -16,6 +17,7 @@ interface Props {
 export default function CommentList({ product_id, dictionary }: Props) {
 	const [comments, setComments] = useState<CommentType[]>();
 	const [refresh, setRefresh] = useState(false);	
+	const { isLoggedIn } = useAuth();
 
 	const handleRefresh = () => {
 		setRefresh(refresh => !refresh);
@@ -29,7 +31,7 @@ export default function CommentList({ product_id, dictionary }: Props) {
 			setComments(commnts);
 		};
 		getCommnts();
-	}, [refresh]);
+	}, [product_id, refresh]);
 
 	
 	const filteredComments = comments?.filter((comment) => comment.product_id === product_id);
@@ -37,7 +39,7 @@ export default function CommentList({ product_id, dictionary }: Props) {
 
 	return (
 		<div className='py-16  lg:pt-16 sm:pt-12 lg:pb-24 sm:pb-32 '>
-			<Comment dictionary={dictionary} product_id={product_id} onSuccess={handleRefresh}/>
+			{isLoggedIn && <Comment dictionary={dictionary} product_id={product_id} onSuccess={handleRefresh}/>}
 			<div className="mx-auto max-w-2xl px-4  sm:px-6  lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-8 lg:px-8">
 
 				<div className="mt-16 col-span-12 lg:mt-0 max-w-xl m-auto">

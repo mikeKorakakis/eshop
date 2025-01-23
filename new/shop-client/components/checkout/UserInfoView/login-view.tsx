@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import { validate } from 'email-validator';
 import s from './UserInfoView.module.css';
 import { useForm } from 'react-hook-form';
@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Dictionary } from '@/lib/get-dictionary';
 import { LINKS } from '@/lib/constants';
-import { User } from '@/types/types';
+import { User } from '@/types';
 import { login } from '@/lib/actions';
 
 const { link_password_reset_request } = LINKS;

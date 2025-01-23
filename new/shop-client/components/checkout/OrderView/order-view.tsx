@@ -6,7 +6,7 @@ import { formatPrice } from '@/lib/utils';
 import CartItem from '@/components/cart/CartItem';
 import { LINKS } from '@/lib/constants';
 import Link from 'next/link';
-import { useCart } from '@/components/ui/cart-context';
+import { useCart } from '@/lib/context/cart-context';
 
 
 interface Props {
@@ -22,13 +22,12 @@ const OrderView: FC<Props> = ({ dictionary }) => {
 	const [calculating, setCalculating] = useState(false);
 	const isEmpty = items?.length === 0;
 	const disabled = false;
-	const isLoading = false;
 	const error = null;
 	const success = null;
 
 	return (
 		<>
-			{isLoading || isEmpty ? (
+			{isEmpty ? (
 				<div className="flex flex-1 flex-col items-center justify-center px-4">
 					{/* <span className="border border-dashed border-black rounded-full flex items-center justify-center w-16 h-16 p-12"> */}
 					<div className="flex h-12 w-12 items-center justify-center rounded-md bg-zinc-100">

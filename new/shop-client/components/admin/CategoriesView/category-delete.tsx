@@ -1,7 +1,7 @@
 'use client'
 import { FC, useState } from 'react';
 // import { validate } from 'email-validator'
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 
@@ -70,7 +70,7 @@ const CategoryDelete: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					<Button
 						className="h-10"
 						variant="slim"
-						type="submit"
+						type="button"
 						loading={loading}
 						disabled={disabled}
 						onClick={handleDeleteCategory}

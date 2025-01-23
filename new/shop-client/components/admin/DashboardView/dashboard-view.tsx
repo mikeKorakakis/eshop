@@ -2,8 +2,8 @@
 import { FC } from 'react';
 
 import { Dictionary } from '@/lib/get-dictionary';
-import { Order, Product, User } from '@/types/types';
-import { useUI } from '@/components/ui/ui-context';
+import { Order, Product, User } from '@/types';
+import { useUI } from '@/lib/context/ui-context';
 import Stat from '@/components/ui/Stat';
 import { ShoppingBagIcon, TagIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 import DashboardTable from './table';
@@ -11,7 +11,7 @@ import CustomerForm from '../CustomersView/customer-form';
 import ProductForm from '../ProductsView/product-form';
 import DashboardOrdersTable from './orders-table';
 import { useRouter } from 'next/navigation';
-import { OrderWithItemsAndUser } from '@/lib/types';
+import { OrderWithItemsAndUser } from '@/types';
 interface Props {
 	dictionary: Dictionary;
 	customers: User[];
@@ -34,7 +34,7 @@ const DashboardView: FC<Props> = ({ dictionary, customers, products, orders, lng
 
 
 
-	let filteredCustomers = customers?.filter((customer) => customer.group_id === 0);
+	const filteredCustomers = customers?.filter((customer) => customer.group_id === 0);
 	let mappedCustomers = filteredCustomers?.map((customer) => {
 		return {
 			id: customer.user_id!,

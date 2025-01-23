@@ -1,5 +1,5 @@
 import { getCustomer } from '@/lib/actions';
-import { User } from '@/types/types';
+import { User } from '@/types';
 import React from 'react'
 
 interface Props {

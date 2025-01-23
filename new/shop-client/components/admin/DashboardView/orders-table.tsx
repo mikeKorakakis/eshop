@@ -1,8 +1,7 @@
 import { Dictionary } from "@/lib/get-dictionary";
 import { formatImage } from "@/lib/helpers";
-import { OrderWithItemsAndUser, Product } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
-import { OrderItem, User } from "@/types/types";
+import { OrderItem, User } from "@/types";
 import Image from "next/image";
 import placeholderImg from '@/assets/images/product-img-placeholder.svg';
 
@@ -33,7 +32,7 @@ export default function DashboardOrdersTable({ values, header, dictionary, }: Pr
 									</tr>
 								</thead>
 								<tbody className="divide-y divide-gray-200 bg-white">
-									{values?.map((value) => (
+									{values?.map((value, i) => (
 										<tr key={value?.id}>
 											<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
 												<span>{value.user}</span>
@@ -42,7 +41,7 @@ export default function DashboardOrdersTable({ values, header, dictionary, }: Pr
 												{formatPrice(value?.total_amount, "EUR")}
 											</td>
 											<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-												{value.items.map(({product}: any) => <div className='flex items-center'>
+												{value.items.map(({product}: any) => <div className='flex items-center' key={product?.product_id}>
 													<Image
 														src={product?.media?.path ? formatImage(product?.media?.path!) : placeholderImg}
 														width={40}

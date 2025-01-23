@@ -5,14 +5,14 @@ import Link from 'next/link';
 import s from './cart-sidebar-view.module.css';
 import CartItem from '../CartItem';
 import Button from '@/components/ui/Button/button';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import SidebarLayout from '@/components/common/SidebarLayout';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { LINKS } from '@/lib/constants';
 import { Dictionary } from '@/lib/get-dictionary';
 import { useState } from 'react';
 import { formatPrice } from '@/lib/utils';
-import { useCart } from '@/components/ui/cart-context';
+import { useCart } from '@/lib/context/cart-context';
 
 const { link_cart, link_checkout } = LINKS;
 

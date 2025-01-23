@@ -15,9 +15,3 @@ export async function addProductToCart({
 //   return res;
 }
 
-export async function refreshCart() {
-  //   const res = await addItemToOrderMutation(productVariantId, quantity);
-  await revalidateTag(TAGS.order);
-  //   return res;
-  return true
-}

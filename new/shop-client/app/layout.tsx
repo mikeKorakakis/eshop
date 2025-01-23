@@ -4,8 +4,8 @@ import { Metadata } from 'next';
 import clsx from 'clsx';
 import './globals.css';
 import { Inter } from 'next/font/google'
-import { ManagedCartContext } from '@/components/ui/cart-context';
-import { ManagedUIContext } from '@/components/ui/ui-context';
+import { ManagedCartContext } from '@/lib/context/cart-context';
+import { ManagedUIContext } from '@/lib/context/ui-context';
 
 // const myFont = localFont({
 //   src: [
@@ -56,12 +56,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 				<link rel="manifest" href="/site.webmanifest" key="site-manifest" />
 			</head>
 			<body className='h-full'>
-				<ManagedUIContext>
-					<ManagedCartContext>
 						{children}
-					</ManagedCartContext>
-				</ManagedUIContext>
-
 			</body>
 		</html>
 	);

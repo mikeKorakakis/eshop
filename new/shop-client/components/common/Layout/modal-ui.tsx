@@ -2,7 +2,7 @@
 import { LoginView, SignUpView } from '@/components/auth';
 // import AddressForm from '@/components/profile/AddressesView/address-form';
 import LoadingDots from '@/components/ui/LoadingDots';
-import { MODAL_VIEWS, useUI } from '@/components/ui/ui-context';
+import { MODAL_VIEWS, useUI } from '@/lib/context/ui-context';
 import { Dictionary } from '@/lib/get-dictionary';
 import dynamic from 'next/dynamic';
 

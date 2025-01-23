@@ -9,7 +9,7 @@ import placeholderImg from '@/assets/images/product-img-placeholder.svg';
 import { Dictionary } from '@/lib/get-dictionary';
 import { formatPrice } from '@/lib/utils';
 import ProductButton from './product-button';
-import { Product } from '@/types/types';
+import { Product } from '@/types';
 import { formatImage } from '@/lib/helpers';
 
 interface Props {
@@ -29,9 +29,7 @@ const ProductCard: FC<Props> = ({
   dictionary,
 }) => {
 
-
-  return (
-    <div className="delay-10 flex h-full flex-col rounded-md p-2 shadow transition ease-in-out hover:-translate-y-1  hover:scale-105 hover:shadow-lg">
+  return (<div className="delay-10 flex h-full flex-col rounded-md p-2 shadow transition ease-in-out hover:-translate-y-1  hover:scale-105 hover:shadow-lg">
       <Link href={`/product/${product.product_id}`} aria-label={product.name}>
         <div key={product.product_id} className="relative">         
           <div className="group relative">

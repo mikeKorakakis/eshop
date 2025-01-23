@@ -9,27 +9,28 @@ import {
 } from '@heroicons/react/24/outline';
 import { LINKS, SHOP_ENABLED } from '@/lib/constants';
 import React, { Fragment, useState } from 'react';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import clsx from 'clsx';
 import { Menu, Transition } from '@headlessui/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/20/solid';
 import { Dictionary } from '@/lib/get-dictionary';
 import { i18n } from '@/i18n-config';
-import { useCart } from '@/components/ui/cart-context';
-import { User } from '@/types/types';
-import { logout } from '@/lib/actions';
+import { useCart } from '@/lib/context/cart-context';
+import { User } from '@/types';
 import { formatImage } from '@/lib/helpers';
 import Image from 'next/image';
+import { useAuth } from '@/lib/context/auth-context';
+import avatarPlaceholder from '@/assets/images/user.png';
 
 const { link_profile } = LINKS;
 
 
 interface Props {
 	dictionary: Dictionary;
-	customer: User | null;
 }
-export default function UserNavClient({ dictionary, customer }: Props) {
+export default function UserNavClient({ dictionary }: Props) {
+	const { user } = useAuth();
 	const router = useRouter();
 	const { items } = useCart();
 	const pathname = usePathname();
@@ -38,10 +39,11 @@ export default function UserNavClient({ dictionary, customer }: Props) {
 	const common_dictionary = dictionary.common;
 	const [openSearch, setOpenSearch] = useState(false);
 	const totalItems = items.length || 0;
+	const { logout } = useAuth();
 
 	const handleLogout = async () => {
 		await logout();
-		window.location.reload();
+		// window.location.reload();
 	};
 	const {
 		// toggleSidebar,
@@ -69,15 +71,11 @@ export default function UserNavClient({ dictionary, customer }: Props) {
 	];
 
 	const openLoginModal = () => {
-		if (customer) return;
+		if (user) return;
 		setModalView('LOGIN_VIEW');
 		openModal()
 	}
 
-	//   const itemsCount = data?.lineItems?.reduce(countItem, 0) ?? 0;
-	//   const DropdownTrigger = customer
-	//     ? DropdownTriggerInst
-	//     : React.Fragment
 
 	return (
 		<div className="flex flex-1 items-center justify-end">
@@ -156,7 +154,7 @@ export default function UserNavClient({ dictionary, customer }: Props) {
 					</div>
 
 					<div className="ml-4 flow-root ">
-						{customer?.email ? (
+						{user?.email ? (
 							<Menu as="div" className="relative flex-shrink-0">
 								<div>
 									<Menu.Button
@@ -166,8 +164,8 @@ export default function UserNavClient({ dictionary, customer }: Props) {
 										)}
 									>
 										<span className="sr-only">Open user menu</span>
-										{customer.media.path ? 
-										<Image width={8} height={8} className="h-8 w-8 rounded-full" src={formatImage(customer.media.path)} alt="" />
+										{user?.media?.path ? 
+										<Image width={8} height={8} className="h-8 w-8 rounded-full" src={user?.media?.path ? formatImage(user?.media?.path) : avatarPlaceholder} alt="" />
 										:
 										<Avatar />}
 									</Menu.Button>

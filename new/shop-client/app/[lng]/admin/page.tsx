@@ -1,7 +1,7 @@
 import DashboardView from '@/components/admin/DashboardView';
 import { getCustomers, getProducts, getOrders } from '@/lib/actions';
 import { getDictionary } from '@/lib/get-dictionary';
-import { LanguageProps } from '@/lib/types'
+import { LanguageProps } from '@/types'
 import React, { Suspense } from 'react'
 
 export default async function CategoriesAdminPage({ params: { lng } }: LanguageProps) {

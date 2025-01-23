@@ -16,6 +16,7 @@
     "incremental": true,
     "baseUrl": ".",
     "noUncheckedIndexedAccess": true,
+	"noUnusedLocals": false,
     "plugins": [
       {
         "name": "next"

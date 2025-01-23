@@ -1,8 +1,8 @@
 import DashboardView from '@/components/admin/DashboardView';
 import { getCustomers, getProducts, getOrders } from '@/lib/actions';
 import { getDictionary } from '@/lib/get-dictionary';
-import { LanguageProps } from '@/lib/types'
-import React, { Suspense } from 'react'
+import { LanguageProps } from '@/types'
+import React from 'react'
 
 export default async function CategoriesAdminPage({ params: { lng } }: LanguageProps) {
 	// const dictionary = await getDictionary(lng);
@@ -19,8 +19,6 @@ export default async function CategoriesAdminPage({ params: { lng } }: LanguageP
 
 
 	return (
-		<Suspense fallback={<div>Loading...</div>}>
 			<DashboardView dictionary={dictionary} customers={customers} orders={orders} products={products} lng={lng}/>
-		</Suspense>
 	)
 }

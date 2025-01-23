@@ -59,8 +59,8 @@ return [
 
         'minio' => [
             'driver' => 's3',
-            'key' => env('MINIO_ACCESS_KEY', 'g9IcoEANhILdyWiHLd9j'),
-            'secret' => env('MINIO_SECRET_KEY', 'rzNr1PJW958MeXoe1761dtAYX0YlLvx4AMKt7mHt'),
+            'key' => env('MINIO_ACCESS_KEY', 'admin'),
+            'secret' => env('MINIO_SECRET_KEY', 'admin123'),
             'region' => env('MINIO_REGION', 'us-east-1'),
             'bucket' => env('MINIO_BUCKET', 'shop'),
             'endpoint' => env('MINIO_ENDPOINT', 'http://localhost:9000'),

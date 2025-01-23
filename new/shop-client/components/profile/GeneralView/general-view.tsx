@@ -2,16 +2,20 @@
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
 import clsx from 'clsx';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { validate } from 'email-validator';
 import s from './general-view.module.css';
 import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
-import { User } from '@/types/types';
-import { updateCustomer } from '@/lib/actions';
+import { User } from '@/types';
+import { me, updateCustomer } from '@/lib/actions';
 import { test_user_id } from '@/lib/constants';
 import { client } from '@/lib/client';
+import Avatar from '@/components/common/Avatar';
+import Image from 'next/image';
+import { formatImage, uploadFile } from '@/lib/helpers';
+import avatarPlaceholder from '@/assets/images/user.png';
 
 type ProfileType = {
 	username: string;
@@ -30,10 +34,19 @@ export default function GeneralView({ dictionary, customer }: Props) {
 	const common_dictionary = dictionary.common;
 	const profile_dictionary = dictionary.profile;
 	const admin_dictionary = dictionary.admin;
+	const [file, setFile] = useState<File | null>(null); // File type for file state
+
+	const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
+		if (e.target.files && e.target.files.length > 0) {
+			e?.target?.files[0] && setFile(e?.target?.files[0]);
+		}
+	};
+
 	const [loading, setLoading] = React.useState(false);
 
 	const {
 		register,
+		reset,
 		handleSubmit,
 		formState: { errors }
 	} = useForm<ProfileType>({
@@ -41,7 +54,7 @@ export default function GeneralView({ dictionary, customer }: Props) {
 			email: customer?.email,
 			full_name: customer?.full_name,
 			username: customer?.username,
-			avatar_url: customer?.avatar_url,
+			avatar_url: customer?.media?.path,
 		},
 		mode: 'onBlur'
 	});
@@ -51,30 +64,24 @@ export default function GeneralView({ dictionary, customer }: Props) {
 
 		if (!customer) return;
 		try {
-			await client.PUT('/users/{id}', {
-				params: {
-				  path: { id: customer.user_id! }
-				},
-				body: {
-				  username: data.username,
-				  email: data.email,
-				  full_name: data.full_name,
-				  group_id : customer.group_id,
-				  avatar_url: data.avatar_url
-				}
-			  })
-			
+			const uploadedMediaId = file ? await uploadFile(file) : null;
+			const res = await updateCustomer({
+				user_id: customer.user_id,
+				username: data.username,
+				full_name: data.full_name,
+				media_id: uploadedMediaId,
 
-			// await updateCustomer({
-			// 	username: data.username,
-			// 	full_name: data.full_name,
-			// 	email: data.email,
-			// 	avatar_url: customer.avatar_url,
-			// 	group_id: customer.group_id,
-			// 	user_id: customer.user_id
-			// });
-			toast.success(profile_dictionary.profile_success);
+			})
+			if (res === 201) {
+				toast.success(profile_dictionary.profile_success);
+			} else {
+				throw new Error('Something went wrong')
+			}
+
+
+
 		} catch (e) {
+			console.error(e);
 			toast.error(profile_dictionary.profile_error);
 		} finally {
 			setLoading(false);
@@ -118,6 +125,7 @@ export default function GeneralView({ dictionary, customer }: Props) {
 								type="email"
 								placeholder="Email"
 								label="Email"
+								disabled
 								{...register('email', {
 									required: common_dictionary.not_empty!,
 									validate: validate,
@@ -127,7 +135,7 @@ export default function GeneralView({ dictionary, customer }: Props) {
 								error={errors?.email?.message}
 							/>
 						</div>
-						
+
 					</div>
 					<div className="grid-cols-12 sm:grid sm:grid-flow-row sm:gap-3">
 						<div className={clsx(s.fieldset, 'col-span-12 sm:col-span-6')}>
@@ -142,18 +150,16 @@ export default function GeneralView({ dictionary, customer }: Props) {
 						</div>
 					</div>
 					<div className="grid-cols-12 sm:grid sm:grid-flow-row sm:gap-3">
-						<div className={clsx(s.fieldset, 'col-span-12 sm:col-span-6')}>
-							<FormInput
-								type="text"
-								label={admin_dictionary.avatar!}
-								{...register('avatar_url', {
-									required: common_dictionary.not_empty!
-								})}
-								error={errors?.avatar_url?.message}
-							/>
+						{customer?.media?.path ?
+							<Image width={64} height={64} className="m-auto w-14 h-14 rounded-full" src={file ?  URL.createObjectURL(file) : customer?.media?.path ? formatImage(customer?.media?.path) : avatarPlaceholder} alt="" />
+							:
+							<Avatar className='m-auto ' />}
+						<div className={clsx(s.fieldset, 'col-span-11 sm:col-span-5')}>
+							<FormInput label={common_dictionary.image} name="file" type="file" onChange={handleFileChange} />
+
 						</div>
 					</div>
-			
+
 				</div>
 			</div>
 			{/* Privacy section */}

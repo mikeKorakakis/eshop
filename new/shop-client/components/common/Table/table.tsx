@@ -9,6 +9,7 @@ import { formatImage } from '@/lib/helpers';
 import Image from 'next/image';
 import { getCustomer } from '@/lib/actions';
 import placeholderImg from '@/assets/images/product-img-placeholder.svg';
+import { Product } from '@/types';
 
 // generate generic typescript props from transactions interface
 type Props = {
@@ -31,9 +32,9 @@ export default function Table({ headers, values, skip, isLoading, dictionary, ed
 		<table className="min-w-full divide-y divide-gray-300">
 			<thead className="bg-gray-50">
 				<tr>
-					{headers.map((header) => (
+					{headers.map((header,i) => (
 						<th
-							key={header}
+							key={i}
 							scope="col"
 							className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
 						>
@@ -135,7 +136,7 @@ const formatValue =  (value: any, key: string, dictionary: Dictionary) => {
 		return formatPrice(value, "EUR");
 	}
 	if (key === "items") {
-		return value.map((product: any) => <div className='flex items-center'>
+		return value.map((product: Product, i: number) => <div className='flex items-center' key={i}>
 		<Image
 			src={product?.media?.path ? formatImage(product?.media?.path!) : placeholderImg}
 			width={40}
@@ -149,22 +150,6 @@ const formatValue =  (value: any, key: string, dictionary: Dictionary) => {
 	if (key === "user"){
 		return <>{value.full_name}</>
 	}
-	// if (key === "user_id") {
-	// 	return <Customer customer_id={value} />
-
-	// }
-	// if (key === "user_id") {
-	// 	return <Customer customer_id={value} />
-
-	// }
-	
-	// if (key === "product_id") {
-	// 	return <Product product_id={value} />
-	// }
-	// if (key === "order_id") {
-	// 	return <Orders order_id={value} />
-	// }
-
 
 	return value;
 }
@@ -184,62 +169,3 @@ export const Customer = ({ customer_id }: { customer_id: number }) => {
 	return <span>{customerName}</span>
 }
 
-
-// const Product = ({ product_id }: { product_id: number }) => {
-// 	const [productName, setProductName] = useState<string | undefined>(undefined);
-// 	useEffect(() => {
-// 		const getProductName = async () => {
-// 			const product = await getProduct({ product_id });
-// 			setProductName(product?.name);
-// 		}
-// 		getProductName();
-// 	}, [product_id]);
-
-// 	return <span>{productName}</span>
-// }
-
-// export const Orders = ({ order_id }: { order_id: number }) => {
-// 	const [productIds, setProductIds] = useState<number[]>([]);
-// 	useEffect(() => {
-// 		const getOrds = async () => {
-// 			const ords = await getOrderItems();
-// 			const orderOrderItems = ords?.filter((order) => (order.order_id === order_id));
-// 			if (!orderOrderItems) return
-
-// 			setProductIds(orderOrderItems.map((order) => order.product_id!));
-// 		}
-// 		getOrds();
-// 	}, [order_id]);
-
-
-// 	return (<ul>
-// 		{productIds.map(productId => (
-// 			<li><OrderProduct productId={productId} /></li>
-// 		))}
-// 	</ul>
-// 	)
-
-// }
-
-// export const OrderProduct = ({ productId }: { productId: number }) => {
-// 	const [product, setProduct] = useState<ProductType>();
-// 	useEffect(() => {
-// 		const getProds = async () => {
-// 			const orderProduct = await getProduct({ product_id: productId });
-// 			if (!orderProduct) return
-// 			setProduct(orderProduct);
-// 		}
-// 		getProds();
-// 	}, [productId]);
-
-// 	return <div className='flex items-center'>
-// 		<Image
-// 			src={formatImage(product?.image_url!)}
-// 			width={40}
-// 			height={40}
-// 			alt="image"
-// 			className="w-8 mr-2" />
-// 		<span className="mr-2">{product?.name}</span>
-// 		<span >{formatPrice(product?.price, "EUR")}</span>
-// 	</div >
-// }

@@ -1,6 +1,6 @@
 'use client'
 import { FC, useEffect, useState } from 'react';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
@@ -8,7 +8,7 @@ import FormInput from '@/components/ui/FormInput';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
-import { Product, User } from '@/types/types';
+import { Product, User } from '@/types';
 import { createCustomer, createProduct, getCustomer, getProduct, updateCustomer, updateProduct } from '@/lib/actions';
 import { test_user_id } from '@/lib/constants';
 import { emailPattern, passwordPattern } from '@/components/auth';
@@ -47,7 +47,6 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		formState: { errors }
 	} = useForm<User>({
 		defaultValues: {
-			avatar_url: "",
 			username: "",
 			email: "",
 			full_name: "",
@@ -64,7 +63,6 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 				const product = await getCustomer({ customer_id: id });
 				if (!product) return;
 				reset({
-					avatar_url: product.avatar_url,
 					username: product.username,
 					email: product.email,
 					full_name: product.full_name,
@@ -73,7 +71,7 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 			}
 		}
 		getProd();
-	}, [id]);
+	}, [id, reset]);
 
 
 	const { closeModal } = useUI();
@@ -88,7 +86,6 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					status = await updateCustomer({
 						user_id: id,
 						username: data?.username,
-						avatar_url: data?.avatar_url,
 						full_name: data?.full_name,
 						email: data?.email,
 						group_id: data?.group_id,
@@ -98,7 +95,6 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					status = await updateCustomer({
 						user_id: id,
 						username: data?.username,
-						avatar_url: data?.avatar_url,
 						full_name: data?.full_name,
 						email: data?.email,
 						group_id: data?.group_id
@@ -110,23 +106,13 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 				if (data?.password) {
 
 					status = await createCustomer({
-						user_id: id,
 						username: data?.username,
-						avatar_url: data?.avatar_url,
 						full_name: data?.full_name,
 						email: data?.email,
 						group_id: data?.group_id,
 						password: data?.password
 					});
-				} else {
-					status = await createCustomer({
-						user_id: id,
-						username: data?.username,
-						avatar_url: data?.avatar_url,
-						full_name: data?.full_name,
-						email: data?.email,
-						group_id: data?.group_id
-					});
+
 				}
 			}
 			if (status !== 201) {
@@ -203,16 +189,6 @@ const CustomerForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					options={groupOptions}
 
 					error={errors.group_id && errors.group_id?.message}
-				/>
-			
-
-				<FormInput
-					type="text"
-					label={admin_dictionary.avatar!}
-					{...register('avatar_url', {
-						// required: common_dictionary.not_empty!
-					})}
-					error={errors.avatar_url && errors.avatar_url?.message}
 				/>
 
 

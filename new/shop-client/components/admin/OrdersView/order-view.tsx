@@ -5,9 +5,8 @@ import { clsx } from 'clsx';
 import { Dictionary } from '@/lib/get-dictionary';
 import Table from '@/components/common/Table/table';
 import Pagination from '@/components/common/Table/pagination';
-import { Order } from '@/types/types';
-import { getOrders, getProducts } from '@/lib/actions';
-import { useUI } from '@/components/ui/ui-context';
+import { MappedOrderWithItemsAndUser, Order } from '@/types';
+import { getOrders } from '@/lib/actions';
 
 interface Props {
 	dictionary: Dictionary;
@@ -18,7 +17,7 @@ const OrdersView: FC<Props> = ({ dictionary }) => {
 
 	const [take, setTake] = useState(10);
 	const [skip, setSkip] = useState(0);
-	const [orders, setOrders] = useState<Omit<Order, 'owner_id'>[]>([]);
+	const [orders, setOrders] = useState<MappedOrderWithItemsAndUser[]>([]);
 	const [totalItems, setTotalItems] = useState(0);
 	// const { openModal, setModalComponent } = useUI();
 	const [refresh, setRefresh] = useState(false);
@@ -32,7 +31,7 @@ const OrdersView: FC<Props> = ({ dictionary }) => {
 		// setIsLoading(true);
 		const getOrds = async ({ take, skip }: { take: number; skip: number }) => {
 			const ords = await getOrders();
-			let orders = ords?.map((order, index) => ({
+			const orders = ords?.map((order, index) => ({
 				id: order.order_id,
 				user: order.user,
 				// user_id: order.user_id,
@@ -56,7 +55,7 @@ const OrdersView: FC<Props> = ({ dictionary }) => {
 		};
 		getOrds({ take, skip });
 		// setOrders(res.);
-	}, [refresh]);
+	}, [refresh, skip, take]);
 	//   const orders = data?.activeCustomer?.orders?.items
 
 	const headers = [

@@ -5,9 +5,9 @@ import { clsx } from 'clsx';
 import { Dictionary } from '@/lib/get-dictionary';
 import Table from '@/components/common/Table/table';
 import Pagination from '@/components/common/Table/pagination';
-import { Product } from '@/types/types';
+import { MappedProduct, Product } from '@/types';
 import { getProducts } from '@/lib/actions';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import ProductForm from './product-form';
 import ProductDelete from './product-delete';
 
@@ -20,9 +20,9 @@ const ProductsView: FC<Props> = ({ dictionary }) => {
 
 	const [take, setTake] = useState(10);
 	const [skip, setSkip] = useState(0);
-	const [products, setProducts] = useState<Omit<Product, 'owner_id'>[]>([]);
+	const [products, setProducts] = useState<MappedProduct[]>([]);
 	const [totalItems, setTotalItems] = useState(0);
-	const {openModal, setModalComponent} = useUI();
+	const { openModal, setModalComponent } = useUI();
 	const [refresh, setRefresh] = useState(false);
 
 	const handleRefresh = () => {
@@ -36,18 +36,15 @@ const ProductsView: FC<Props> = ({ dictionary }) => {
 			const prods = await getProducts();
 			const mappedProds = prods?.map((product, index) => ({
 				id: product.product_id,
-				// image_url: product.image_url,
 				media: product?.media,
 				name: product.name,
 				description: product.description,
 				price: product.price,
 				added_date: product.added_date,
 				country_of_origin: product.country_of_origin,
-				// category_id: product.category_id,
 				category: product?.category?.name,
-				
+
 			}));
-			console.log(mappedProds);
 			if (!mappedProds) return
 			setProducts(mappedProds);
 			setTotalItems(mappedProds.length ?? 0);
@@ -55,7 +52,7 @@ const ProductsView: FC<Props> = ({ dictionary }) => {
 		};
 		getProds({ take, skip });
 		// setOrders(res.);
-	}, [refresh]);
+	}, [refresh, skip, take]);
 	//   const orders = data?.activeCustomer?.orders?.items
 
 	const headers = [
@@ -102,15 +99,15 @@ const ProductsView: FC<Props> = ({ dictionary }) => {
 														values={products ?? []}
 														skip={skip}
 														editAction={(id) => {
-															setModalComponent(<ProductForm id={id} dictionary={dictionary} onSuccess={handleRefresh}/>)
+															setModalComponent(<ProductForm id={id} dictionary={dictionary} onSuccess={handleRefresh} />)
 															openModal()
 														}}
 														deleteAction={(id) => {
-															setModalComponent(<ProductDelete id={id} dictionary={dictionary} onSuccess={handleRefresh}/>)
+															setModalComponent(<ProductDelete id={id} dictionary={dictionary} onSuccess={handleRefresh} />)
 															openModal()
 														}}
 														createAction={() => {
-															setModalComponent(<ProductForm dictionary={dictionary} onSuccess={handleRefresh}/>)
+															setModalComponent(<ProductForm dictionary={dictionary} onSuccess={handleRefresh} />)
 															openModal()
 														}}
 													/>
@@ -124,7 +121,7 @@ const ProductsView: FC<Props> = ({ dictionary }) => {
 															totalItems={totalItems}
 														/>
 													)}
-													
+
 												</>
 											}
 										</div>

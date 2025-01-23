@@ -5,9 +5,9 @@ import { clsx } from 'clsx';
 import { Dictionary } from '@/lib/get-dictionary';
 import Table from '@/components/common/Table/table';
 import Pagination from '@/components/common/Table/pagination';
-import { User } from '@/types/types';
+import { User } from '@/types';
 import { getCustomers } from '@/lib/actions';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import CustomerFormForm from './customer-form';
 import CustomerDelete from './customer-delete';
 
@@ -20,7 +20,7 @@ const CustomersView: FC<Props> = ({ dictionary }) => {
 
 	const [take, setTake] = useState(10);
 	const [skip, setSkip] = useState(0);
-	const [products, setProducts] = useState<Omit<User, 'owner_id'>[]>([]);
+	const [products, setProducts] = useState<Omit<User, 'owner_id' | 'user_id'| 'media'| 'password'| 'registration_date'| 'media_id'>[]>([]);
 	const [totalItems, setTotalItems] = useState(0);
 	const { openModal, setModalComponent } = useUI();
 	const [refresh, setRefresh] = useState(false);
@@ -36,7 +36,7 @@ const CustomersView: FC<Props> = ({ dictionary }) => {
 			const custs = await getCustomers();
 			const mappedCusts = custs?.map((customer, index) => ({
 				id: customer.user_id,
-				avatar_url: customer.avatar_url,
+				avatar_url: customer?.media?.path,
 				username: customer.username,
 				email: customer.email,
 				full_name: customer.full_name,
@@ -50,7 +50,7 @@ const CustomersView: FC<Props> = ({ dictionary }) => {
 		};
 		getCusts({ take, skip });
 		// setOrders(res.);
-	}, [refresh]);
+	}, [refresh, skip, take]);
 	//   const orders = data?.activeCustomer?.orders?.items
 
 	const headers = [

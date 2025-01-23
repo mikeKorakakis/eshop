@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { formatPrice } from '@/lib/utils';
 import { LINKS } from '@/lib/constants';
 import { redirect } from 'next/navigation';
-import { Order, OrderItem } from '@/types/types';
+import { Order, OrderItem } from '@/types';
 import { client } from '@/lib/client';
 import ProductView from './product-view';
 import { getOrderItemsByOrder } from '@/lib/actions';

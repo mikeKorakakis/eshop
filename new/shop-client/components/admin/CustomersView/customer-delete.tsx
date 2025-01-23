@@ -1,6 +1,6 @@
 'use client'
 import { FC, useState } from 'react';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import toast from 'react-hot-toast';
@@ -62,7 +62,7 @@ const CustomerDelete: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					<Button
 						className="h-10"
 						variant="slim"
-						type="submit"
+						type="button"
 						loading={loading}
 						disabled={disabled}
 						onClick={handleDeleteCustomer}

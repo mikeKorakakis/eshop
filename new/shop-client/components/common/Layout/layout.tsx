@@ -8,6 +8,8 @@ import SidebarUI from './sidebar-ui';
 import ModalUI from './modal-ui';
 import MobileMenu from './mobile-menu';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/lib/context/auth-context';
+import Loading from '@/components/ui/Loading';
 
 interface Props {
 	children?: React.ReactNode;
@@ -16,9 +18,12 @@ interface Props {
 }
 
 const Layout: React.FC<Props> =  ({ children, dictionary, lng }) => {
-
+	const { isLoading } = useAuth();
 	const pathname = usePathname();
-	const order = {}
+
+	if (isLoading) {
+		return <Loading/>
+	}
 	return (
 		<div>
 			<div>
@@ -27,7 +32,6 @@ const Layout: React.FC<Props> =  ({ children, dictionary, lng }) => {
 					<Navigation
 						dictionary={dictionary}
 						search={<Search dictionary={dictionary} />}
-						order={order}
 						lng={lng}
 					/>
 				</div>

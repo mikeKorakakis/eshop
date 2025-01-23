@@ -5,48 +5,39 @@ import { clsx } from 'clsx';
 import { Dictionary } from '@/lib/get-dictionary';
 import Table from '@/components/common/Table/table';
 import Pagination from '@/components/common/Table/pagination';
-import { Order, User } from '@/types/types';
-import { getCurrentUserOrders, getOrders, getProducts } from '@/lib/actions';
-import { useUI } from '@/components/ui/ui-context';
+import { MappedOrderWithItemsAndUser, Order, OrderWithItemsAndUser, User } from '@/types';
+import { getCurrentUserOrders } from '@/lib/actions';
 
 interface Props {
 	dictionary: Dictionary;
 	customer: User;
 }
 
-const OrdersView: FC<Props> = ({ dictionary, customer }) => {
+const OrdersView: FC<Props> = ({ dictionary }) => {
 	const admin_dictionary = dictionary.admin;
 
 	const [take, setTake] = useState(10);
 	const [skip, setSkip] = useState(0);
-	const [orders, setOrders] = useState<Omit<Order, 'owner_id'> & { items: any }[]>([]);
+	const [orders, setOrders] = useState<MappedOrderWithItemsAndUser[]>();
 	const [totalItems, setTotalItems] = useState(0);
-	// const { openModal, setModalComponent } = useUI();
-	const [refresh, setRefresh] = useState(false);
-
-	const handleRefresh = () => {
-		setRefresh(refresh => !refresh);
-	}
 
 
 	useEffect(() => {
 		// setIsLoading(true);
 		const getOrds = async ({ take, skip }: { take: number; skip: number }) => {
 			const ords = await getCurrentUserOrders();
-			let orders = ords?.map((order, index) => ({
+			const orders = ords?.map((order, index) => ({
 				id: order.order_id,
 				user: order.user,
-				// user_id: order.user_id,
 				order_date: order.order_date,
 				total_amount: order.total_amount,
 				order_status: order.order_status,
-				// order_id: order.order_id,
 				items: order.items.map((item) => ({
 					id: item.product_id,
 					name: item.product.name,
 					quantity: item.quantity,
 					price: item.price_at_purchase,
-					media_id: item.product.media_id
+					media: item.product.media
 				}),
 				),
 			}));
@@ -54,12 +45,9 @@ const OrdersView: FC<Props> = ({ dictionary, customer }) => {
 			if (!orders) return
 			setOrders(orders);
 			setTotalItems(orders.length ?? 0);
-			// setIsLoading(false);
 		};
 		getOrds({ take, skip });
-		// setOrders(res.);
-	}, [refresh]);
-	//   const orders = data?.activeCustomer?.orders?.items
+	}, [skip, take]);
 
 	const headers = [
 		'#',

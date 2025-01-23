@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `group_id` BIGINT NOT NULL DEFAULT 0 COMMENT 'Group or role identifier',
   `registration_date` DATETIME  NOT NULL COMMENT 'Date of registration' DEFAULT CURRENT_TIMESTAMP,
   `media_id` BIGINT UNSIGNED DEFAULT NULL COMMENT 'id of avatar image',
-  FOREIGN KEY (`media_id`) REFERENCES `media` (`media_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`media_id`) REFERENCES `media` (`media_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `parent_id` BIGINT DEFAULT 0 COMMENT 'Parent category ID',
   `ordering` BIGINT DEFAULT NULL COMMENT 'Category display order',
   `media_id` BIGINT UNSIGNED DEFAULT NULL COMMENT 'id of category image',
-  FOREIGN KEY (`media_id`) REFERENCES `media` (`media_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`media_id`) REFERENCES `media` (`media_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   PRIMARY KEY (`category_id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -62,8 +62,8 @@ CREATE TABLE IF NOT EXISTS `products` (
   `media_id` BIGINT UNSIGNED DEFAULT NULL COMMENT 'id of product image',
   PRIMARY KEY (`product_id`), 
   FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (`owner_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (`media_id`) REFERENCES `media` (`media_id` ) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`owner_id`) REFERENCES `users` (`user_id`) ON UPDATE CASCADE,
+  FOREIGN KEY (`media_id`) REFERENCES `media` (`media_id` ) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Table: `comments`
@@ -106,12 +106,12 @@ CREATE TABLE IF NOT EXISTS `orders` (
 CREATE TABLE IF NOT EXISTS `order_items` (
   `order_item_id` BIGINT UNSIGNED NOT NULL  AUTO_INCREMENT COMMENT 'Unique ID for order item',
   `order_id` BIGINT UNSIGNED NOT NULL COMMENT 'Associated order ID',
-  `product_id` BIGINT UNSIGNED NOT NULL COMMENT 'ID of purchased item',
+  `product_id` BIGINT UNSIGNED COMMENT 'ID of purchased item',
   `quantity` BIGINT NOT NULL COMMENT 'Quantity purchased',
   `price_at_purchase` DECIMAL(10,2) NOT NULL COMMENT 'Price at the time of purchase',
   PRIMARY KEY (`order_item_id`),
   FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Table: `product_gallery`
@@ -122,8 +122,8 @@ CREATE TABLE product_gallery (
     `product_id` BIGINT UNSIGNED NOT NULL,	
     `size` INT DEFAULT NULL,
      PRIMARY KEY (`gallery_id`),    
-     FOREIGN KEY (media_id) REFERENCES media(media_id) ON DELETE CASCADE,
-     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+     FOREIGN KEY (media_id) REFERENCES media(media_id) ON DELETE CASCADE ON UPDATE CASCADE,
+     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Create the 'cache' table if it does not already exist
@@ -160,8 +160,8 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
 
 -- Insert data into `users`_
 INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `full_name`, `group_id`, `registration_date`) VALUES
-(1, 'admin', 'f865b53623b121fd34ee5426c792e5c33af8c227', 'admin@example.com', 'Admin User', 1, '2023-01-01'),
-(2, 'user', '95c946bf622ef93b0a211cd0fd028dfdfcf7e39e', 'jsmith@example.com', 'John Smith', 0, '2023-01-02');
+(1, 'admin', '$2y$12$ZL5J5rnQLVulLW0gWvA5TuOLCR8mly4NsUMJO8TYpbntaWKzuy8/i', 'admin@example.com', 'Admin User', 1, '2023-01-01'),
+(2, 'user', '$2y$12$0yFGiK07DvtiW2pY90x.oeMiowOdaTn8xUa7XGqfr/QSzuBySOSYK', 'jsmith@example.com', 'John Smith', 0, '2023-01-02');
 
 -- Insert data into `categories`
 INSERT INTO `categories` (`category_id`, `name`, `description`, `parent_id`, `ordering`) VALUES

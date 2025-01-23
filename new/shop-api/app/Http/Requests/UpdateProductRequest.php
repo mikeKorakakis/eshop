@@ -21,7 +21,7 @@ class UpdateProductRequest extends FormRequest
             'price' => 'required|numeric',
             'country_of_origin' => 'nullable|string|max:255',
             'category_id' => 'required',
-            'owner_id' => 'required',
+            'owner_id' => 'nullable|integer',
             'media_id' => 'nullable|integer'
         ];
     }

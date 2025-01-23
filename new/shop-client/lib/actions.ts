@@ -1,24 +1,20 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { OrderWithItemsAndUser, SetHttpCookieType } from './types';
+import {
+  ChangePasswordInput,
+  OrderWithItemsAndUser,
+  SetHttpCookieType,
+  SignupInput,
+  SignupRes,
+  UpdateCustomerInput
+} from '@/types';
 import { getDictionary } from './get-dictionary';
 import { client } from './client';
-import {
-  Category,
-  CreditCard,
-  Product,
-  Order,
-  OrderItem,
-  CartItem,
-  User,
-  Comment
-} from '@/types/types';
-import { test_user_id } from './constants';
-import { activeSlideStatus } from 'yet-another-react-lightbox/*';
+import { Category, CreditCard, Product, Order, OrderItem, CartItem, User, Comment } from '@/types';
 
 export async function setCookieServer(data: SetHttpCookieType) {
-  const { name, value, path, httpOnly, secure, sameSite } = data;
+  const { name, value, httpOnly, secure, sameSite } = data;
   const days = data.days || 1;
   const date = new Date();
 
@@ -27,7 +23,7 @@ export async function setCookieServer(data: SetHttpCookieType) {
     name,
     value,
     httpOnly: !!httpOnly,
-    path: path || '/',
+    path: '/',
     sameSite,
     secure,
     expires
@@ -40,86 +36,75 @@ export async function getToken() {
   return bearer;
 }
 
-export async function signup({ username, email, full_name, password, group_id, media_id }: User) {
+export async function login({ username, password }: { username: string; password: string }) {
+  const res = await client(undefined)
+    .post('login', {
+      json: {
+        username,
+        password
+      }
+    })
+    .json<SignupRes>();
+
+  const { access_token } = res;
+  if (!access_token) return false;
+
+  await setCookieServer({
+    name: 'authToken',
+    value: access_token,
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    days: 1
+  });
+
+  return true;
+}
+
+export async function me() {
   const bearer = await getToken();
-  const res = await client(bearer).POST('/register', {
-    body: {
+  try {
+    const user = await client(bearer).get('me').json<User>();
+    return user;
+  } catch (error) {
+    return null;
+  }
+}
+
+const isAdmin = async () => {
+  const user = await me();
+  return user?.group_id === 1;
+};
+
+export async function logout() {
+  const bearer = await getToken();
+  const cookieStore = await cookies();
+  const res = await client(bearer).post('logout');
+  const status = res.status;
+  if (status === 200) cookieStore.delete('authToken');
+  return status;
+}
+
+export async function signup({
+  username,
+  password,
+  email,
+  full_name,
+  group_id,
+  media_id
+}: SignupInput) {
+  const bearer = await getToken();
+  const res = await client(bearer).post('register', {
+    json: {
       username,
-      email,
       password,
+      email,
       full_name,
       group_id,
       media_id
     }
   });
-
-  const register_res = res.data as any[];
-  const { access_token } = register_res;
-
-  await setCookieServer({
-    name: 'authToken',
-    value: access_token,
-    httpOnly: true,
-    secure: true,
-    sameSite: 'strict',
-    days: 1
-  });
-
-  return access_token;
-}
-
-export async function me() {
-  const bearer = await getToken();
-  const res = await client(bearer).GET('/me');
-  const user = res.data as User;
-  return user;
-}
-
-export async function login({ username, password }: { username: string; password: string }) {
-  const bearer = '';
-  const res = await client(bearer).POST('/login', {
-    body: {
-      username: username,
-      password: password
-    }
-  });
-
-  const login_res = res as any;
-  const { access_token } = login_res.data;
-
-  await setCookieServer({
-    name: 'authToken',
-    value: access_token,
-    httpOnly: true,
-    secure: true,
-    sameSite: 'strict',
-    days: 1
-  });
-  return access_token;
-}
-
-export async function logout() {
-  const bearer = await getToken();
-  const cookieStore = await cookies();
-  await client(bearer).POST('/logout');
-  cookieStore.delete('authToken');
-}
-
-export async function register({ username, email, full_name, group_id, avatar_url }: User) {
-  const bearer = await getToken();
-  const res = await client(bearer).POST('/register', {
-    body: {
-      username,
-      email,
-      full_name,
-      group_id,
-      avatar_url
-    }
-  });
-
-
-  const login_res = res.data as any[];
-  const { access_token } = login_res;
+  const { access_token } = await res.json<SignupRes>();
 
   await setCookieServer({
     name: 'authToken',
@@ -138,9 +123,8 @@ export async function getDictionaryServer({ lng }: { lng: 'el' | 'en' }) {
 
 export async function getCustomers() {
   const bearer = await getToken();
-  const res = await client(bearer).GET('/users');
-  const customers = res.data as User[];
-  return customers;
+  const res = await client(bearer).get('users').json<User[]>();
+  return res;
 }
 
 export async function createCustomer({
@@ -148,75 +132,71 @@ export async function createCustomer({
   email,
   password,
   full_name,
-  group_id,
-  avatar_url
-}: User) {
+  group_id
+}: Omit<UpdateCustomerInput, 'user_id' | 'media_id'>) {
+  const userIsAdmin = await isAdmin();
+  if (!userIsAdmin) throw new Error('not_authorized');
+
   const bearer = await getToken();
-  const res = await client(bearer).POST('/users', {
-    body: {
+  const res = await client(bearer).post('users', {
+    json: {
       username,
       email,
       password,
       full_name,
-      group_id,
-      avatar_url
+      group_id
     }
   });
-  return res.response.status;
+  return res.status;
 }
 
 export async function updateCustomer({
   user_id,
   username,
-  password,
-  email,
   full_name,
+  media_id,
   group_id,
-  avatar_url
-}: User) {
+  password
+}: UpdateCustomerInput) {
   const bearer = await getToken();
-  const res = await client(bearer).PUT('/users/{id}', {
-    params: {
-      path: { id: user_id! }
-    },
-    body: {
+  const userIsAdmin = await isAdmin();
+  const user = await me();
+  const customer = await getCustomer({ customer_id: user_id });
+  if (user?.user_id !== user_id && !userIsAdmin) throw new Error('not_authorized');
+  const res = await client(bearer).put(`users/${user_id}`, {
+    json: {
       user_id,
       username,
-      password,
-      email,
+      password: password ?? customer.password,
+      email: customer.email,
       full_name,
-      group_id,
-      avatar_url
+      group_id: group_id ?? customer.group_id,
+      media_id: media_id ?? customer.media?.media_id
     }
   });
-  return res.response.status;
+
+  return res.status;
 }
 
 export async function deleteCustomer({ user_id }: { user_id: number }) {
+  const userIsAdmin = await isAdmin();
+  if (!userIsAdmin) throw new Error('not_authorized');
   const bearer = await getToken();
-  const res = await client(bearer).DELETE('/users/{id}', {
-    params: {
-      path: { id: user_id }
-    }
-  });
-  return res.response.status;
+  const res = await client(bearer).delete(`users/${user_id}`);
+  return res.status;
 }
 
-export async function changePassword({
-  currentPassword,
-  newPassword
-}: {
-  currentPassword: string;
-  newPassword: string;
-}) {
+export async function changePassword({ currentPassword, newPassword }: ChangePasswordInput) {
   const bearer = await getToken();
-  const res = await client(bearer).PUT('/change-password', {
-    body: {
+  const res = await client(bearer).put('change-password', {
+    json: {
       current_password: currentPassword,
       new_password: newPassword
     }
   });
-  if (!(res.response.status === 200)) throw new Error('password_error');
+  console.log(await res.status);
+  if (!(res.status === 200)) throw new Error('password_error');
+  return res.status;
 }
 
 export async function changeOtherUserPassword({
@@ -228,104 +208,67 @@ export async function changeOtherUserPassword({
 }) {
   const customer = await getCustomer({ customer_id: user_id });
   const bearer = await getToken();
-  const res = await client(bearer).PUT('/users/{id}', {
-    params: {
-      path: { id: user_id! }
-    },
-    body: {
+  const res = await client(bearer).put(`users/${user_id}`, {
+    json: {
       ...customer,
       password: newPassword
     }
   });
-  if (!(res.response.status === 200)) throw new Error('password_error');
+  if (!(res.status === 200)) throw new Error('password_error');
 }
 
 export async function getCustomer({ customer_id }: { customer_id: number }) {
   const bearer = await getToken();
-  const res = await client(bearer).GET(`/users/{id}`, {
-    params: {
-      path: { id: customer_id }
-    }
-  });
-  const customer = res.data as User;
-  return customer;
+  const res = await client(bearer).get(`users/${customer_id}`, {}).json<User>();
+  return res;
 }
 
 export async function getOrder({ order_id }: { order_id: number }) {
   const bearer = await getToken();
-  const ordersRes = await client(bearer).GET(`/orders/{id}`, {
-    params: {
-      path: { id: order_id }
-    }
-  });
-  const order = ordersRes.data as Order;
-  return order;
+  const res = await client(bearer).get(`orders/${order_id}`).json<Order>();
+  return res;
 }
 
 export async function getOrders() {
   const bearer = await getToken();
-  const ordersRes = await client(bearer).GET(`/orders`);
-  const allOrders = ordersRes.data as OrderWithItemsAndUser[];
-  return allOrders;
+  const res = await client(bearer).get(`orders`).json<OrderWithItemsAndUser[]>();
+  return res;
 }
 
 export async function getUserOrders({ user_id }: { user_id: number }) {
   const bearer = await getToken();
-  const ordersRes = await client(bearer).GET(`/users/{id}/orders`, {
-    params: {
-      path: { id: user_id }
-    }
-  });
-  const orders = ordersRes.data as Order[];
-  return orders;
+  const res = await client(bearer).get(`users/${user_id}/orders`).json<Order[]>();
+
+  return res;
 }
 export async function getCurrentUserOrders() {
   const bearer = await getToken();
-  const ordersRes = await client(bearer).GET(`/me/orders`);
-  const orders = ordersRes.data as OrderWithItemsAndUser[];
-  return orders;
+  const res = await client(bearer).get(`me/orders`).json<OrderWithItemsAndUser[]>();
+  return res;
 }
 
 export async function getProduct({ product_id }: { product_id: number }) {
   const bearer = await getToken();
-  const res = await client('bearer').GET(`/products/{id}`, {
-    params: {
-      path: { id: product_id! }
-    }
-  });
-  const product = res.data as Product;
-  return product;
+  const res = await client(bearer).get(`products/${product_id}`).json<Product>();
+  return res;
 }
 
 export async function getProducts() {
   const bearer = await getToken();
-  const res = await client(bearer).GET(`/products`);
-  const products = res.data as Product[];
-  return products;
+  const res = await client(bearer).get(`products`).json<Product[]>();
+  return res;
 }
 
 export async function getProductsByCategory({ category_id }: { category_id: number }) {
   const bearer = await getToken();
-  // @ts-ignore
-  const res = await client(bearer).GET(`/categories/{id}/products`, {
-    params: {
-      path: { id: category_id }
-    }
-  });
-  const productsByCategory = res.data as Product[];
-  return productsByCategory;
+  const res = await client(bearer).get(`categories/${category_id}/products`).json<Product[]>();
+  return res;
 }
 
 export async function getProductComments({ product_id }: { product_id: number }) {
   const bearer = await getToken();
-  // @ts-ignore
-  const res = await client(bearer).GET(`/products/{id}/comments`, {
-    params: {
-      path: { id: product_id }
-    }
-  });
-  const comments = res.data as Comment[];
-  return comments;
+  const res = await client(bearer).get(`products/${product_id}/comments`).json<Comment[]>();
+  return res;
 }
 
 export async function createProduct({
@@ -334,22 +277,24 @@ export async function createProduct({
   price,
   country_of_origin,
   category_id,
-  image_url,
-  owner_id
-}: Product) {
+  media_id,
+}: Omit<Product, 'product_id' | 'added_date' | 'owner_id' | 'media' | 'category'>) {
+  const user = await me();
+  const userIsAdmin = user?.group_id === 1;
+  if (!userIsAdmin) throw new Error('not_authorized');
   const bearer = await getToken();
-  const res = await client(bearer).POST('/products', {
-    body: {
+  const res = await client(bearer).post('products', {
+    json: {
       name,
       description,
       price,
       country_of_origin,
       category_id,
-      image_url,
-      owner_id
+      media_id ,
+      owner_id: user?.user_id
     }
   });
-  return res.response.status;
+  return res.status;
 }
 
 export async function updateProduct({
@@ -359,67 +304,66 @@ export async function updateProduct({
   price,
   country_of_origin,
   category_id,
-  image_url,
-  owner_id
-}: Product) {
+  media_id
+}: Omit<Product, 'added_date' | 'owner_id' | 'media' | 'category'>) {
+	console.log(product_id, name, description, price, country_of_origin, category_id, media_id)
+  const userIsAdmin = await isAdmin();
+  if (!userIsAdmin) throw new Error('not_authorized');
   const bearer = await getToken();
-  const res = await client(bearer).PUT('/products/{id}', {
-    params: {
-      path: { id: product_id! }
-    },
-    body: {
+  const res = await client(bearer).put(`products/${product_id}`, {
+    json: {
       name,
       description,
       price,
       country_of_origin,
       category_id,
-      image_url,
-      owner_id
+      media_id
     }
   });
-  return res.response.status;
+  console.log(await res.json())
+  return res.status;
 }
 
 export async function deleteProduct({ product_id }: { product_id: number }) {
+  const userIsAdmin = await isAdmin();
+  if (!userIsAdmin) throw new Error('not_authorized');
   const bearer = await getToken();
-  const res = await client(bearer).DELETE('/products/{id}', {
-    params: {
-      path: { id: product_id }
-    }
-  });
-  return res.response.status;
+  const res = await client(bearer).delete(`products/${product_id}`);
+  return res.status;
 }
 
 export async function getCategories() {
   const bearer = await getToken();
-  const res = await client(bearer).GET('/categories');
-  const categories = res.data as Category[];
-  return categories;
+  const res = await client(bearer).get('categories').json<Category[]>();
+  return res;
 }
 
 export async function getCategory({ category_id }: { category_id: number }) {
   const bearer = await getToken();
-  const res = await client(bearer).GET('/categories/{id}', {
-    params: {
-      path: { id: category_id }
-    }
-  });
-  const category = res.data as Category;
-  return category;
+  const res = await client(bearer).get(`categories/${category_id}`).json<Category>();
+  return res;
 }
 
-export async function createCategory({ name, description, ordering, parent_id, media_id }: Category) {
+export async function createCategory({
+  name,
+  description,
+  ordering,
+  parent_id,
+  media_id
+}: Omit<Category, 'category_id' | 'media'>) {
+  const userIsAdmin = await isAdmin();
+  if (!userIsAdmin) throw new Error('not_authorized');
   const bearer = await getToken();
-  const res = await client(bearer).POST('/categories', {
-    body: {
+  const res = await client(bearer).post('categories', {
+    json: {
       name,
       description,
       ordering,
       parent_id,
-	  media_id
+      media_id
     }
   });
-  return res.response.status;
+  return res.status;
 }
 
 export async function updateCategory({
@@ -429,66 +373,51 @@ export async function updateCategory({
   ordering,
   parent_id,
   media_id
-}: Category) {
+}: Omit<Category, 'media'>) {
+  const userIsAdmin = await isAdmin();
+  if (!userIsAdmin) throw new Error('not_authorized');
+  const category = await getCategory({ category_id });
   const bearer = await getToken();
-  const res = await client(bearer).PUT('/categories/{id}', {
-    body: {
+  const res = await client(bearer).put(`categories/${category_id}`, {
+    json: {
       name,
       description,
       ordering,
-      parent_id,
-	  media_id
-    },
-    params: {
-      path: { id: category_id! }
+      parent_id: parent_id ?? category.parent_id,
+      media_id
     }
   });
-  return res.response.status;
+  return res.status;
 }
 
 export async function deleteCategory({ category_id }: { category_id: number }) {
   const bearer = await getToken();
-  const res = await client(bearer).DELETE('/categories/{id}', {
-    params: {
-      path: { id: category_id }
-    }
-  });
-  return res.response.status;
+  const res = await client(bearer).delete(`categories/${category_id}`);
+  return res.status;
 }
 
 export async function getComments() {
   const bearer = await getToken();
-  const res = await client(bearer).GET('/comments');
-  const comments = res.data;
-  return comments;
+  const res = await client(bearer).get('comments').json<Comment[]>();
+  return res;
 }
 
 export async function getComment({ comment_id }: { comment_id: number }) {
   const bearer = await getToken();
-  const res = await client(bearer).GET('/comments/{id}', {
-    params: {
-      path: { id: comment_id }
-    }
-  });
-
-  const comment = res.data?.data;
-  return comment;
+  const res = await client(bearer).get(`comments/${comment_id}`).json<Comment>();
+  return res;
 }
 
 export async function deleteComment({ comment_id }: { comment_id: number }) {
   const bearer = await getToken();
-  const res = await client(bearer).DELETE('/comments/{id}', {
-    params: {
-      path: { id: comment_id }
-    }
-  });
-  return res.response.status;
+  const res = await client(bearer).delete(`comments/${comment_id}`);
+  return res.status;
 }
 
 export async function createComment({ product_id, user_id, content }: Comment) {
   const bearer = await getToken();
-  await client(bearer).POST('/comments', {
-    body: {
+  await client(bearer).post('comments', {
+    json: {
       product_id,
       user_id,
       content,
@@ -499,33 +428,22 @@ export async function createComment({ product_id, user_id, content }: Comment) {
 
 export async function getOrderItems() {
   const bearer = await getToken();
-  const orderProductsRes = await client(bearer).GET(`/order-items`);
-  const allOrderProducts = orderProductsRes.data as OrderItem[];
-  return allOrderProducts;
+  const res = await client(bearer).get(`order-items`).json<OrderItem[]>();
+  return res;
 }
 
 export async function getOrderItemsByOrder({ order_id }: { order_id: number }) {
   const bearer = await getToken();
 
-  const orderProductsRes = await client(bearer).GET(`/orders/{id}/order-items`, {
-    params: {
-      path: { id: order_id }
-    }
-  });
+  const res = await client(bearer).get(`orders/${order_id}/order-items`).json<OrderItem[]>();
 
-  const orderProducts = orderProductsRes.data as OrderItem[];
-  return orderProducts;
+  return res;
 }
 
 export async function getUserCreditCard({ user_id }: { user_id: number }) {
   const bearer = await getToken();
-  // @ts-ignore
-  const userBalanceRes = await client(bearer).GET('/users/{user_id}/credit_card', {
-    params: {
-      path: { user_id }
-    }
-  });
-  return userBalanceRes.data as CreditCard;
+  const res = await client(bearer).get(`users/${user_id}/credit_card`).json<CreditCard>();
+  return res;
 }
 
 export async function updateCreditCardBalance({
@@ -537,12 +455,11 @@ export async function updateCreditCardBalance({
 }) {
   const userCreditCard = await getUserCreditCard({ user_id });
   if (!userCreditCard || !userCreditCard.credit_card_id) throw 'credit card not found';
+
   const bearer = await getToken();
-  await client(bearer).PUT('/credit-cards/{id}', {
-    params: {
-      path: { id: userCreditCard.credit_card_id }
-    },
-    body: {
+  const credit_card_id = userCreditCard.credit_card_id;
+  await client(bearer).put(`credit-cards/${credit_card_id}`, {
+    json: {
       ...userCreditCard,
       balance: new_balance
     }
@@ -561,15 +478,17 @@ export async function createOrder({
   order_status: string;
 }) {
   const bearer = await getToken();
-  const res = await client(bearer).POST('/orders', {
-    body: {
-      user_id: user_id,
-      total_amount: total_amount,
-      order_date: order_date,
-      order_status: order_status
-    }
-  });
-  return res.data as Order;
+  const res = await client(bearer)
+    .post('orders', {
+      json: {
+        user_id: user_id,
+        total_amount: total_amount,
+        order_date: order_date,
+        order_status: order_status
+      }
+    })
+    .json<Order>();
+  return res;
 }
 
 export async function createOrderProduct({
@@ -584,14 +503,17 @@ export async function createOrderProduct({
   order_id: number;
 }) {
   const bearer = await getToken();
-  const res = await client(bearer).POST('/order-items', {
-    body: {
-      product_id: product_id,
-      price_at_purchase: price_at_purchase,
-      quantity: quantity,
-      order_id: order_id
-    }
-  });
+  const res = await client(bearer)
+    .post('order-items', {
+      json: {
+        product_id: product_id,
+        price_at_purchase: price_at_purchase,
+        quantity: quantity,
+        order_id: order_id
+      }
+    })
+    .json<OrderItem>();
+  return res;
 }
 
 export async function makePurchase2({
@@ -604,7 +526,7 @@ export async function makePurchase2({
   products: CartItem[];
 }) {
   const user = await me();
-  const user_id = user.user_id;
+  const user_id = user?.user_id;
   if (!user_id) throw 'user_not_found';
   const userCreditCard = await getUserCreditCard({ user_id });
   if (!userCreditCard?.balance || card_number.replaceAll(' ', '') !== userCreditCard.card_number) {
@@ -658,15 +580,16 @@ export async function makePurchase({
     product_id: product.id,
     quantity: product.quantity
   }));
-  const res = await client(bearer).POST('/make-purchase', {
-    body: {
-      card_number,
-      total_amount,
-      products: mappedProducts
-    }
-  });
+  const res = await client(bearer)
+    .post('make-purchase', {
+      json: {
+        card_number,
+        total_amount,
+        products: mappedProducts
+      }
+    })
+    .json<Order>();
 
-  const order = res.data as Order;
-  if (!order) throw new Error('payment_failed');
-  return order;
+  if (!res) throw new Error('payment_failed');
+  return res;
 }

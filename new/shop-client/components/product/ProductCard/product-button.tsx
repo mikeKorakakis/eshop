@@ -1,54 +1,53 @@
 'use client'
 
 import Button from '@/components/ui/Button';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import { Dictionary } from '@/lib/get-dictionary';
-import { useRouter } from 'next/navigation';
-import { refreshCart } from '../actions';
 import { useState } from 'react';
 import { wait } from '@/lib/utils';
-import { Product } from '@/types/types';
+import { Product } from '@/types';
+import { useCart } from '@/lib/context/cart-context';
+import toast from 'react-hot-toast';
 
 type Props = {
-  dictionary: Dictionary;
-  product: Product;
+	dictionary: Dictionary;
+	product: Product;
 };
 export default function ProductButton({ dictionary, product }: Props) {
-  const router = useRouter();
-  const { setSidebarView, openSidebar } = useUI();
-  const [loading, setLoading] = useState(false);
-  const common_dictionary = dictionary.common;
-  const addToCart = async () => {
-    setLoading(true);
-    try {
-    //   await addProductToOrderMutation(product.productVariantId, 1);
-      const res = await refreshCart();
-      //   await addProductToCart({ productVariantId: product.productVariantId, quantity: 1 });
-      if (res) {
-        await wait(1200)
-        setSidebarView('CART_VIEW');
-        openSidebar();
-      }
-    } catch (e) {
-      console.log('error', e);
-    } finally {
-      setLoading(false);
-    }
-  };
-  //   const hasVariant = (product?.priceWithTax as any)?.min;
-  const hasVariant = false;
-  return (
-    <Button
-      //    href={product.href}
-      onClick={hasVariant ? () => router.push(`/product/${product.product_id}`) : () => addToCart()}
-      // onClick={()=>alert(JSON.stringify(product))}
-      className="w-full"
-      loading={loading}
-    //   disabled={!product.inStock}
-      // className="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900 hover:bg-gray-200"
-    >
-      {hasVariant ? common_dictionary.show : common_dictionary.add_to_cart}
-      <span className="sr-only">, {product.name}</span>
-    </Button>
-  );
+	const { setSidebarView, openSidebar } = useUI();
+	const [loading, setLoading] = useState(false);
+	const common_dictionary = dictionary.common;
+	const { addToCart } = useCart()
+
+	const handleAddToCart = async () => {
+		setLoading(true);
+		try {
+			addToCart({
+				id: product.product_id!,
+				imageUrl: product?.media?.path,
+				name: product.name,
+				price: product.price,
+			})
+			setSidebarView('CART_VIEW');
+			openSidebar();
+			setLoading(false);
+		} catch (err) {
+			setLoading(false);
+			if (err instanceof Error) {
+				console.error(err);
+				toast.error(common_dictionary.product_cart_error)
+
+			}
+		}
+	};
+	return (
+		<Button
+			onClick={() => handleAddToCart()}
+			className="w-full"
+			loading={loading}
+		>
+			{common_dictionary.add_to_cart}
+			<span className="sr-only">, {product.name}</span>
+		</Button>
+	);
 }

@@ -1,5 +1,5 @@
 import { getDictionary } from '@/lib/get-dictionary';
-import { LanguageProps } from '@/lib/types';
+import { LanguageProps } from '@/types';
 import dynamic from 'next/dynamic';
 import HeroSection from '@/components/home/hero-section';
 

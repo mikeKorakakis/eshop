@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 import { LINKS, test_user_id } from '@/lib/constants';
 import { FieldErrors, useForm, UseFormRegister } from 'react-hook-form';
 import FormInput from '@/components/ui/FormInput';
-import { useCart } from '@/components/ui/cart-context';
+import { useCart } from '@/lib/context/cart-context';
 import { makePurchase } from '@/lib/actions';
 
 const { link_order_confirmation, link_checkout_shipping, link_checkout_general } = LINKS;

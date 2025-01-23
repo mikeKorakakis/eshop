@@ -1,6 +1,6 @@
 import CommentsView from '@/components/admin/CommentsView';
 import { getDictionary } from '@/lib/get-dictionary';
-import { LanguageProps } from '@/lib/types'
+import { LanguageProps } from '@/types'
 import React from 'react'
 
 export default async function CommentsAdminPage({ params: { lng } }: LanguageProps) {

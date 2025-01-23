@@ -5,9 +5,9 @@ import { clsx } from 'clsx';
 import { Dictionary } from '@/lib/get-dictionary';
 import Table from '@/components/common/Table/table';
 import Pagination from '@/components/common/Table/pagination';
-import { Comment } from '@/types/types';
+import { Comment } from '@/types';
 import { getCategories, getComments } from '@/lib/actions';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import CategoryDelete from './comment-delete';
 
 interface Props {
@@ -19,7 +19,7 @@ const CommentsView: FC<Props> = ({ dictionary }) => {
 
 	const [take, setTake] = useState(10);
 	const [skip, setSkip] = useState(0);
-	const [comments, setComments] = useState<Comment[]>([]);
+	const [comments, setComments] = useState<Omit<Comment,"comment_id">[]>([]);
 	const [totalItems, setTotalItems] = useState(0);
 	const {openModal, setModalComponent} = useUI();
 	const [refresh, setRefresh] = useState(false);
@@ -47,7 +47,7 @@ const CommentsView: FC<Props> = ({ dictionary }) => {
 		};
 		getCommnts({ take, skip });
 		// setOrders(res.);
-	}, [refresh]);
+	}, [refresh, skip, take]);
 	//   const orders = data?.activeCustomer?.orders?.items
 
 	const headers = [

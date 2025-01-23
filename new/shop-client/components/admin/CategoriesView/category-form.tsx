@@ -1,6 +1,6 @@
 'use client'
 import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
@@ -8,10 +8,11 @@ import FormInput from '@/components/ui/FormInput';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
-import { Category } from '@/types/types';
+import { Category } from '@/types';
 import { createCategory, getCategories, getCategory, updateCategory } from '@/lib/actions';
 import FormSelect from '@/components/ui/FormSelect';
 import { Options } from '@/components/ui/FormSelect/form-select';
+import { uploadFile } from '@/lib/helpers';
 
 
 interface Props {
@@ -38,37 +39,6 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 	};
 
 
-	const handleUpload = async (): Promise<void> => {
-		if (!file) {
-			return;
-		}
-
-		const formData = new FormData();
-		formData.append("name", file.name);
-		formData.append("file", file);
-
-		try {
-			const response = await fetch("http://localhost:8000/api/media", {
-				method: "POST",
-				body: formData,
-			});
-
-
-			if (!response.ok) {
-				throw new Error(`Error: ${response.statusText}`);
-			}
-
-			const data = await response.json();
-			console.log("Upload successful:", data);
-			if (data.media_id) {
-				return data.media_id;
-			}
-		} catch (error: any) {
-			console.error("Error uploading file:", error.message);
-			toast.error(common_dictionary.error);
-		}
-	};
-
 
 	const {
 		register,
@@ -94,7 +64,7 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 			}
 		}
 		getCat();
-	}, [id]);
+	}, [id, reset]);
 
 	useEffect(() => {
 		const getCats = async () => {
@@ -121,7 +91,7 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		try {
 			let status;
 			setLoading(true);
-			const uploadedMediaId = await handleUpload();
+			const uploadedMediaId = file ? await uploadFile(file) : null;
 
 			if (id) {
 				status = await updateCategory({
@@ -136,7 +106,6 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 			}
 			else {
 				status = await createCategory({
-					category_id: id,
 					name: data?.name,
 					description: data?.description,
 					ordering: data?.ordering,
@@ -199,9 +168,7 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 				<FormSelect
 					dictionary={dictionary}
 					label={admin_dictionary.parent!}
-					{...register('parent_id', {
-						required: common_dictionary.not_empty!
-					})}
+					{...register('parent_id')}
 					options={[...options, { value: 0, label: "" }]}
 
 					error={errors.parent_id && errors.parent_id?.message}

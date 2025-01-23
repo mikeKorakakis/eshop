@@ -5,9 +5,9 @@ import { clsx } from 'clsx';
 import { Dictionary } from '@/lib/get-dictionary';
 import Table from '@/components/common/Table/table';
 import Pagination from '@/components/common/Table/pagination';
-import { Category } from '@/types/types';
+import { Category } from '@/types';
 import { getCategories } from '@/lib/actions';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import CategoryForm from './category-form';
 import CategoryDelete from './category-delete';
 
@@ -20,7 +20,7 @@ const CategoriesView: FC<Props> = ({ dictionary }) => {
 
 	const [take, setTake] = useState(10);
 	const [skip, setSkip] = useState(0);
-	const [categories, setCategories] = useState<Category[]>([]);
+	const [categories, setCategories] = useState<Omit<Category, "category_id" | "media_id" | "media">[]>([]);
 	const [totalItems, setTotalItems] = useState(0);
 	const {openModal, setModalComponent} = useUI();
 	const [refresh, setRefresh] = useState(false);

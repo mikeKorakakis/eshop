@@ -41,15 +41,14 @@ class ProductController extends Controller
             'added_date' => date('Y-m-d', strtotime(now())),
             'country_of_origin' => $request->country_of_origin,
             'category_id' => $request->category_id,
-            'owner_id' => $user->user_id,
-			
+            'owner_id' => $user->user_id
            
         ];
 
 		
 
 		if ($request->has('media_id')) {
-			$details['media_id'] = $request->image_url;
+			$details['media_id'] = $request->media_id;
 		}
 		
         DB::beginTransaction();
@@ -79,13 +78,10 @@ class ProductController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'country_of_origin' => $request->country_of_origin,
-            'category_id' => $request->category_id,
-            'owner_id' => $request->owner_id,
-           
+            'category_id' => $request->category_id
         ];
-
 		if ($request->has('media_id')) {
-			$details['media_id'] = $request->image_url;
+			$updateDetails['media_id'] = $request->media_id;
 		}
 		
         DB::beginTransaction();

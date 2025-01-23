@@ -8,8 +8,8 @@ services:
       MINIO_URL: https://minio.mscacs.info
       SECURE_COOKIE: true
       HTTPONLY_COOKIE: true
-      VIRTUAL_HOST: www.moto-book.com
-      LETSENCRYPT_HOST: www.moto-book.com
+      VIRTUAL_HOST: old_shop.mscacs.info
+      LETSENCRYPT_HOST: old_shop.mscacs.info
       LETSENCRYPT_EMAIL: mike.korakakis@gmail.com
     ports:
       - 3000:3000
@@ -101,6 +101,22 @@ services:
     volumes:
       - minio-data:/data                      # Persistent storage for MinIO data
     command: server /data --console-address ":9001" # Enable Admin Console on port 9001
+
+  create-bucket:
+    image: minio/mc:latest
+    environment:
+      MC_HOST_minio: http://admin:admin123@minio:9000
+    entrypoint:
+      - sh
+      - -c
+      - |
+        until mc ls minio > /dev/null 2>&1; do
+          sleep 0.5
+        done
+        mc mb minio/shop
+        mc anonymous set public minio/shop
+    depends_on:
+      - minio
 
   proxy:
     image: jwilder/nginx-proxy

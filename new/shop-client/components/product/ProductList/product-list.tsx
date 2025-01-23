@@ -2,7 +2,7 @@ import React from 'react';
 import ProductCard from '../ProductCard';
 
 import { Dictionary } from '@/lib/get-dictionary';
-import { Product } from '@/types/types';
+import { Product } from '@/types';
 
 interface Props {
   products: Product[];
@@ -12,6 +12,7 @@ interface Props {
 
 export default function ProductList({ products, title, dictionary }: Props) {
   return (
+    
     <section className="mb-10">
       <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
         <h2 className="text-xl font-bold text-gray-900">{title}</h2>

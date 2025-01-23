@@ -1,6 +1,6 @@
 import { getCustomer } from '@/lib/actions';
 import { formatImage } from '@/lib/helpers';
-import { User } from '@/types/types';
+import { User } from '@/types';
 import React from 'react'
 import Image from 'next/image';
 import clsx from 'clsx';

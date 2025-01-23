@@ -4,7 +4,7 @@ import s from './modal.module.css';
 import FocusTrap from '@/lib/focus-trap';
 import { Cross } from '@/components/icons';
 import { Dialog, Transition } from '@headlessui/react';
-import { useUI } from '../ui-context';
+import { useUI } from '../../../lib/context/ui-context';
 
 interface ModalProps {
   className?: string;

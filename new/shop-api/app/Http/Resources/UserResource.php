@@ -18,7 +18,8 @@ class UserResource extends JsonResource
             'group_id' => $this->group_id,
             'registration_date' => $this->registration_date,
             'avatar_url' => $this->avatar_url,
-            'media_id' => $this->media_id
+            'media_id' => $this->media_id,
+			'media' => new MediaResource($this->media)
         ];
     }
 }

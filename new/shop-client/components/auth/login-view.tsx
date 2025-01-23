@@ -3,21 +3,15 @@ import { useState } from 'react';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
-import { useUI } from '@/components/ui/ui-context';
-import { validate } from 'email-validator';
+import { useUI } from '@/lib/context/ui-context';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Dictionary } from '@/lib/get-dictionary';
-import { login, setCookieServer } from '@/lib/actions';
-import { client } from '@/lib/client';
-import { setCookie } from '@/lib/utils';
+import { useAuth } from '@/lib/context/auth-context';
+import { LoginInput } from '@/types';
 
-interface LoginType {
-	username: string;
-	password: string;
-	//   rememberMe: boolean;
-}
+
 
 type Props = {
 	dictionary: Dictionary;
@@ -31,33 +25,31 @@ const LoginView = ({ dictionary }: Props) => {
 	const [message, setMessage] = useState('');
 	const [disabled, setDisabled] = useState(false);
 	const { setModalView, closeModal } = useUI();
+	const { login } = useAuth();
 	const {
 		register,
 		handleSubmit,
 		formState: { errors }
-	} = useForm<LoginType>({
+	} = useForm<LoginInput>({
 		defaultValues: { username: '', password: '' },
 		mode: 'onBlur'
 	});
 
 
-	//   const login = useLogin()
 
-	const handleLogin = async (data: LoginType) => {
+	const handleLogin = async (data: LoginInput) => {
 		try {
 			setLoading(true);
 			setMessage('');
 
-			const access_token = await login(data);
-			if (!access_token) {
-				throw new Error('Invalid login');
+			const success = await login(data);
+			if (!success) {
+				throw new Error('Error logging in');
 			}
 
 			toast.success(common_dictionary.login_success!);
-			setTimeout(() => {
-				window.location.reload();
-			}, 1000);
-
+			
+			closeModal();
 			// Save the JWT in a cookie or localStorage
 		} catch (err: any) {
 			toast.error(common_dictionary.wrong_password!);

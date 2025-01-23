@@ -10,19 +10,8 @@ import FormInput from '@/components/ui/FormInput';
 import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
 import { changePassword } from '@/lib/actions';
-import { User } from '@/types/types';
+import { ChangePasswordInput, User } from '@/types';
 
-// type ChangePasswordType = ChangePassword.ChangePasswordBody;
-interface ChangePasswordType {
-	/**
-	 * The user's email address.
-	 */
-	currentPassword: string;
-	/**
-	 * The user's password.
-	 */
-	newPassword: string;
-}
 
 interface Props {
 	dictionary: Dictionary;
@@ -40,7 +29,7 @@ export default function ChangePasswordView({ dictionary, customer }: Props) {
 		formState: { errors },
 		reset,
 		handleSubmit
-	} = useForm<ChangePasswordType>({
+	} = useForm<ChangePasswordInput>({
 		defaultValues: {
 			currentPassword: '',
 			newPassword: ''
@@ -48,18 +37,21 @@ export default function ChangePasswordView({ dictionary, customer }: Props) {
 		mode: 'onBlur'
 	});
 
-	const onSubmit = async (data: ChangePasswordType) => {
+	const onSubmit = async (data: ChangePasswordInput) => {
 		try {
-			await changePassword({
+			const res = await changePassword({
 				currentPassword: data.currentPassword,
 				newPassword: data.newPassword
 			});
 
-			toast.success(profile_dictionary.password_success);
+			if(res===200){
+				toast.success(profile_dictionary.password_success);
+			}else{
+				throw new Error('Error changing password');
+			}
 			reset();
 		} catch (err) {
 			console.log(err);
-
 			toast.error(profile_dictionary.password_error);
 			// TODO - handle error UI here.
 		} finally {

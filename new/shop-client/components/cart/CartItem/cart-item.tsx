@@ -4,13 +4,13 @@ import cn from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import s from './cart-item.module.css';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import Quantity from '@/components/ui/Quantity';
 // import { useTranslation } from 'next-i18next'
 import { Dictionary } from '@/lib/get-dictionary';
 import { formatPrice } from '@/lib/utils';
-import { CartItem as CartContextItem } from '@/types/types';
-import { useCart } from '@/components/ui/cart-context';
+import { CartItem as CartContextItem } from '@/types';
+import { useCart } from '@/lib/context/cart-context';
 import { formatImage } from '@/lib/helpers';
 
 type ItemOption = {
@@ -129,7 +129,7 @@ const CartItem = ({
 								height={500}
 
 								//   src={placeholderImg}
-								src={formatImage(item?.imageUrl) || placeholderImg}
+								src={item?.imageUrl ? formatImage(item?.imageUrl) : placeholderImg}
 								
 								alt={'Product Image'}
 							/>

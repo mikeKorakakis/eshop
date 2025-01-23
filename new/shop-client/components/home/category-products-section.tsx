@@ -12,8 +12,7 @@ interface Props {
 export default async function CategoryProductsSection({ dictionary, category_id }: Props) {
 
 	const products = await getProductsByCategory({category_id});
-
-	
+     
 
 	return (
 			<Suspense fallback={<div>Loading...</div>}>

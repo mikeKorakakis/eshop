@@ -2,7 +2,7 @@
 import { ChangeEvent, FC, useState } from 'react';
 // import { validate } from 'email-validator'
 import { Info } from '@/components/icons';
-import { useUI } from '@/components/ui/ui-context';
+import { useUI } from '@/lib/context/ui-context';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
@@ -15,21 +15,17 @@ import { LINKS } from '@/lib/constants';
 import { useRouter } from 'next/navigation';
 import { emailPattern, passwordPattern } from './helpers';
 import { Dictionary } from '@/lib/get-dictionary';
-import { signup } from '@/lib/actions';
 import { client } from '@/lib/client';
 import { set } from 'zod';
 import { FileUpload } from '../common/FileUpload';
+import { SignupInput } from '@/types';
+import { useAuth } from '@/lib/context/auth-context';
+import { uploadFile } from '@/lib/helpers';
 
 interface Props {
 	dictionary: Dictionary;
 }
-interface SignUpType {
-	email: string;
-	password: string;
-	username: string;
-	full_name: string;
-	media_id: number;
-}
+
 
 const SignUpView: FC<Props> = ({ dictionary }: Props) => {
 	// Form State
@@ -38,6 +34,7 @@ const SignUpView: FC<Props> = ({ dictionary }: Props) => {
 	const [loading, setLoading] = useState(false);
 	//   const [message, setMessage] = useState('')
 	const [disabled, setDisabled] = useState(false);
+	const { signup } = useAuth();
 
 	const [file, setFile] = useState<File | null>(null); // File type for file state
 
@@ -45,79 +42,41 @@ const SignUpView: FC<Props> = ({ dictionary }: Props) => {
 		if (e.target.files && e.target.files.length > 0) {
 			e?.target?.files[0] && setFile(e?.target?.files[0]);
 		}
-	};
-
-
-
-	const handleUpload = async (): Promise<void> => {
-		if (!file) {
-			return;
-		}
-
-		const formData = new FormData();
-		formData.append("name", file.name);
-		formData.append("file", file);
-
-		try {
-			const response = await fetch("http://localhost:8000/api/media", {
-				method: "POST",
-				body: formData,
-			});
-
-
-			if (!response.ok) {
-				throw new Error(`Error: ${response.statusText}`);
-			}
-
-			const data = await response.json();
-			console.log("Upload successful:", data);
-			if (data.media_id){
-				return data.media_id;
-			}
-		} catch (error: any) {
-			console.error("Error uploading file:", error.message);
-			alert("Error uploading file.");
-		}
-	};
+	};	
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors }
-	} = useForm<SignUpType>({
+	} = useForm<SignupInput>({
 		defaultValues: { email: '', password: '', full_name: '', username: '' },
 		mode: 'onBlur'
 	});
 
 	const { setModalView, closeModal } = useUI();
 
-	const handleSignup = async (data: SignUpType) => {
+	const handleSignup = async (data: SignupInput) => {
 		try {
 			setLoading(true);
-			const uploadedMediaId = await handleUpload();
-			const status = await signup({
+			const uploadedMediaId = file ? await uploadFile(file) : null;
+			
+			await signup({
 				email: data?.email,
 				username: data?.username,
 				full_name: data?.full_name,
 				password: data?.password,
 				media_id: uploadedMediaId,
-				group_id: 1
+				group_id: 0
 			});
 
-			if (!status) {
-				throw new Error('Invalid signup');
-			}
+
+
+			
 			setLoading(false);
 
 			toast.success(common_dictionary.signup_success);
 
 			closeModal();
-
-			setTimeout(() => {
-				window.location.reload();
-			}, 1000);
-
-
 
 		} catch (err) {
 			console.error(err);

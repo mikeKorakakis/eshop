@@ -1,6 +1,6 @@
 'use client'
-import { FC, useEffect, useState } from 'react';
-import { useUI } from '@/components/ui/ui-context';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { useUI } from '@/lib/context/ui-context';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
@@ -8,10 +8,11 @@ import FormInput from '@/components/ui/FormInput';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Dictionary } from '@/lib/get-dictionary';
-import { Product } from '@/types/types';
+import { Product } from '@/types';
 import { createProduct, getCategories, getProduct, updateProduct } from '@/lib/actions';
 import { test_user_id } from '@/lib/constants';
 import FormSelect, { Options } from '@/components/ui/FormSelect/form-select';
+import { uploadFile } from '@/lib/helpers';
 
 
 interface Props {
@@ -27,6 +28,13 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 	const admin_dictionary = dictionary.admin;
 	const [loading, setLoading] = useState(false);
 	const [options, setOptions] = useState<Options[]>([]);
+	const [file, setFile] = useState<File | null>(null); // File type for file state
+
+	const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
+		if (e.target.files && e.target.files.length > 0) {
+			e?.target?.files[0] && setFile(e?.target?.files[0]);
+		}
+	};
 
 	//   const [message, setMessage] = useState('')
 	const [disabled, setDisabled] = useState(false);
@@ -42,7 +50,6 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 			price: 0,
 			country_of_origin: '',
 			category_id: 0,
-			image_url: '',
 
 		},
 		mode: 'onBlur'
@@ -60,12 +67,11 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					price: product.price,
 					country_of_origin: product.country_of_origin,
 					category_id: product.category_id,
-					image_url: product.image_url,
 				});
 			}
 		}
 		getProd();
-	}, [id]);
+	}, [id, reset]);
 
 	useEffect(() => {
 		const getCats = async () => {
@@ -90,6 +96,7 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 
 	const submit = async (data: Product) => {
 		try {
+			const media_id = file ? await uploadFile(file) : null;
 			let status;
 			setLoading(true);
 			if (id) {
@@ -100,8 +107,7 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					price: data?.price,
 					country_of_origin: data?.country_of_origin,
 					category_id: data?.category_id,
-					image_url: data?.image_url,
-					owner_id: test_user_id
+					media_id,
 				});
 			}
 			else {
@@ -111,11 +117,10 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					price: data?.price,
 					country_of_origin: data?.country_of_origin,
 					category_id: data?.category_id,
-					image_url: data?.image_url,
-					owner_id: test_user_id
+					media_id,
 				});
 			}
-			if (status !== 201){
+			if (status !== 201) {
 				throw new Error('Error creating product');
 			}
 			onSuccess && onSuccess();
@@ -156,7 +161,7 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					error={errors.description && errors.description?.message}
 				/>
 
-				
+
 				<FormInput
 					type="number"
 					label={admin_dictionary.price!}
@@ -179,18 +184,12 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					{...register('category_id', {
 						required: common_dictionary.not_empty!
 					})}
-					options={[...options, {value: 0, label: ""}]}
+					options={[...options, { value: 0, label: "" }]}
 
 					error={errors.category_id && errors.category_id?.message}
 				/>
-				<FormInput
-					type="text"
-					label={admin_dictionary.image!}
-					{...register('image_url', {
-						// required: common_dictionary.not_empty!
-					})}
-					error={errors.image_url && errors.image_url?.message}
-				/>
+				<FormInput label={common_dictionary.image} name="file" type="file" onChange={handleFileChange} />
+
 
 
 				<div className="flex w-full flex-col pt-2">
