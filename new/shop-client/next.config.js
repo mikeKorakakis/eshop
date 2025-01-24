@@ -9,18 +9,18 @@ module.exports = {
   },
   images: {
     // formats: ['image/avif', 'image/webp'],
-    remotePatterns: [
-      {
+   remotePatterns: [
+	  {
         protocol: 'http',
         hostname: 'localhost',
         pathname: '/**'
       },
       {
         protocol: 'https',
-        hostname: 'minio.macacs.info',
+        hostname: 'minio.mscacs.info',
         pathname: '/**'
       }
-    ]
+    ],
   },
   async redirects() {
     return [

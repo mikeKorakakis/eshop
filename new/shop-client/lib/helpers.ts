@@ -12,7 +12,7 @@ export const uploadFile = async (file: File): Promise<number | null> => {
   formData.append('file', file);
 
   try {
-    const response = await fetch(`${process.env.API_URL}/api/media`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/media`, {
       method: 'POST',
       body: formData
     });

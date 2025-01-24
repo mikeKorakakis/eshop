@@ -1,0 +1,17 @@
+
+
+docker compose up -d proxy proxy-letsencrypt
+docker compose up -d db
+docker exec -i mysql_db mysql -u root -prootpassword eshop_db < ./drop_tables.sql
+docker exec -i mysql_db mysql -u root -prootpassword eshop_db < ./shop.sql
+docker compose up -d phpmyadmin
+docker compose up -d minio
+docker compose up -d create-bucket
+docker compose up -d web
+docker compose up -d api
+// if permissions error docker exec insdie api and run these commands
+// sudo chmod -R 777 ./new/shop-api/storage
+//  sudo chmod -R 777 ./new/shop-api/bootstrap/cache
+docker compose up -d webserver
+docker compose up -d client
+
