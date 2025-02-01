@@ -13,6 +13,9 @@ DROP TABLE IF EXISTS `cache_locks`;
 DROP TABLE IF EXISTS `migrations`;
 DROP TABLE IF EXISTS `personal_access_tokens`;
 DROP TABLE IF EXISTS `product_gallery`;
+DROP TABLE IF EXISTS `shipping`;
+DROP TABLE IF EXISTS `shipping_methods`;
+
 
 
 

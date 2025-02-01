@@ -1,21 +1,21 @@
 <?php
 /*
-================================================
-== Orders Page
-================================================
+============================================
+== Σελίδα Παραγγελιών
+============================================
 */
 
-ob_start(); // Output Buffering Start
+ob_start(); // Έναρξη Output Buffering
 
 session_start();
 
-$pageTitle = 'Orders';
+$pageTitle = 'Παραγγελίες';
 
 if (isset($_SESSION['admin'])) {
 
     include 'init.php';
 
-    // Fetch Orders with User Details
+    // Λήψη Παραγγελιών με Λεπτομέρειες Χρήστη
     $stmt = $con->prepare("
         SELECT 
             orders.*, 
@@ -36,28 +36,28 @@ if (isset($_SESSION['admin'])) {
     if (!empty($orders)) {
         ?>
 
-        <h1 class="text-center">Manage Orders</h1>
+        <h1 class="text-center">Διαχείριση Παραγγελιών</h1>
         <div class="container">
             <div class="table-responsive">
                 <table class="main-table manage-orders text-center table table-bordered">
                     <tr>
-                        <td>Order ID</td>
-                        <td>Customer</td>
-                        <td>Order Date</td>
-                        <td>Total Amount</td>
-                        <td>Status</td>
-                        <td>Products</td>
+                        <td>Κωδικός Παραγγελίας</td>
+                        <td>Πελάτης</td>
+                        <td>Ημερομηνία Παραγγελίας</td>
+                        <td>Συνολικό Ποσό</td>
+                        <td>Κατάσταση</td>
+                        <td>Προϊόντα</td>
                     </tr>
                     <?php
                     foreach ($orders as $order) {
                         echo "<tr>";
-                        echo "<td>" . $order['order_id'] . "</td>";
-                        echo "<td>" . $order['user_id'] . "</td>";
-                        echo "<td>" . $order['order_date'] . "</td>";
-                        echo "<td>" . $order['total_amount'] . "</td>";
-                        echo "<td>" . $order['order_status'] . "</td>";
+                        echo "<td>" . htmlspecialchars($order['order_id']) . "</td>";
+                        echo "<td>" . htmlspecialchars($order['Customer']) . "</td>";
+                        echo "<td>" . htmlspecialchars($order['order_date']) . "</td>";
+                        echo "<td>" . htmlspecialchars(number_format($order['total_amount'], 2)) . " €</td>";
+                        echo "<td>" . htmlspecialchars($order['order_status']) . "</td>";
 
-                        // Fetch Products for the Current Order
+                        // Λήψη Προϊόντων για την Τρέχουσα Παραγγελία
                         $productStmt = $con->prepare("
                             SELECT 
                                 products.name AS product_name, 
@@ -81,12 +81,12 @@ if (isset($_SESSION['admin'])) {
                             echo "<ul>";
                             foreach ($products as $product) {
                                 echo "<li>";
-                                echo $product['product_name'] . " - Qty: " . $product['quantity'] . ", Price: $" . $product['price_at_purchase'];
+                                echo htmlspecialchars($product['product_name']) . " - Ποσότητα: " . htmlspecialchars($product['quantity']) . ", Τιμή: €" . htmlspecialchars(number_format($product['price_at_purchase'], 2));
                                 echo "</li>";
                             }
                             echo "</ul>";
                         } else {
-                            echo "No products found.";
+                            echo "Δεν βρέθηκαν προϊόντα.";
                         }
                         echo "</td>";
 
@@ -100,7 +100,7 @@ if (isset($_SESSION['admin'])) {
         <?php
     } else {
         echo '<div class="container">';
-        echo '<div class="nice-message">There are no orders to show.</div>';
+        echo '<div class="alert alert-info">Δεν υπάρχουν παραγγελίες προς εμφάνιση.</div>';
         echo '</div>';
     }
 
@@ -113,5 +113,5 @@ if (isset($_SESSION['admin'])) {
     exit();
 }
 
-ob_end_flush(); // Release The Output
+ob_end_flush(); // Απελευθέρωση της Εξόδου
 ?>

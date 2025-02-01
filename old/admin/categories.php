@@ -1,431 +1,437 @@
 <?php
 
-	/*
-	================================================
-	== Category Page
-	================================================
-	*/
-
-	$cssFile = "categories.css";
-
-	ob_start(); // Output Buffering Start
-
-	session_start();
-
-	$pageTitle = 'Categories';
-
-	if (isset($_SESSION['admin'])) {
-
-		include 'init.php';
-
-		$do = isset($_GET['do']) ? $_GET['do'] : 'Manage';
-
-		if ($do == 'Manage') {
-
-			$sort = 'asc';
-
-			$sort_array = array('asc', 'desc');
-
-			if (isset($_GET['sort']) && in_array($_GET['sort'], $sort_array)) {
-
-				$sort = $_GET['sort'];
-
-			}
-
-			$cats = getAll("SELECT * FROM categories WHERE parent_id = 0 ORDER BY ordering $sort");
-
-			if (! empty($cats)) {
-
-			?>
-
-			<h1 class="text-center">Manage Categories</h1>
-			<div class="container categories">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<i class="fa fa-edit"></i> Manage Categories
-						<div class="option pull-right">
-							<i class="fa fa-sort"></i> Ordering: [
-							<a class="<?php if ($sort == 'asc') { echo 'active'; } ?>" href="?sort=asc">Asc</a> | 
-							<a class="<?php if ($sort == 'desc') { echo 'active'; } ?>" href="?sort=desc">Desc</a> ]
-							<i class="fa fa-eye"></i> View: [
-							<span class="active" data-view="full">Full</span> |
-							<span data-view="classic">Classic</span> ]
-						</div>
-					</div>
-					<div class="panel-body">
-						<?php
-							foreach($cats as $cat) {
-								echo "<div class='cat'>";
-									echo "<div class='hidden-buttons'>";
-										echo "<a href='categories.php?do=Edit&catid=" . $cat['category_id'] . "' class='btn btn-xs btn-primary'><i class='fa fa-edit'></i> Edit</a>";
-										echo "<a href='categories.php?do=Delete&catid=" . $cat['category_id'] . "' class='confirm btn btn-xs btn-danger'><i class='fa fa-close'></i> Delete</a>";
-									echo "</div>";
-									echo "<h3>" . $cat['name'] . '</h3>';
-									echo "<div class='full-view'>";
-										echo "<p>"; if($cat['description'] == '') { echo 'This category has no description'; } else { echo $cat['description']; } echo "</p>";
-									echo "</div>";
-
-									// Get Child Categories
-							      	$childCats = getAll("SELECT * FROM categories WHERE parent_id = ?", [$cat['category_id']]);
-							      	// $childCats = getAllFrom("*", "categories", "where parent_id = {$cat['category_id']}", "", "category_id", "ASC");
-							      	if (! empty($childCats)) {
-								      	echo "<h4 class='child-head'>Child Categories</h4>";
-								      	echo "<ul class='list-unstyled child-cats'>";
-										foreach ($childCats as $c) {
-											echo "<li class='child-link'>
-												<a href='categories.php?do=Edit&catid=" . $c['category_id'] . "'>" . $c['name'] . "</a>
-												<a href='categories.php?do=Delete&catid=" . $c['category_id'] . "' class='show-delete confirm'> Delete</a>
-											</li>";
-										}
-										echo "</ul>";
-									}
-
-								echo "</div>";
-								echo "<hr>";
-							}
-						?>
-					</div>
-				</div>
-				<a class="add-category btn btn-primary" href="categories.php?do=Add"><i class="fa fa-plus"></i> Add New Category</a>
-			</div>
-
-			<?php } else {
-
-				echo '<div class="container">';
-					echo '<div class="nice-message">There\'s No Categories To Show</div>';
-					echo '<a href="categories.php?do=Add" class="btn btn-primary">
-							<i class="fa fa-plus"></i> New Category
-						</a>';
-				echo '</div>';
-
-			} ?>
-
-			<?php
-
-		} elseif ($do == 'Add') { ?>
-
-			<h1 class="text-center">Add New Category</h1>
-			<div class="container">
-				<form class="form-horizontal" action="?do=Insert" method="POST">
-					<!-- Start Name Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Name</label>
-						<div class="col-sm-10 col-md-6">
-							<input type="text" name="name" class="form-control" autocomplete="off" required="required" placeholder="Name Of The Category" />
-						</div>
-					</div>
-					<!-- End Name Field -->
-					<!-- Start Description Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Description</label>
-						<div class="col-sm-10 col-md-6">
-							<input type="text" name="description" class="form-control" placeholder="Describe The Category" />
-						</div>
-					</div>
-					<!-- End Description Field -->
-					<!-- Start Ordering Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Ordering</label>
-						<div class="col-sm-10 col-md-6">
-							<input type="text" name="ordering" class="form-control" placeholder="Number To Arrange The Categories" />
-						</div>
-					</div>
-					<!-- End Ordering Field -->
-					<!-- Start Category Type -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Parent?</label>
-						<div class="col-sm-10 col-md-6">
-							<select name="parent">
-								<option value="0">None</option>
-								<?php 
-									$allCats = getAll("SELECT * FROM categories WHERE parent_id = 0");
-									foreach($allCats as $cat) {
-										echo "<option value='" . $cat['category_id'] . "'>" . $cat['name'] . "</option>";
-									}
-								?>
-							</select>
-						</div>
-					</div>
-					<!-- End Category Type -->
-					
-					<!-- Start Submit Field -->
-					<div class="form-group form-group-lg">
-						<div class="col-sm-offset-2 col-sm-10">
-							<input type="submit" value="Add Category" class="btn btn-primary btn-lg" />
-						</div>
-					</div>
-					<!-- End Submit Field -->
-				</form>
-			</div>
+    /*
+    =================================================
+    == Σελίδα Κατηγοριών
+    =================================================
+    */
+
+    $cssFile = "categories.css";
+
+    ob_start(); // Έναρξη Output Buffering
+
+    session_start();
+
+    $pageTitle = 'Κατηγορίες';
+
+    if (isset($_SESSION['admin'])) {
+
+        include 'init.php';
+
+        $do = isset($_GET['do']) ? $_GET['do'] : 'Manage';
+
+        if ($do == 'Manage') {
+
+            $sort = 'asc';
+
+            $sort_array = array('asc', 'desc');
+
+            if (isset($_GET['sort']) && in_array($_GET['sort'], $sort_array)) {
+
+                $sort = $_GET['sort'];
+
+            }
+
+            $cats = getAll("SELECT * FROM categories WHERE parent_id = 0 ORDER BY ordering $sort");
+
+            if (!empty($cats)) {
+
+            ?>
+
+            <h1 class="text-center">Διαχείριση Κατηγοριών</h1>
+            <div class="container categories">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-edit"></i> Διαχείριση Κατηγοριών
+                        <div class="option pull-right">
+                            <i class="fa fa-sort"></i> Ταξινόμηση: [
+                            <a class="<?php if ($sort == 'asc') { echo 'active'; } ?>" href="?sort=asc">Αύξουσα</a> | 
+                            <a class="<?php if ($sort == 'desc') { echo 'active'; } ?>" href="?sort=desc">Φθίνουσα</a> ]
+                            <i class="fa fa-eye"></i> Προβολή: [
+                            <span class="active" data-view="full">Πλήρης</span> |
+                            <span data-view="classic">Κλασική</span> ]
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <?php
+                            foreach($cats as $cat) {
+                                echo "<div class='cat'>";
+                                    echo "<div class='hidden-buttons'>";
+                                        echo "<a href='categories.php?do=Edit&catid=" . htmlspecialchars($cat['category_id']) . "' class='btn btn-xs btn-primary'><i class='fa fa-edit'></i> Επεξεργασία</a>";
+                                        echo "<a href='categories.php?do=Delete&catid=" . htmlspecialchars($cat['category_id']) . "' class='confirm btn btn-xs btn-danger'><i class='fa fa-close'></i> Διαγραφή</a>";
+                                    echo "</div>";
+                                    echo "<h3>" . htmlspecialchars($cat['name']) . '</h3>';
+                                    echo "<div class='full-view'>";
+                                        echo "<p>"; 
+                                            if($cat['description'] == '') { 
+                                                echo 'Αυτή η κατηγορία δεν έχει περιγραφή'; 
+                                            } else { 
+                                                echo htmlspecialchars($cat['description']); 
+                                            } 
+                                        echo "</p>";
+                                    echo "</div>";
+
+                                    // Λήψη Υποκατηγοριών
+                                    $childCats = getAll("SELECT * FROM categories WHERE parent_id = ?", [$cat['category_id']]);
+                                    if (!empty($childCats)) {
+                                        echo "<h4 class='child-head'>Υποκατηγορίες</h4>";
+                                        echo "<ul class='list-unstyled child-cats'>";
+                                            foreach ($childCats as $c) {
+                                                echo "<li class='child-link'>
+                                                    <a href='categories.php?do=Edit&catid=" . htmlspecialchars($c['category_id']) . "'>" . htmlspecialchars($c['name']) . "</a>
+                                                    <a href='categories.php?do=Delete&catid=" . htmlspecialchars($c['category_id']) . "' class='show-delete confirm'> Διαγραφή</a>
+                                                </li>";
+                                            }
+                                        echo "</ul>";
+                                    }
+
+                                echo "</div>";
+                                echo "<hr>";
+                            }
+                        ?>
+                    </div>
+                </div>
+                <a class="add-category btn btn-primary" href="categories.php?do=Add"><i class="fa fa-plus"></i> Προσθήκη Νέας Κατηγορίας</a>
+            </div>
+
+            <?php } else {
+
+                echo '<div class="container">';
+                    echo '<div class="nice-message">Δεν υπάρχουν κατηγορίες προς εμφάνιση.</div>';
+                    echo '<a href="categories.php?do=Add" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> Νέα Κατηγορία
+                        </a>';
+                echo '</div>';
+
+            } ?>
+
+            <?php
+
+        } elseif ($do == 'Add') { ?>
+
+            <h1 class="text-center">Προσθήκη Νέας Κατηγορίας</h1>
+            <div class="container">
+                <form class="form-horizontal" action="?do=Insert" method="POST">
+                    <!-- Έναρξη Πεδίου Ονόματος -->
+                    <div class="form-group form-group-lg">
+                        <label class="col-sm-2 control-label">Όνομα</label>
+                        <div class="col-sm-10 col-md-6">
+                            <input type="text" name="name" class="form-control" autocomplete="off" required="required" placeholder="Όνομα της Κατηγορίας" />
+                        </div>
+                    </div>
+                    <!-- Τέλος Πεδίου Ονόματος -->
+                    <!-- Έναρξη Πεδίου Περιγραφής -->
+                    <div class="form-group form-group-lg">
+                        <label class="col-sm-2 control-label">Περιγραφή</label>
+                        <div class="col-sm-10 col-md-6">
+                            <input type="text" name="description" class="form-control" placeholder="Περιγράψτε την Κατηγορία" />
+                        </div>
+                    </div>
+                    <!-- Τέλος Πεδίου Περιγραφής -->
+                    <!-- Έναρξη Πεδίου Ταξινόμησης -->
+                    <div class="form-group form-group-lg">
+                        <label class="col-sm-2 control-label">Ταξινόμηση</label>
+                        <div class="col-sm-10 col-md-6">
+                            <input type="text" name="ordering" class="form-control" placeholder="Αριθμός για Ταξινόμηση των Κατηγοριών" />
+                        </div>
+                    </div>
+                    <!-- Τέλος Πεδίου Ταξινόμησης -->
+                    <!-- Έναρξη Επιλογής Τύπου Κατηγορίας -->
+                    <div class="form-group form-group-lg">
+                        <label class="col-sm-2 control-label">Γονική Κατηγορία?</label>
+                        <div class="col-sm-10 col-md-6">
+                            <select name="parent">
+                                <option value="0">Κανένα</option>
+                                <?php 
+                                    $allCats = getAll("SELECT * FROM categories WHERE parent_id = 0");
+                                    foreach($allCats as $cat) {
+                                        echo "<option value='" . htmlspecialchars($cat['category_id']) . "'>" . htmlspecialchars($cat['name']) . "</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Τέλος Επιλογής Τύπου Κατηγορίας -->
+                    
+                    <!-- Έναρξη Πεδίου Υποβολής -->
+                    <div class="form-group form-group-lg">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit" value="Προσθήκη Κατηγορίας" class="btn btn-primary btn-lg" />
+                        </div>
+                    </div>
+                    <!-- Τέλος Πεδίου Υποβολής -->
+                </form>
+            </div>
 
-			<?php
+            <?php
 
-		} elseif ($do == 'Insert') {
+        } elseif ($do == 'Insert') {
 
-			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-				echo "<h1 class='text-center'>Insert Category</h1>";
-				echo "<div class='container'>";
+                echo "<h1 class='text-center'>Εισαγωγή Κατηγορίας</h1>";
+                echo "<div class='container'>";
 
-				// Get Variables From The Form
+                // Λήψη Μεταβλητών Από τη Φόρμα
 
-				$name 		= $_POST['name'];
-				$desc 		= $_POST['description'];
-				$parent 	= $_POST['parent'];
-				$order 		= $_POST['ordering'];
+                $name        = $_POST['name'];
+                $description        = $_POST['description'];
+                $parent      = $_POST['parent'];
+                $ordering       = $_POST['ordering'];
 
-				// Check If Category Exist in Database
+                // Έλεγχος Αν Η Κατηγορία Υπάρχει στη Βάση Δεδομένων
 
-				$check = checkItem("Name", "categories", $name);
+                $check = checkItem("Name", "categories", $name);
 
-				if ($check == 1) {
+                if ($check == 1) {
 
-					$theMsg = '<div class="alert alert-danger">Sorry This Category Is Exist</div>';
-
-					redirectHome($theMsg, 'back');
-
-				} else {
-
-					// Insert Category Info In Database
-
-					$stmt = $con->prepare("INSERT INTO 
-
-						categories(Name, Description, parent_id, ordering)
-
-					VALUES(:zname, :zdesc, :zparent, :zorder)");
-
-					$stmt->execute(array(
-						'zname' 	=> $name,
-						'zdesc' 	=> $desc,
-						'zparent' 	=> $parent,
-						'zorder' 	=> $order,
-					));
-
-					// Echo Success Message
-
-					$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Inserted</div>';
-
-					$seconds = 3;
-
-					echo "<div class='alert alert-info'>You Will Be Redirected to your profil After $seconds Seconds.</div>";
-		
-					header("refresh:$seconds;url='categories.php'");
-
-				}
-
-			} else {
-
-				echo "<div class='container'>";
-
-				$theMsg = '<div class="alert alert-danger">Sorry You Cant Browse This Page Directly</div>';
-
-				redirectHome($theMsg, 'back');
-
-				echo "</div>";
-
-			}
-
-			echo "</div>";
-
-		} elseif ($do == 'Edit') {
-
-			// Check If Get Request catid Is Numeric & Get Its Integer Value
-
-			$catid = isset($_GET['catid']) && is_numeric($_GET['catid']) ? intval($_GET['catid']) : 0;
-
-			// Select All Data Depend On This ID
-
-			$stmt = $con->prepare("SELECT * FROM categories WHERE category_id = ?");
-
-			// Execute Query
-
-			$stmt->execute(array($catid));
-
-			// Fetch The Data
-
-			$cat = $stmt->fetch();
+                    $theMsg = '<div class="alert alert-danger">Συγγνώμη, αυτή η κατηγορία υπάρχει ήδη.</div>';
 
-			// The Row Count
-
-			$count = $stmt->rowCount();
-
-			// If There's Such ID Show The Form
-
-			if ($count > 0) { ?>
-
-				<h1 class="text-center">Edit Category</h1>
-				<div class="container">
-					<form class="form-horizontal" action="?do=Update" method="POST">
-						<input type="hidden" name="catid" value="<?php echo $catid ?>" />
-						<!-- Start Name Field -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Name</label>
-							<div class="col-sm-10 col-md-6">
-								<input type="text" name="name" class="form-control" required="required" placeholder="Name Of The Category" value="<?php echo $cat['name'] ?>" />
-							</div>
-						</div>
-						<!-- End Name Field -->
-						<!-- Start Description Field -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Description</label>
-							<div class="col-sm-10 col-md-6">
-								<input type="text" name="description" class="form-control" placeholder="Describe The Category" value="<?php echo $cat['description'] ?>" />
-							</div>
-						</div>
-						<!-- End Description Field -->
-						<!-- Start Ordering Field -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Ordering</label>
-							<div class="col-sm-10 col-md-6">
-								<input type="number" name="ordering" class="form-control" placeholder="Number To Arrange The Categories" value="<?php echo $cat['ordering'] ?>" />
-							</div>
-						</div>
-						<!-- End Ordering Field -->
-						<!-- Start Category Type -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Parent?</label>
-							<div class="col-sm-10 col-md-6">
-								<select name="parent">
-									<option value="0">None</option>
-									<?php 
-										$allCats = getAll("SELECT * FROM categories WHERE parent_id = 0");
-										foreach($allCats as $c) {
-											echo "<option value='" . $c['category_id'] . "'";
-											if ($cat['parent_id'] == $c['category_id']) { echo ' selected'; }
-											echo ">" . $c['name'] . "</option>";
-										}
-									?>
-								</select>
-							</div>
-						</div>
-						<!-- End Category Type -->
-						
-						<!-- Start Submit Field -->
-						<div class="form-group form-group-lg">
-							<div class="col-sm-offset-2 col-sm-10">
-								<input type="submit" value="Save" class="btn btn-primary btn-lg" />
-							</div>
-						</div>
-						<!-- End Submit Field -->
-					</form>
-				</div>
+                    redirectHome($theMsg, 'back');
 
-			<?php
+                } else {
 
-			// If There's No Such ID Show Error Message
+                    // Εισαγωγή Πληροφοριών Κατηγορίας στη Βάση Δεδομένων
 
-			} else {
+                    $stmt = $con->prepare("INSERT INTO 
+
+                        categories(Name, Description, parent_id, ordering)
+
+                    VALUES(:name, :description, :parent, :order)");
+
+                    $stmt->execute(array(
+                        'name'     => $name,
+                        'description'     => $description,
+                        'parent'   => $parent,
+                        'order'    => $ordering,
+                    ));
+
+                    // Εμφάνιση Μηνύματος Επιτυχίας
+
+                    $theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Κατηγορία Εισήχθη</div>';
+
+                    $seconds = 3;
+
+                    echo "<div class='alert alert-info'>Θα ανακατευθυνθείτε στο προφίλ σας μετά από $seconds δευτερόλεπτα.</div>";
+
+                    header("refresh:$seconds;url='categories.php'");
+
+                }
+
+            } else {
+
+                echo "<div class='container'>";
+
+                $theMsg = '<div class="alert alert-danger">Συγγνώμη, δεν μπορείτε να περιηγηθείτε απευθείας σε αυτή τη σελίδα.</div>';
+
+                redirectHome($theMsg, 'back');
+
+                echo "</div>";
+
+            }
+
+            echo "</div>";
+
+        } elseif ($do == 'Edit') {
+
+            // Έλεγχος Αν Η Παράμετρος catid Είναι Αριθμητική & Λήψη Της Ακέραιας Τιμής Της
+
+            $catid = isset($_GET['catid']) && is_numeric($_GET['catid']) ? intval($_GET['catid']) : 0;
+
+            // Επιλογή Όλων των Δεδομένων Βάσει Του ID
 
-				echo "<div class='container'>";
+            $stmt = $con->prepare("SELECT * FROM categories WHERE category_id = ?");
 
-				$theMsg = '<div class="alert alert-danger">Theres No Such ID</div>';
+            // Εκτέλεση Ερωτήματος
 
-				redirectHome($theMsg);
+            $stmt->execute(array($catid));
+
+            // Ανάκτηση των Δεδομένων
 
-				echo "</div>";
+            $cat = $stmt->fetch();
 
-			}
+            // Αριθμός Γραμμών
 
-		} elseif ($do == 'Update') {
+            $count = $stmt->rowCount();
 
-			echo "<h1 class='text-center'>Update Category</h1>";
-			echo "<div class='container'>";
+            // Αν Υπάρχει Τέτοιο ID, Εμφάνιση της Φόρμας
 
-			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($count > 0) { ?>
+
+                <h1 class="text-center">Επεξεργασία Κατηγορίας</h1>
+                <div class="container">
+                    <form class="form-horizontal" action="?do=Update" method="POST">
+                        <input type="hidden" name="catid" value="<?php echo htmlspecialchars($catid) ?>" />
+                        <!-- Έναρξη Πεδίου Ονόματος -->
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-2 control-label">Όνομα</label>
+                            <div class="col-sm-10 col-md-6">
+                                <input type="text" name="name" class="form-control" required="required" placeholder="Όνομα της Κατηγορίας" value="<?php echo htmlspecialchars($cat['name']) ?>" />
+                            </div>
+                        </div>
+                        <!-- Τέλος Πεδίου Ονόματος -->
+                        <!-- Έναρξη Πεδίου Περιγραφής -->
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-2 control-label">Περιγραφή</label>
+                            <div class="col-sm-10 col-md-6">
+                                <input type="text" name="description" class="form-control" placeholder="Περιγράψτε την Κατηγορία" value="<?php echo htmlspecialchars($cat['description']) ?>" />
+                            </div>
+                        </div>
+                        <!-- Τέλος Πεδίου Περιγραφής -->
+                        <!-- Έναρξη Πεδίου Ταξινόμησης -->
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-2 control-label">Ταξινόμηση</label>
+                            <div class="col-sm-10 col-md-6">
+                                <input type="number" name="ordering" class="form-control" placeholder="Αριθμός για Ταξινόμηση των Κατηγοριών" value="<?php echo htmlspecialchars($cat['ordering']) ?>" />
+                            </div>
+                        </div>
+                        <!-- Τέλος Πεδίου Ταξινόμησης -->
+                        <!-- Έναρξη Επιλογής Τύπου Κατηγορίας -->
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-2 control-label">Γονική Κατηγορία?</label>
+                            <div class="col-sm-10 col-md-6">
+                                <select name="parent">
+                                    <option value="0">Κανένα</option>
+                                    <?php 
+                                        $allCats = getAll("SELECT * FROM categories WHERE parent_id = 0");
+                                        foreach($allCats as $c) {
+                                            echo "<option value='" . htmlspecialchars($c['category_id']) . "'";
+                                            if ($cat['parent_id'] == $c['category_id']) { echo ' selected'; }
+                                            echo ">" . htmlspecialchars($c['name']) . "</option>";
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Τέλος Επιλογής Τύπου Κατηγορίας -->
+                        
+                        <!-- Έναρξη Πεδίου Υποβολής -->
+                        <div class="form-group form-group-lg">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input type="submit" value="Αποθήκευση" class="btn btn-primary btn-lg" />
+                            </div>
+                        </div>
+                        <!-- Τέλος Πεδίου Υποβολής -->
+                    </form>
+                </div>
 
-				// Get Variables From The Form
+            <?php
 
-				$id 		= $_POST['catid'];
-				$name 		= $_POST['name'];
-				$desc 		= $_POST['description'];
-				$order 		= $_POST['ordering'];
-				$parent 	= $_POST['parent'];
+            // Αν Δεν Υπάρχει Τέτοιο ID, Εμφάνιση Μηνύματος Σφάλματος
 
+            } else {
 
-				// Update The Database With This Info
+                echo "<div class='container'>";
 
-				$stmt = $con->prepare("UPDATE 
-											categories 
-										SET 
-											name = ?, 
-											description = ?, 
-											ordering = ?, 
-											parent_id = ?
-										WHERE 
-											category_id = ?");
+                $theMsg = '<div class="alert alert-danger">Δεν υπάρχει τέτοιο ID.</div>';
 
-				$stmt->execute(array($name, $desc, $order, $parent, $id));
+                redirectHome($theMsg);
 
-				// Echo Success Message
+                echo "</div>";
 
-				$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Updated</div>';
+            }
 
-				$seconds = 3;
+        } elseif ($do == 'Update') {
 
-				echo $theMsg;
-				
-				echo "<div class='alert alert-info'>You Will Be Redirected to your profile After $seconds Seconds.</div>";
-	
-				header("refresh:$seconds;url='categories.php'");
+            echo "<h1 class='text-center'>Ενημέρωση Κατηγορίας</h1>";
+            echo "<div class='container'>";
 
-			} else {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-				$theMsg = '<div class="alert alert-danger">Sorry You Cant Browse This Page Directly</div>';
+                // Λήψη Μεταβλητών Από τη Φόρμα
 
-				redirectHome($theMsg);
+                $id          = $_POST['catid'];
+                $name        = $_POST['name'];
+                $desc        = $_POST['description'];
+                $order       = $_POST['ordering'];
+                $parent      = $_POST['parent'];
 
-			}
 
-			echo "</div>";
+                // Ενημέρωση της Βάσης Δεδομένων με αυτές τις πληροφορίες
 
-		} elseif ($do == 'Delete') {
+                $stmt = $con->prepare("UPDATE 
+                                            categories 
+                                        SET 
+                                            name = ?, 
+                                            description = ?, 
+                                            ordering = ?, 
+                                            parent_id = ?
+                                        WHERE 
+                                            category_id = ?");
 
-			echo "<h1 class='text-center'>Delete Category</h1>";
-			echo "<div class='container'>";
+                $stmt->execute(array($name, $desc, $order, $parent, $id));
 
-				// Check If Get Request Catid Is Numeric & Get The Integer Value Of It
+                // Εμφάνιση Μηνύματος Επιτυχίας
 
-				$catid = isset($_GET['catid']) && is_numeric($_GET['catid']) ? intval($_GET['catid']) : 0;
+                $theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Κατηγορία Ενημερώθηκε</div>';
 
-				// Select All Data Depend On This ID
+                $seconds = 3;
 
-				$check = checkItem('category_id', 'categories', $catid);
+                echo $theMsg;
+                
+                echo "<div class='alert alert-info'>Θα ανακατευθυνθείτε στο προφίλ σας μετά από $seconds δευτερόλεπτα.</div>";
+    
+                header("refresh:$seconds;url='categories.php'");
 
-				// If There's Such ID Show The Form
+            } else {
 
-				if ($check > 0) {
+                $theMsg = '<div class="alert alert-danger">Συγγνώμη, δεν μπορείτε να περιηγηθείτε απευθείας σε αυτή τη σελίδα.</div>';
 
-					$stmt = $con->prepare("DELETE FROM categories WHERE category_id = :zid");
+                redirectHome($theMsg, 'back');
 
-					$stmt->bindParam(":zid", $catid);
+            }
 
-					$stmt->execute();
+            echo "</div>";
 
-					$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Deleted</div>';
+        } elseif ($do == 'Delete') {
 
-					redirectHome($theMsg, 'back');
+            echo "<h1 class='text-center'>Διαγραφή Κατηγορίας</h1>";
+            echo "<div class='container'>";
 
-				} else {
+                // Έλεγχος Αν Η Παράμετρος catid Είναι Αριθμητική & Λήψη Της Ακέραιας Τιμής Της
 
-					$theMsg = '<div class="alert alert-danger">This ID is Not Exist</div>';
+                $catid = isset($_GET['catid']) && is_numeric($_GET['catid']) ? intval($_GET['catid']) : 0;
 
-					redirectHome($theMsg);
+                // Έλεγχος Αν Υπάρχει Τέτοιο ID
 
-				}
+                $check = checkItem('category_id', 'categories', $catid);
 
-			echo '</div>';
+                // Αν Υπάρχει Τέτοιο ID, Διαγραφή της Κατηγορίας
 
-		}
+                if ($check > 0) {
 
-		include $tpl . 'footer.php';
+                    $stmt = $con->prepare("DELETE FROM categories WHERE category_id = :zid");
 
-	} else {
+                    $stmt->bindParam(":zid", $catid);
 
-		header('Location: index.php');
+                    $stmt->execute();
 
-		exit();
-	}
+                    $theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Κατηγορία Διαγράφηκε</div>';
 
-	ob_end_flush(); // Release The Output
+                    redirectHome($theMsg, 'back');
+
+                } else {
+
+                    $theMsg = '<div class="alert alert-danger">Αυτό το ID δεν υπάρχει.</div>';
+
+                    redirectHome($theMsg);
+
+                }
+
+            echo '</div>';
+
+        }
+
+        include $tpl . 'footer.php';
+
+    } else {
+
+        header('Location: index.php');
+
+        exit();
+
+    }
+
+    ob_end_flush(); // Απελευθέρωση της Εξόδου
 
 ?>

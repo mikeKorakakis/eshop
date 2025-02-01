@@ -8,7 +8,7 @@
 		<div id="containerFooter">
 
 			<div id="webFooter">
-				<h3> online store </h3>
+				<h3>ΚΑΤΗΓΟΡΙΕΣ </h3>
 				<?php
 				$allCats = getAll("SELECT * FROM categories WHERE parent_id = 0 ORDER BY category_id ASC", []);
 				foreach ($allCats as $cat) {
@@ -20,18 +20,17 @@
 
 			</div>
 			<div id="webFooter">
-				<h3> helpful link </h3>
-				<p><a href="/"> home </a> </p>
-				<p><a href="#"> about </a> </p>
-				<p><a href="#"> contact </a> </p>
+				<h3>ΣΥΝΔΕΣΜΟΙ</h3>
+				<p><a href="/">ΑΡΧΙΚΗ</a> </p>
+				<p><a href="#">ΣΧΕΤΙΚΑ</a> </p>
+				<p><a href="#">ΕΠΙΚΟΙΝΩΝΙΑ</a> </p>
 			</div>
 
 			<div id="webFooter">
-				<h3> address </h3>
-				<p> Ag. Spyridonos Str. </p>
-				<p> Egaleo Park Campus </p>
-				<p> Egaleo Postal Code 12243 </p>
-				<p> Greece </p>
+				<h3>ΔΙΕΥΘΥΝΣΗ</h3>
+				<p> ΑΓΙΟΥ ΣΠΥΡΙΔΩΝΟς </p>
+				<p> ΤΑΧΥΔΡΟΜΙΚΟΣ ΚΩΔΙΚΑΣ 12243 </p>
+				<p> ΕΛΛΑΔΑ </p>
 			</div>
 		</div>
 		<div id="credit"><a href="https://www.uniwa.gr"> © UNIWA TEAM </a> &nbsp&nbsp&nbsp | &nbsp&nbsp&nbsp <a
@@ -40,7 +39,7 @@
 
 </footer>
 </body>
-<script src="http://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 	crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
 

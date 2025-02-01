@@ -1,19 +1,19 @@
 <?php
 ob_start();
 session_start();
-$pageTitle = 'Show Items';
+$pageTitle = 'Εμφάνιση Προϊόντων';
 $cssFile = 'contentDetails.css';
 include 'cart-handler.php';
 include 'init.php';
 
-// Check If Get Request product Is Numeric & Get Its Integer Value
+// Έλεγχος αν η παράμετρος GET 'product_id' είναι αριθμητική και λήψη της ακέραιας τιμής της
 $product_id = isset($_GET['product_id']) && is_numeric($_GET['product_id']) ? intval($_GET['product_id']) : 0;
 
-// Select All Data Depend On This ID
+// Επιλογή όλων των δεδομένων βάσει αυτού του ID
 $stmt = $con->prepare("SELECT 
 								products.*, 
 								categories.name AS category_name, 
-								users.username ,
+								users.username,
 								media.path AS image_url
 							FROM 
 								products
@@ -32,55 +32,55 @@ $stmt = $con->prepare("SELECT
 							WHERE 
 								product_id = ?");
 
-// Execute Query
+// Εκτέλεση του ερωτήματος
 $stmt->execute(array($product_id));
 
 $count = $stmt->rowCount();
 
 if ($count > 0) {
 
-	// Fetch The Data
+	// Ανάκτηση των δεδομένων
 	$product = $stmt->fetch();
 ?>
 	<div id="containerD">
 		<div id="imageSection">
-			<img id="imgDetails" src="<?php echo formatImage($product['image_url']) ?>" alt="Product Main Preview">
+			<img id="imgDetails" src="<?php echo formatImage($product['image_url']) ?>" alt="Κύρια Προβολή Προϊόντος">
 		</div>
 		<div id="productDetails">
 
-			<h1><?php echo $product['name'] ?></h1>
-			<h4><?php echo $product['category_name'] ?></h4>
+			<h1><?php echo htmlspecialchars($product['name']) ?></h1>
+			<h4><?php echo htmlspecialchars($product['category_name']) ?></h4>
 			<div id="details">
-				<h3><?php echo $product['price'] ?></h3>
-				<h3>Description</h3>
-				<p><?php echo $product['description'] ?></p>
-				<h3>Made in</h3>
-				<p><?php echo $product['country_of_origin'] ?></p>
-				<!-- <h3>Added by</h3>
-				<p><?php echo $product['username'] ?></p> -->
+				<h3><?php echo htmlspecialchars($product['price']) ?>€</h3>
+				<h3>Περιγραφή</h3>
+				<p><?php echo nl2br(htmlspecialchars($product['description'])) ?></p>
+				<h3>Χώρα Κατασκευής</h3>
+				<p><?php echo htmlspecialchars($product['country_of_origin']) ?></p>
+				<!-- <h3>Προστέθηκε από</h3>
+				<p><?php echo htmlspecialchars($product['username']) ?></p> -->
 
 			</div>
 			<!-- <div id="productPreview">
-					<h3>Product Preview</h3>
-					<img id="previewImg" src="preview-image-1.jpg" alt="Preview Image 1">
-					<img id="previewImg" src="preview-image-2.jpg" alt="Preview Image 2">
-					<img id="previewImg" src="preview-image-3.jpg" alt="Preview Image 3">
+					<h3>Προβολή Προϊόντος</h3>
+					<img id="previewImg" src="preview-image-1.jpg" alt="Προβολή Εικόνας 1">
+					<img id="previewImg" src="preview-image-2.jpg" alt="Προβολή Εικόνας 2">
+					<img id="previewImg" src="preview-image-3.jpg" alt="Προβολή Εικόνας 3">
 				</div> -->
 			<!-- <div id="button">
-				<button>Add to Cart</button>
+				<button>Προσθήκη στο Καλάθι</button>
 			</div> -->
 			<form action="" method="POST">
-				<input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-				<input type="hidden" name="product_name" value="<?php echo $product['name']; ?>">
-				<input type="hidden" name="product_price" value="<?php echo $product['price']; ?>">
-				<input type="hidden" name="product_picture" value="<?php echo $product['image_url']; ?>">
-				<button type="submit" name="add_to_cart" class="btn btn-primary">Add to Cart</button>
+				<!-- <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['product_id']); ?>">
+				<input type="hidden" name="product_name" value="<?php echo htmlspecialchars($product['name']); ?>">
+				<input type="hidden" name="product_price" value="<?php echo htmlspecialchars($product['price']); ?>">
+				<input type="hidden" name="product_picture" value="<?php echo htmlspecialchars($product['image_url']); ?>"> -->
+				<button type="submit" name="add_to_cart" class="btn btn-primary">Προσθήκη στο Καλάθι</button>
 				<?php
-				// Display feedback message if available
+				// Εμφάνιση μηνύματος επιβεβαίωσης αν είναι διαθέσιμο
 				if (isset($_SESSION['feedback'])) {
 					echo '<div style="height: 10px"></div>';
-					echo '<div class="alert alert-success">' . $_SESSION['feedback'] . '</div>';
-					unset($_SESSION['feedback']); // Clear feedback after showing
+					echo '<div class="alert alert-success">' . htmlspecialchars($_SESSION['feedback']) . '</div>';
+					unset($_SESSION['feedback']); // Καθαρισμός του μηνύματος μετά την εμφάνιση
 				}
 
 				?>
@@ -91,14 +91,14 @@ if ($count > 0) {
 
 	<hr class="custom-hr">
 	<?php if (isset($_SESSION['user'])) { ?>
-		<!-- Start Add Comment -->
+		<!-- Έναρξη Προσθήκης Σχολίου -->
 		<div class="row">
 			<div class="col-md-offset-3">
 				<div class="add-comment">
-					<h3>Add Your Feedback</h3>
-					<form action="<?php echo $_SERVER['PHP_SELF'] . '?product_id=' . $product['product_id'] ?>" method="POST">
+					<h3>Προσθήκη Σχολίου</h3>
+					<form action="<?php echo $_SERVER['PHP_SELF'] . '?product_id=' . htmlspecialchars($product['product_id']) ?>" method="POST">
 						<textarea name="comment" required></textarea>
-						<input class="button" type="submit" name="add_comment">
+						<input class="button" type="submit" name="add_comment" value="Προσθήκη">
 					</form>
 					<?php
 					if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_comment'])) {
@@ -123,27 +123,27 @@ if ($count > 0) {
 
 							if ($stmt) {
 
-								echo '<div class="alert alert-success">Comment added</div>';
+								echo '<div class="alert alert-success">Το σχόλιο προστέθηκε</div>';
 							}
 						} else {
 
-							echo '<div class="alert alert-danger">You must add a comment</div>';
+							echo '<div class="alert alert-danger">Πρέπει να προσθέσεις ένα σχόλιο</div>';
 						}
 					}
 					?>
 				</div>
 			</div>
 		</div>
-		<!-- End Add Comment -->
+		<!-- Τέλος Προσθήκης Σχολίου -->
 	<?php } else {
 
-		echo '<div class="row"><a href="login.php">Login</a>&nbsp or &nbsp <a href="login.php">Register</a> &nbsp to add comment</div>';
+		echo '<div class="row"><a href="login.php">Σύνδεση</a>&nbsp ή &nbsp <a href="login.php">Εγγραφή</a> &nbsp για να προσθέσεις σχόλιο</div>';
 	} ?>
 	<hr class="custom-hr">
 	<?php
 
-	// Select All Users Except Admin \
-	$comments = getAll("SELECT comments.content, comments.content,  media.path as image_url,  users.username as username FROM comments INNER JOIN users ON users.user_id = comments.user_id INNER JOIN media ON media.media_id=users.media_id WHERE product_id = ? ORDER BY comment_id DESC", [$product['product_id']]);
+	// Επιλογή όλων των σχολίων για αυτό το προϊόν
+	$comments = getAll("SELECT comments.content, media.path as image_url, users.username FROM comments INNER JOIN users ON users.user_id = comments.user_id INNER JOIN media ON media.media_id=users.media_id WHERE product_id = ? ORDER BY comment_id DESC", [$product['product_id']]);
 	?>
 
 	<?php foreach ($comments as $comment) {
@@ -153,16 +153,16 @@ if ($count > 0) {
 				<div class="col-sm-2 text-center">
 					<?php
 					echo '<img class="img-responsive img-thumbnail img-circle center-block" ';
-					if (empty($myimage)) {
-						echo "<img src='uploads/default.png' alt='' />";
+					if (empty($comment['image_url'])) { // Έλεγχος αν υπάρχει εικόνα χρήστη
+						echo "src='uploads/default.png' alt='Εικόνα Χρήστη' />";
 					} else {
-						echo "<img src='" . formatImage($myimage) . "' alt='' />";
+						echo "src='" . htmlspecialchars(formatImage($comment['image_url'])) . "' alt='Εικόνα Χρήστη' />";
 					}
 					?>
-					<p><?php echo $comment['username'] ?></p>
+					<p><?php echo htmlspecialchars($comment['username']) ?></p>
 				</div>
 				<div class="col-sm-10">
-					<p class="lead"><?php echo $comment['content'] ?></p>
+					<p class="lead"><?php echo nl2br(htmlspecialchars($comment['content'])) ?></p>
 				</div>
 			</div>
 		</div>
@@ -172,7 +172,7 @@ if ($count > 0) {
 <?php
 } else {
 	echo '<div class="container">';
-	echo '<div class="alert alert-danger">There\'s no such ID or this product is waiting approval</div>';
+	echo '<div class="alert alert-danger">Δεν υπάρχει τέτοιο ID ή αυτό το προϊόν περιμένει έγκριση</div>';
 	echo '</div>';
 }
 include $tpl . 'footer.php';

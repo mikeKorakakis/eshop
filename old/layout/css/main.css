@@ -688,6 +688,8 @@ form {
 .btn-primary:hover {
     background-color:  rgb(3, 94, 94);
     border-color: rgb(3, 94, 94);
+	text-decoration: none;
+
 }
 
 .btn-lg {

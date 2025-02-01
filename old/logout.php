@@ -1,6 +1,6 @@
 <?php
 ob_start();
-session_start(); // Start The Session
+session_start();
 
 unset($_SESSION['user']); 
 unset($_SESSION['uid']);      

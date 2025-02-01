@@ -1,60 +1,71 @@
 <?php
-ob_start(); // Start output buffering
+ob_start(); // Έναρξη output buffering
 
 session_start();
 include 'init.php';
 
-echo "<h1 class='text-center'>Update Profile</h1>";
+echo "<h1 class='text-center'>Ενημέρωση Προφίλ</h1>";
 echo "<div class='container'>";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    // Get Variables From The Form
+	// Λήψη Μεταβλητών Από τη Φόρμα
 
-    $id 	= $_POST['userid'];
-    $user 	= $_POST['username'];
-    $email 	= $_POST['email'];
-    $name 	= $_POST['full'];
+	$id      = intval($_POST['userid']);
+	$username    = trim($_POST['username']);
+	$email   = trim($_POST['email']);
+	$fullname    = trim($_POST['fullname']);
+	$avatarFile = $_FILES['pictures'];
 
-    // Password Trick
 
-    $pass = empty($_POST['newpassword']) ? $_POST['oldpassword'] : sha1($_POST['newpassword']);
+	// Τεχνική για τον Κωδικό με χρήση bcrypt και cost 12
 
-    // Validate The Form
+	// Αν ο χρήστης δεν εισάγει νέο κωδικό, χρησιμοποιούμε τον υπάρχοντα κωδικό από τη βάση δεδομένων
+	// Διαφορετικά, δημιουργούμε ένα νέο hash κωδικού με bcrypt και cost 12
+	if (empty($_POST['newpassword'])) {
+		// Προέρχεται από τη φόρμα ως κρυφό πεδίο
+		$pass = $_POST['oldpassword'];
+	} else {
+		// Δημιουργία hash με bcrypt και cost 12
+		$pass = password_hash($_POST['newpassword'], PASSWORD_BCRYPT, ['cost' => 12]);
+	}
 
-    $formErrors = array();
+	// Επαλήθευση της Φόρμας
 
-    if (strlen($user) < 4) {
-        $formErrors[] = 'Username Cant Be Less Than <strong>4 Characters</strong>';
-    }
+	$formErrors = array();
 
-    if (strlen($user) > 20) {
-        $formErrors[] = 'Username Cant Be More Than <strong>20 Characters</strong>';
-    }
+	if (strlen($username) < 4) {
+		$formErrors[] = 'Το Όνομα Χρήστη δεν μπορεί να είναι μικρότερο από <strong>4 χαρακτήρες</strong>.';
+	}
 
-    if (empty($user)) {
-        $formErrors[] = 'Username Cant Be <strong>Empty</strong>';
-    }
+	if (strlen($username) > 20) {
+		$formErrors[] = 'Το Όνομα Χρήστη δεν μπορεί να είναι μεγαλύτερο από <strong>20 χαρακτήρες</strong>.';
+	}
 
-    if (empty($name)) {
-        $formErrors[] = 'Full Name Cant Be <strong>Empty</strong>';
-    }
+	if (empty($username)) {
+		$formErrors[] = 'Το Όνομα Χρήστη δεν μπορεί να είναι <strong>κενό</strong>.';
+	}
 
-    if (empty($email)) {
-        $formErrors[] = 'Email Cant Be <strong>Empty</strong>';
-    }
+	if (empty($fullname)) {
+		$formErrors[] = 'Το Πλήρες Όνομα δεν μπορεί να είναι <strong>κενό</strong>.';
+	}
 
-    // Loop Into Errors Array And Echo It
+	if (empty($email)) {
+		$formErrors[] = 'Το Email δεν μπορεί να είναι <strong>κενό</strong>.';
+	}
 
-    foreach($formErrors as $error) {
-        echo '<div class="alert alert-danger">' . $error . '</div>';
-    }
+	// Βρόχος μέσα στον Πίνακα Σφαλμάτων και Εμφάνιση τους
 
-    // Check If There's No Error Proceed The Update Operation
+	foreach ($formErrors as $error) {
+		echo '<div class="alert alert-danger">' . htmlspecialchars($error) . '</div>';
+	}
 
-    if (empty($formErrors)) {
+	// Έλεγχος Αν Δεν Υπάρχουν Σφάλματα, Συνεχίστε με την Ενημέρωση της Βάσης Δεδομένων
 
-        $stmt2 = $con->prepare("SELECT 
+	if (empty($formErrors)) {
+
+		// Έλεγχος αν το νέο όνομα χρήστη υπάρχει ήδη για άλλον χρήστη
+		$stmt2 = $con->prepare("SELECT 
                                     *
                                 FROM 
                                     users
@@ -63,46 +74,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 AND 
                                     user_id != ?");
 
-        $stmt2->execute(array($user, $id));
+		$stmt2->execute(array($username, $id));
 
-        $count = $stmt2->rowCount();
+		$count = $stmt2->rowCount();
 
-        if ($count == 1) {
+		if ($count == 1) {
 
-            $theMsg = '<div class="alert alert-danger">Sorry This User Is Exist</div>';
+			$theMsg = '<div class="alert alert-danger">Συγγνώμη, αυτός ο χρήστης υπάρχει ήδη.</div>';
 
-            redirectHome($theMsg, 'back');
+			redirectHome($theMsg, 'back');
+		} else {
 
-        } else { 
+			// Ενημέρωση της Βάσης Δεδομένων με Αυτές τις Πληροφορίες
+			$mediaId = null;
+			if (!empty($_FILES['pictures']['name'])) {
+				$mediaId = uploadImage($avatarFile, $con, $s3Client, $bucket);
+				$stmt = $con->prepare("UPDATE users SET username = ?, email = ?, full_name = ?, password = ?, media_id = ? WHERE user_id = ?");
+				$stmt->execute(array($username, $email, $fullname, $pass, $mediaId, $id));
+				$stmt = $con->prepare("
+				SELECT 
+					media.path as avatar_url
+				FROM 
+					users 
+				LEFT JOIN
+					media
+				ON
+					media.media_id = users.media_id
+				WHERE 
+					username = ?
+			");
+				$stmt->execute(array($username));
+				$get = $stmt->fetch();
+				$count = $stmt->rowCount();
+				if ($get["avatar_url"]) {
+					$_SESSION['avatar'] = $get['avatar_url'];
+				}
+			} else {
+				$stmt = $con->prepare("UPDATE users SET username = ?, email = ?, full_name = ?, password = ? WHERE user_id = ?");
+				$stmt->execute(array($username, $email, $fullname, $pass, $id));
+			}
 
-            // Update The Database With This Info
 
-            $stmt = $con->prepare("UPDATE users SET username = ?, email = ?, full_name = ?, password = ? WHERE user_id = ?");
 
-            $stmt->execute(array($user, $email, $name, $pass, $id));
+			// Εμφάνιση Μηνύματος Επιτυχίας
 
-            // Echo Success Message
+			$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Εγγραφή Ενημερώθηκε</div>';
 
-            $theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Updated</div>';
+			echo $theMsg;
 
-            echo $theMsg;
+			$seconds = 2;
 
-            $seconds = 2;
+			echo "<div class='alert alert-info'>Θα ανακατευθυνθείτε στο προφίλ σας μετά από $seconds δευτερόλεπτα.</div>";
 
-		    echo "<div class='alert alert-info'>You Will Be Redirected to your profile After $seconds Seconds.</div>";
-
-		    header("refresh:$seconds;url='profile.php'");
-
-        }
-
-    }
-
+			header("refresh:$seconds;url='profile.php'");
+		}
+	}
 } else {
 
-    $theMsg = '<div class="alert alert-danger">Sorry You Cant Browse This Page Directly</div>';
+	$theMsg = '<div class="alert alert-danger">Συγγνώμη, δεν μπορείτε να περιηγηθείτε απευθείας σε αυτή τη σελίδα.</div>';
 
-    redirectHome($theMsg);
-
+	redirectHome($theMsg);
 }
 
 echo "</div>";

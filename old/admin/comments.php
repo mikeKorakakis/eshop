@@ -1,181 +1,183 @@
 <?php
 
-	/*
-	================================================
-	== Manage Comments Page
-	== You Can Edit | Delete | Approve Comments From Here
-	================================================
-	*/
+    /*
+    =================================================
+    == Σελίδα Διαχείρισης Σχολίων
+    == Μπορείς να Επεξεργαστείς | Διαγράψεις | Εγκρίνεις Σχόλια Από Εδώ
+    =================================================
+    */
 
-	ob_start(); // Output Buffering Start
+    ob_start(); // Έναρξη Output Buffering
 
-	session_start();
+    session_start();
 
-	$pageTitle = 'Comments';
+    $pageTitle = 'Σχόλια';
 
-	if (isset($_SESSION['admin'])) {
+    if (isset($_SESSION['admin'])) {
 
-		include 'init.php';
+        include 'init.php';
 
-		$do = isset($_GET['do']) ? $_GET['do'] : 'Manage';
+        $do = isset($_GET['do']) ? $_GET['do'] : 'Manage';
 
-		// Start Manage Page
+        // Έναρξη Σελίδας Διαχείρισης
 
-		if ($do == 'Manage') { // Manage Members Page
+        if ($do == 'Manage') { // Διαχείριση Σχολίων
 
-			// Select All Users Except Admin 
+            // Επιλογή Όλων των Σχολίων με Λεπτομέρειες Προϊόντος και Χρήστη
 
-			$stmt = $con->prepare("SELECT 
-										comments.*, products.name AS product_name, users.username AS username  
-									FROM 
-										comments
-									INNER JOIN 
-										products 
-									ON 
-										products.product_id = comments.product_id
-									INNER JOIN 
-										users 
-									ON 
-										users.user_id = comments.user_id
-									ORDER BY 
-										comment_id DESC");
+            $stmt = $con->prepare("SELECT 
+                                        comments.*, products.name AS product_name, users.username AS username  
+                                    FROM 
+                                        comments
+                                    INNER JOIN 
+                                        products 
+                                    ON 
+                                        products.product_id = comments.product_id
+                                    INNER JOIN 
+                                        users 
+                                    ON 
+                                        users.user_id = comments.user_id
+                                    ORDER BY 
+                                        comment_id DESC");
 
-			// Execute The Statement
+            // Εκτέλεση του Statement
 
-			$stmt->execute();
+            $stmt->execute();
 
-			// Assign To Variable 
+            // Ανάθεση στον Πίνακα 
 
-			$comments = $stmt->fetchAll();
+            $comments = $stmt->fetchAll();
 
-			if (! empty($comments)) {
+            if (! empty($comments)) {
 
-			?>
+            ?>
 
-			<h1 class="text-center">Manage Feedbacks</h1>
-			<div class="container">
-				<div class="table-responsive">
-					<table class="main-table text-center table table-bordered">
-						<tr>
-							<td>Feedback</td>
-							<td>Item Name</td>
-							<td>User Name</td>
-							<td>Added Date</td>
-							<td>Control</td>
-						</tr>
-						<?php
-							foreach($comments as $comment) {
-								echo "<tr>";
-									echo "<td>" . $comment['content'] . "</td>";
-									echo "<td>" . $comment['product_name'] . "</td>";
-									echo "<td>" . $comment['username'] . "</td>";
-									echo "<td>" . $comment['created_date'] ."</td>";
-									echo "<td>
-										<a href='comments.php?do=Delete&comid=" . $comment['comment_id'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
-										
-									echo "</td>";
-								echo "</tr>";
-							}
-						?>
-						<tr>
-					</table>
-				</div>
-			</div>
+            <h1 class="text-center">Διαχείριση Σχολίων</h1>
+            <div class="container">
+                <div class="table-responsive">
+                    <table class="main-table text-center table table-bordered">
+                        <tr>
+                            <td>Σχόλιο</td>
+                            <td>Όνομα Προϊόντος</td>
+                            <td>Όνομα Χρήστη</td>
+                            <td>Ημερομηνία Προσθήκης</td>
+                            <td>Ενέργειες</td>
+                        </tr>
+                        <?php
+                            foreach($comments as $comment) {
+                                echo "<tr>";
+                                    echo "<td>" . htmlspecialchars($comment['content']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($comment['product_name']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($comment['username']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($comment['created_date']) ."</td>";
+                                    
+                                    echo "</td>";
+                                    echo "<td>
+                                        <a href='comments.php?do=Delete&comid=" . htmlspecialchars($comment['comment_id']) . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Διαγραφή </a>";
+                                        
+                                    echo "</td>";
+                                echo "</tr>";
+                            }
+                        ?>
+                        <tr>
+                    </table>
+                </div>
+            </div>
 
-			<?php } else {
+            <?php } else {
 
-				echo '<div class="container">';
-					echo '<div class="nice-message">There\'s No Comments To Show</div>';
-				echo '</div>';
+                echo '<div class="container">';
+                    echo '<div class="nice-message">Δεν υπάρχουν σχόλια προς εμφάνιση.</div>';
+                echo '</div>';
 
-			} ?>
+            } ?>
 
-		<?php 
+        <?php 
 
-		} elseif ($do == 'Delete') { // Delete Page
+        } elseif ($do == 'Delete') { // Σελίδα Διαγραφής
 
-			echo "<h1 class='text-center'>Delete Comment</h1>";
+            echo "<h1 class='text-center'>Διαγραφή Σχολίου</h1>";
 
-			echo "<div class='container'>";
+            echo "<div class='container'>";
 
-				// Check If Get Request comid Is Numeric & Get The Integer Value Of It
+                // Έλεγχος Αν Η Παράμετρος comid Είναι Αριθμητική & Λήψη Της Ακέραιας Τιμής Της
 
-				$comid = isset($_GET['comid']) && is_numeric($_GET['comid']) ? intval($_GET['comid']) : 0;
+                $comid = isset($_GET['comid']) && is_numeric($_GET['comid']) ? intval($_GET['comid']) : 0;
 
-				// Select All Data Depend On This ID
+                // Έλεγχος Αν Υπάρχει Τέτοιο ID
 
-				$check = checkItem('comment_id', 'comments', $comid);
+                $check = checkItem('comment_id', 'comments', $comid);
 
-				// If There's Such ID Show The Form
+                // Αν Υπάρχει Τέτοιο ID, Διαγραφή του Σχολίου
 
-				if ($check > 0) {
+                if ($check > 0) {
 
-					$stmt = $con->prepare("DELETE FROM comments WHERE comment_id = :zid");
+                    $stmt = $con->prepare("DELETE FROM comments WHERE comment_id = :zid");
 
-					$stmt->bindParam(":zid", $comid);
+                    $stmt->bindParam(":zid", $comid);
 
-					$stmt->execute();
+                    $stmt->execute();
 
-					$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Deleted</div>';
+                    $theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Η εγγραφή διαγράφηκε με επιτυχία.</div>';
 
-					redirectHome($theMsg, 'back');
+                    redirectHome($theMsg, 'back');
 
-				} else {
+                } else {
 
-					$theMsg = '<div class="alert alert-danger">This ID is Not Exist</div>';
+                    $theMsg = '<div class="alert alert-danger">Αυτό το ID δεν υπάρχει.</div>';
 
-					redirectHome($theMsg);
+                    redirectHome($theMsg);
 
-				}
+                }
 
-			echo '</div>';
+            echo '</div>';
 
-		} elseif ($do == 'Approve') {
+        } elseif ($do == 'Approve') {
 
-			echo "<h1 class='text-center'>Approve Comment</h1>";
-			echo "<div class='container'>";
+            echo "<h1 class='text-center'>Έγκριση Σχολίου</h1>";
+            echo "<div class='container'>";
 
-				// Check If Get Request comid Is Numeric & Get The Integer Value Of It
+                // Έλεγχος Αν Η Παράμετρος comid Είναι Αριθμητική & Λήψη Της Ακέραιας Τιμής Της
 
-				$comid = isset($_GET['comid']) && is_numeric($_GET['comid']) ? intval($_GET['comid']) : 0;
+                $comid = isset($_GET['comid']) && is_numeric($_GET['comid']) ? intval($_GET['comid']) : 0;
 
-				// Select All Data Depend On This ID
+                // Έλεγχος Αν Υπάρχει Τέτοιο ID
 
-				$check = checkItem('comment_id', 'comments', $comid);
+                $check = checkItem('comment_id', 'comments', $comid);
 
-				// If There's Such ID Show The Form
+                // Αν Υπάρχει Τέτοιο ID, Ενημέρωση της Κατάστασης
 
-				if ($check > 0) {
+                if ($check > 0) {
 
-					$stmt = $con->prepare("UPDATE comments SET status = 1 WHERE comment_id = ?");
+                    $stmt = $con->prepare("UPDATE comments SET status = 1 WHERE comment_id = ?");
 
-					$stmt->execute(array($comid));
+                    $stmt->execute(array($comid));
 
-					$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Approved</div>';
+                    $theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Η εγγραφή εγκρίθηκε με επιτυχία.</div>';
 
-					redirectHome($theMsg, 'back');
+                    redirectHome($theMsg, 'back');
 
-				} else {
+                } else {
 
-					$theMsg = '<div class="alert alert-danger">This ID is Not Exist</div>';
+                    $theMsg = '<div class="alert alert-danger">Αυτό το ID δεν υπάρχει.</div>';
 
-					redirectHome($theMsg);
+                    redirectHome($theMsg);
 
-				}
+                }
 
-			echo '</div>';
+            echo '</div>';
 
-		}
+        }
 
-		include $tpl . 'footer.php';
+        include $tpl . 'footer.php';
 
-	} else {
+    } else {
 
-		header('Location: index.php');
+        header('Location: index.php');
 
-		exit();
-	}
+        exit();
+    }
 
-	ob_end_flush(); // Release The Output
+    ob_end_flush(); // Απελευθέρωση της Εξόδου
 
 ?>

@@ -1,592 +1,554 @@
 <?php
 
-	$cssFile = "dashboard.css";
+    $cssFile = "dashboard.css";
+
+    /*
+    ================================================
+    == Σελίδα Διαχείρισης Μελών
+    == Μπορείς να Προσθέσεις | Επεξεργαστείς | Διαγράψεις Μέλη Από Εδώ
+    ================================================
+    */
+
+    ob_start(); // Έναρξη Output Buffering
+
+    session_start();
+
+    $pageTitle = 'Μέλη';
+
+    if (isset($_SESSION['admin'])) {
+
+        include 'init.php';
+
+        $do = isset($_GET['do']) ? $_GET['do'] : 'Manage';
+
+        // Έναρξη Σελίδας Διαχείρισης
+
+        if ($do == 'Manage') { // Διαχείριση Μελών
+
+            $query = '';
+
+            if (isset($_GET['page']) && $_GET['page'] == 'Pending') {
+
+                $query = 'AND RegStatus = 0';
+
+            }
+
+			// Επιλογή Όλων των Μελών εκτός του Admin
+
+            $users = getAll("SELECT * FROM users 
+			WHERE group_id != 1 $query ORDER BY user_id DESC", []);
+
+            if (!empty($users)) {
+
+            ?>
+
+            <h1 class="text-center">Διαχείριση Πελατών</h1>
+            <div class="container">
+                <div class="table-responsive">
+                    <table class="main-table manage-members text-center table table-bordered">
+                        <tr>
+                            <td>Avatar</td>
+                            <td>Όνομα Χρήστη</td>
+                            <td>Email</td>
+                            <td>Πλήρες Όνομα</td>
+                            <td>Ημερομηνία Εγγραφής</td>
+                            <td>Ενέργειες</td>
+                        </tr>
+                        <?php
+                            foreach($users as $user) {
+                                echo "<tr>";
+                                    echo "<td>";
+                                    if (empty($user['avatar_url'])) {
+                                        echo "<img src='". htmlspecialchars($upload_main) ."/default.png' alt='Αποκλεισμένη Εικόνα' />";
+                                    } else {
+                                        echo "<img src='". htmlspecialchars(formatImage($user['avatar_url'])) . "' alt='Εικόνα Χρήστη' />";
+                                    }
+                                    echo "</td>";
+
+                                    echo "<td>" . htmlspecialchars($user['username']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($user['email']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($user['full_name']) . "</td>";
+									echo "<td>" . htmlspecialchars($user['registration_date']) . "</td>";
+                                    echo "<td>
+                                        <a href='customers.php?do=Edit&userid=" . htmlspecialchars($user['user_id']) . "' class='btn btn-success' style='width:120px'><i class='fa fa-edit' ></i> Επεξεργασία</a>
+                                        <a href='customers.php?do=Delete&userid=" . htmlspecialchars($user['user_id']) . "' class='btn btn-danger confirm' style='width:120px; margin-top:5px'><i class='fa fa-close' ></i> Διαγραφή </a>";
+                                        
+                                    echo "</td>";
+                                echo "</tr>";
+                            }
+                        ?>
+                        <tr>
+                    </table>
+                </div>
+                <a href="customers.php?do=Add" class="btn btn-primary">
+                    <i class="fa fa-plus"></i> Νέο Μέλος
+                </a>
+            </div>
+
+            <?php } else {
+
+                echo '<div class="container">';
+                    echo '<div class="alert alert-info">Δεν υπάρχουν μέλη προς εμφάνιση.</div>';
+                    echo '<a href="customers.php?do=Add" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> Νέο Μέλος
+                        </a>';
+                echo '</div>';
+
+            } ?>
+
+        <?php 
+
+        } elseif ($do == 'Add') { // Σελίδα Προσθήκης ?>
+
+            <h1 class="text-center">Προσθήκη Νέου Μέλους</h1>
+            <div class="container">
+                <form class="form-horizontal" action="?do=Insert" method="POST" enctype="multipart/form-data">
+                    <!-- Έναρξη Πεδίου Ονόματος Χρήστη -->
+                    <div class="form-group form-group-lg">
+                        <label class="col-sm-2 control-label">Όνομα Χρήστη</label>
+                        <div class="col-sm-10 col-md-6">
+                            <input type="text" name="username" class="form-control" autocomplete="off" required="required" placeholder="Όνομα Χρήστη για Σύνδεση στο Κατάστημα" />
+                        </div>
+                    </div>
+                    <!-- Τέλος Πεδίου Ονόματος Χρήστη -->
+                    <!-- Έναρξη Πεδίου Κωδικού -->
+                    <div class="form-group form-group-lg">
+                        <label class="col-sm-2 control-label">Κωδικός</label>
+                        <div class="col-sm-10 col-md-6">
+                            <input type="password" name="password" class="password form-control" required="required" autocomplete="new-password" placeholder="Ο Κωδικός πρέπει να είναι Δύσκολος & Σύνθετος" />
+                            <i class="show-pass fa fa-eye fa-2x"></i>
+                        </div>
+                    </div>
+                    <!-- Τέλος Πεδίου Κωδικού -->
+                    <!-- Έναρξη Πεδίου Email -->
+                    <div class="form-group form-group-lg">
+                        <label class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10 col-md-6">
+                            <input type="email" name="email" class="form-control" required="required" placeholder="Το Email πρέπει να είναι Έγκυρο" />
+                        </div>
+                    </div>
+                    <!-- Τέλος Πεδίου Email -->
+                    <!-- Έναρξη Πεδίου Πλήρους Ονόματος -->
+                    <div class="form-group form-group-lg">
+                        <label class="col-sm-2 control-label">Πλήρες Όνομα</label>
+                        <div class="col-sm-10 col-md-6">
+                            <input type="text" name="fullname" class="form-control" required="required" placeholder="Πλήρες Όνομα που θα εμφανίζεται στη Σελίδα Προφίλ" />
+                        </div>
+                    </div>
+                    <!-- Τέλος Πεδίου Πλήρους Ονόματος -->
+                    <!-- Έναρξη Πεδίου Avatar -->
+                    <!-- <div class="form-group form-group-lg">
+                        <label class="col-sm-2 control-label">Avatar Χρήστη</label>
+                        <div class="col-sm-10 col-md-6">
+                            <input type="file" name="avatar" class="form-control" required="required" />
+                        </div>
+                    </div> -->
+                    <!-- Τέλος Πεδίου Avatar -->
+                    <!-- Έναρξη Πεδίου Υποβολής -->
+                    <div class="form-group form-group-lg">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit" value="Προσθήκη Μέλους" class="btn btn-primary btn-lg" />
+                        </div>
+                    </div>
+                    <!-- Τέλος Πεδίου Υποβολής -->
+                </form>
+            </div>
+
+        <?php 
+
+        } elseif ($do == 'Insert') {
+
+            // Σελίδα Εισαγωγής Μέλους
 
-	/*
-	================================================
-	== Manage Members Page
-	== You Can Add | Edit | Delete Members From Here
-	================================================
-	*/
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-	ob_start(); // Output Buffering Start
+                echo "<h1 class='text-center'>Εισαγωγή Μέλους</h1>";
+                echo "<div class='container'>";
 
-	session_start();
+                              
+                // Λήψη Μεταβλητών Από τη Φόρμα
 
-	$pageTitle = 'Members';
+                $username   = $_POST['username'];
+                $password   = $_POST['password'];
+                $email  = $_POST['email'];
+                $fullname   = $_POST['fullname'];
 
-	if (isset($_SESSION['admin'])) {
+                $hashPass = password_hash($password, PASSWORD_BCRYPT);
 
-		include 'init.php';
+                // Επαλήθευση της Φόρμας
 
-		$do = isset($_GET['do']) ? $_GET['do'] : 'Manage';
+                $formErrors = array();
 
-		// Start Manage Page
-
-		if ($do == 'Manage') { // Manage Members Page
-
-			$query = '';
-
-			if (isset($_GET['page']) && $_GET['page'] == 'Pending') {
-
-				$query = 'AND RegStatus = 0';
-
-			}
-
-			// Select All Users Except Admin 
-
-			// $stmt = $con->prepare("SELECT * FROM users WHERE group_id != 1 $query ORDER BY user_id DESC");
-
-			// // Execute The Statement
-
-			// $stmt->execute();
-
-			// // Assign To Variable 
-
-			// $rows = $stmt->fetchAll();
-
-			$users = getAll("SELECT * FROM users WHERE group_id != 1 $query ORDER BY user_id DESC", []);
-
-			if (! empty($users)) {
-
-			?>
-
-			<h1 class="text-center">Manage Customers</h1>
-			<div class="container">
-				<div class="table-responsive">
-					<table class="main-table manage-members text-center table table-bordered">
-						<tr>
-							<td>Avatar</td>
-							<td>Username</td>
-							<td>Email</td>
-							<td>Full Name</td>
-							<td>Registered Date</td>
-							<td>Control</td>
-						</tr>
-						<?php
-							foreach($users as $user) {
-								echo "<tr>";
-									echo "<td>";
-									if (empty($user['avatar_url'])) {
-										echo "<img src='". $upload_main ."/default.png' alt='' />";
-									} else {
-										echo "<img src='". formatImage($user['image_url']) . "' alt='' />";
-									}
-									echo "</td>";
-
-									echo "<td>" . $user['username'] . "</td>";
-									echo "<td>" . $user['email'] . "</td>";
-									echo "<td>" . $user['full_name'] . "</td>";
-									echo "<td>" . $user['registration_date'] ."</td>";
-									echo "<td>
-										<a href='members.php?do=Edit&userid=" . $user['user_id'] . "' class='btn btn-success'><i class='fa fa-edit'></i> Edit</a>
-										<a href='members.php?do=Delete&userid=" . $user['user_id'] . "' class='btn btn-danger confirm'><i class='fa fa-close'></i> Delete </a>";
-										
-									echo "</td>";
-								echo "</tr>";
-							}
-						?>
-						<tr>
-					</table>
-				</div>
-				<a href="members.php?do=Add" class="btn btn-primary">
-					<i class="fa fa-plus"></i> New Member
-				</a>
-			</div>
-
-			<?php } else {
-
-				echo '<div class="container">';
-					echo '<div class="nice-message">There\'s No Members To Show</div>';
-					echo '<a href="members.php?do=Add" class="btn btn-primary">
-							<i class="fa fa-plus"></i> New Member
-						</a>';
-				echo '</div>';
-
-			} ?>
-
-		<?php 
-
-		} elseif ($do == 'Add') { // Add Page ?>
-
-			<h1 class="text-center">Add New Member</h1>
-			<div class="container">
-				<form class="form-horizontal" action="?do=Insert" method="POST" enctype="multipart/form-data">
-					<!-- Start Username Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Username</label>
-						<div class="col-sm-10 col-md-6">
-							<input type="text" name="username" class="form-control" autocomplete="off" required="required" placeholder="Username To Login Into Shop" />
-						</div>
-					</div>
-					<!-- End Username Field -->
-					<!-- Start Password Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Password</label>
-						<div class="col-sm-10 col-md-6">
-							<input type="password" name="password" class="password form-control" required="required" autocomplete="new-password" placeholder="Password Must Be Hard & Complex" />
-							<i class="show-pass fa fa-eye fa-2x"></i>
-						</div>
-					</div>
-					<!-- End Password Field -->
-					<!-- Start Email Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Email</label>
-						<div class="col-sm-10 col-md-6">
-							<input type="email" name="email" class="form-control" required="required" placeholder="Email Must Be Valid" />
-						</div>
-					</div>
-					<!-- End Email Field -->
-					<!-- Start Full Name Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">Full Name</label>
-						<div class="col-sm-10 col-md-6">
-							<input type="text" name="full" class="form-control" required="required" placeholder="Full Name Appear In Your Profile Page" />
-						</div>
-					</div>
-					<!-- End Full Name Field -->
-					<!-- Start Avatar Field -->
-					<div class="form-group form-group-lg">
-						<label class="col-sm-2 control-label">User Avatar</label>
-						<div class="col-sm-10 col-md-6">
-							<input type="file" name="avatar" class="form-control" required="required" />
-						</div>
-					</div>
-					<!-- End Avatar Field -->
-					<!-- Start Submit Field -->
-					<div class="form-group form-group-lg">
-						<div class="col-sm-offset-2 col-sm-10">
-							<input type="submit" value="Add Member" class="btn btn-primary btn-lg" />
-						</div>
-					</div>
-					<!-- End Submit Field -->
-				</form>
-			</div>
-
-		<?php 
-
-		} elseif ($do == 'Insert') {
-
-			// Insert Member Page
+                if (strlen($username) < 4) {
+                    $formErrors[] = 'Το Όνομα Χρήστη δεν μπορεί να είναι λιγότερο από <strong>4 χαρακτήρες</strong>.';
+                }
 
-			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-				echo "<h1 class='text-center'>Insert Member</h1>";
-				echo "<div class='container'>";
-
-				// Upload Variables
-
-				$avatarName = $_FILES['avatar']['name'];
-				$avatarSize = $_FILES['avatar']['size'];
-				$avatarTmp	= $_FILES['avatar']['tmp_name'];
-				$avatarType = $_FILES['avatar']['type'];
+                if (strlen($username) > 20) {
+                    $formErrors[] = 'Το Όνομα Χρήστη δεν μπορεί να είναι περισσότερο από <strong>20 χαρακτήρες</strong>.';
+                }
 
-				// List Of Allowed File Typed To Upload
+                if (empty($username)) {
+                    $formErrors[] = 'Το Όνομα Χρήστη δεν μπορεί να είναι <strong>Άδειο</strong>.';
+                }
 
-				$avatarAllowedExtension = array("jpeg", "jpg", "png", "gif");
+                if (empty($password)) {
+                    $formErrors[] = 'Ο Κωδικός δεν μπορεί να είναι <strong>Άδειος</strong>.';
+                }
 
-				// Get Avatar Extension
-				
-				$ref = explode('.', $avatarName);
-				$avatarExtension = strtolower(end($ref));
+                if (empty($fullname)) {
+                    $formErrors[] = 'Το Πλήρες Όνομα δεν μπορεί να είναι <strong>Άδειο</strong>.';
+                }
 
-				// Get Variables From The Form
+                if (empty($email)) {
+                    $formErrors[] = 'Το Email δεν μπορεί να είναι <strong>Άδειο</strong>.';
+                }
 
-				$user 	= $_POST['username'];
-				$pass 	= $_POST['password'];
-				$email 	= $_POST['email'];
-				$name 	= $_POST['full'];
+              
 
-				$hashPass = sha1($_POST['password']);
+                // Επανάληψη στον Πίνακα Σφαλμάτων και Εμφάνιση τους
 
-				// Validate The Form
+                foreach($formErrors as $error) {
+                    echo '<div class="alert alert-danger">' . $error . '</div>';
+                }
 
-				$formErrors = array();
+                // Έλεγχος Αν Δεν Υπάρχουν Σφάλματα, Προχωρήστε στην Εισαγωγή
 
-				if (strlen($user) < 4) {
-					$formErrors[] = 'Username Cant Be Less Than <strong>4 Characters</strong>';
-				}
+                if (empty($formErrors)) {
 
-				if (strlen($user) > 20) {
-					$formErrors[] = 'Username Cant Be More Than <strong>20 Characters</strong>';
-				}
+                    // Έλεγχος Αν Υπάρχει Ο Χρήστης στη Βάση Δεδομένων
 
-				if (empty($user)) {
-					$formErrors[] = 'Username Cant Be <strong>Empty</strong>';
-				}
+                    $check = checkItem("Username", "users", $username);
 
-				if (empty($pass)) {
-					$formErrors[] = 'Password Cant Be <strong>Empty</strong>';
-				}
+                    if ($check == 1) {
 
-				if (empty($name)) {
-					$formErrors[] = 'Full Name Cant Be <strong>Empty</strong>';
-				}
+                        $theMsg = '<div class="alert alert-danger">Συγγνώμη, αυτό το χρήστης υπάρχει ήδη.</div>';
 
-				if (empty($email)) {
-					$formErrors[] = 'Email Cant Be <strong>Empty</strong>';
-				}
+                        redirectHome($theMsg, 'back');
 
-				if (! empty($avatarName) && ! in_array($avatarExtension, $avatarAllowedExtension)) {
-					$formErrors[] = 'This Extension Is Not <strong>Allowed</strong>';
-				}
+                    } else {
 
-				if (empty($avatarName)) {
-					$formErrors[] = 'Avatar Is <strong>Required</strong>';
-				}
+                        // Εισαγωγή Πληροφοριών Χρήστη στη Βάση Δεδομένων
 
-				if ($avatarSize > 4194304) {
-					$formErrors[] = 'Avatar Cant Be Larger Than <strong>4MB</strong>';
-				}
+                        $stmt = $con->prepare("INSERT INTO 
+                                                    users(username, password, email, full_name, group_id, registration_date)
+                                                VALUES(:username, :password, :email, :fullname, 0, now())");
+                        $stmt->execute(array(
 
-				// Loop Into Errors Array And Echo It
+                            'username'     => $username,
+                            'password'     => $hashPass,
+                            'email'     => $email,
+                            'fullname'     => $fullname,
+                        ));
+
+                        // Εμφάνιση Μηνύματος Επιτυχίας
+
+                        $theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Η εγγραφή πραγματοποιήθηκε με επιτυχία.</div>';
+                    
+                        $seconds = 3;
+
+                        echo $theMsg;
+
+                        echo "<div class='alert alert-info'>Θα ανακατευθυνθείτε μετά από $seconds δευτερόλεπτα.</div>";
+
+                        header("refresh:$seconds;url='customers.php'");
 
-				foreach($formErrors as $error) {
-					echo '<div class="alert alert-danger">' . $error . '</div>';
-				}
+                    }
 
-				// Check If There's No Error Proceed The Update Operation
+                }
 
-				if (empty($formErrors)) {
 
-					$avatar = rand(0, 10000000000) . '_' . $avatarName;
+            } else {
 
-					move_uploaded_file($avatarTmp, $upload_main. '/avatars/' . $avatar);
+                echo "<div class='container'>";
 
-					// Check If User Exist in Database
+                $theMsg = '<div class="alert alert-danger">Συγγνώμη, δεν μπορείτε να περιηγηθείτε απευθείας σε αυτή τη σελίδα.</div>';
 
-					$check = checkItem("Username", "users", $user);
+                redirectHome($theMsg);
 
-					if ($check == 1) {
+                echo "</div>";
 
-						$theMsg = '<div class="alert alert-danger">Sorry This User Is Exist</div>';
+            }
 
-						redirectHome($theMsg, 'back');
+            echo "</div>";
 
-					} else {
+        } elseif ($do == 'Edit') {
 
-						// Insert Userinfo In Database
+            // Έλεγχος Αν Η Παράμετρος userid Είναι Αριθμητική & Λήψη Της Ακέραιας Τιμής Της
 
-						$stmt = $con->prepare("INSERT INTO 
-													users(username, password, email, full_name, registration_status, registration_date, avatar_url)
-												VALUES(:zuser, :zpass, :zmail, :zname, 1, now(), :zavatar) ");
-						$stmt->execute(array(
+            $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
 
-							'zuser' 	=> $user,
-							'zpass' 	=> $hashPass,
-							'zmail' 	=> $email,
-							'zname' 	=> $name,
-							'zavatar'	=> $avatar
+            // Επιλογή Όλων των Δεδομένων Βάσει Του ID
 
-						));
+            $stmt = $con->prepare("SELECT * FROM users WHERE user_id = ? LIMIT 1");
 
-						// Echo Success Message
+            // Εκτέλεση Ερωτήματος
 
-						$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Inserted</div>';
-					
-						$seconds = 3;
+            $stmt->execute(array($userid));
 
-						echo $theMsg;
+            // Ανάκτηση των Δεδομένων
 
-						echo "<div class='alert alert-info'>You Will Be Redirected After $seconds Seconds.</div>";
-			
-						header("refresh:$seconds;url='members.php'");
+            $row = $stmt->fetch();
 
-					}
+            // Αριθμός Γραμμών
 
-				}
+            $count = $stmt->rowCount();
 
+            // Αν Υπάρχει Τέτοιο ID, Εμφάνιση της Φόρμας
 
-			} else {
+            if ($count > 0) { ?>
 
-				echo "<div class='container'>";
+                <h1 class="text-center">Επεξεργασία Μέλους</h1>
+                <div class="container">
+                    <form class="form-horizontal" action="?do=Update" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="userid" value="<?php echo htmlspecialchars($userid) ?>" />
+                        <!-- Έναρξη Πεδίου Ονόματος Χρήστη -->
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-2 control-label">Όνομα Χρήστη</label>
+                            <div class="col-sm-10 col-md-6">
+                                <input type="text" name="username" class="form-control" value="<?php echo htmlspecialchars($row['username']) ?>" autocomplete="off" required="required" />
+                            </div>
+                        </div>
+                        <!-- Τέλος Πεδίου Ονόματος Χρήστη -->
+                        <!-- Έναρξη Πεδίου Κωδικού -->
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-2 control-label">Κωδικός</label>
+                            <div class="col-sm-10 col-md-6">
+                                <input type="hidden" name="oldpassword" value="<?php echo htmlspecialchars($row['password']) ?>" />
+                                <input type="password" name="newpassword" class="form-control" autocomplete="new-password" placeholder="Αφήστε κενό αν δεν θέλετε να αλλάξετε" />
+                            </div>
+                        </div>
+                        <!-- Τέλος Πεδίου Κωδικού -->
+                        <!-- Έναρξη Πεδίου Email -->
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10 col-md-6">
+                                <input type="email" name="email" value="<?php echo htmlspecialchars($row['email']) ?>" class="form-control" required="required" />
+                            </div>
+                        </div>
+                        <!-- Τέλος Πεδίου Email -->
+                        <!-- Έναρξη Πεδίου Πλήρους Ονόματος -->
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-2 control-label">Πλήρες Όνομα</label>
+                            <div class="col-sm-10 col-md-6">
+                                <input type="text" name="fullname" value="<?php echo htmlspecialchars($row['full_name']) ?>" class="form-control" required="required" />
+                            </div>
+                        </div>
+                        <!-- Τέλος Πεδίου Πλήρους Ονόματος -->
+                        <!-- Έναρξη Πεδίου Υποβολής -->
+                        <div class="form-group form-group-lg">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input type="submit" value="Αποθήκευση" class="btn btn-primary btn-lg" />
+                            </div>
+                        </div>
+                        <!-- Τέλος Πεδίου Υποβολής -->
+                    </form>
+                </div>
 
-				$theMsg = '<div class="alert alert-danger">Sorry You Cant Browse This Page Directly</div>';
+            <?php
 
-				redirectHome($theMsg);
+            // Αν Δεν Υπάρχει Τέτοιο ID, Εμφάνιση Μηνύματος Σφάλματος
 
-				echo "</div>";
+            } else {
 
-			}
+                echo "<div class='container'>";
 
-			echo "</div>";
+                $theMsg = '<div class="alert alert-danger">Δεν υπάρχει τέτοιο ID.</div>';
 
-		} elseif ($do == 'Edit') {
+                redirectHome($theMsg);
 
-			// Check If Get Request userid Is Numeric & Get Its Integer Value
+                echo "</div>";
 
-			$userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+            }
 
-			// Select All Data Depend On This ID
+        } elseif ($do == 'Update') { // Σελίδα Ενημέρωσης
 
-			$stmt = $con->prepare("SELECT * FROM users WHERE user_id = ? LIMIT 1");
+            echo "<h1 class='text-center'>Ενημέρωση Μέλους</h1>";
+            echo "<div class='container'>";
 
-			// Execute Query
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-			$stmt->execute(array($userid));
+                // Λήψη Μεταβλητών Από τη Φόρμα
 
-			// Fetch The Data
+                $id      = $_POST['userid'];
+                $username    = $_POST['username'];
+                $email   = $_POST['email'];
+                $fullname    = $_POST['fullname'];
 
-			$row = $stmt->fetch();
+                // Τεχνική για τον Κωδικό
 
-			// The Row Count
+                $pass = empty($_POST['newpassword']) ? $_POST['oldpassword'] : password_hash($_POST['newpassword'], PASSWORD_BCRYPT, ['cost' => 12]);
 
-			$count = $stmt->rowCount();
+                // Επαλήθευση της Φόρμας
 
-			// If There's Such ID Show The Form
+                $formErrors = array();
 
-			if ($count > 0) { ?>
+                if (strlen($username) < 4) {
+                    $formErrors[] = 'Το Όνομα Χρήστη δεν μπορεί να είναι λιγότερο από <strong>4 χαρακτήρες</strong>.';
+                }
 
-				<h1 class="text-center">Edit Member</h1>
-				<div class="container">
-					<form class="form-horizontal" action="?do=Update" method="POST" enctype="multipart/form-data">
-						<input type="hidden" name="userid" value="<?php echo $userid ?>" />
-						<!-- Start Username Field -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Username</label>
-							<div class="col-sm-10 col-md-6">
-								<input type="text" name="username" class="form-control" value="<?php echo $row['username'] ?>" autocomplete="off" required="required" />
-							</div>
-						</div>
-						<!-- End Username Field -->
-						<!-- Start Password Field -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Password</label>
-							<div class="col-sm-10 col-md-6">
-								<input type="hidden" name="oldpassword" value="<?php echo $row['password'] ?>" />
-								<input type="password" name="newpassword" class="form-control" autocomplete="new-password" placeholder="Leave Blank If You Dont Want To Change" />
-							</div>
-						</div>
-						<!-- End Password Field -->
-						<!-- Start Email Field -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Email</label>
-							<div class="col-sm-10 col-md-6">
-								<input type="email" name="email" value="<?php echo $row['email'] ?>" class="form-control" required="required" />
-							</div>
-						</div>
-						<!-- End Email Field -->
-						<!-- Start Full Name Field -->
-						<div class="form-group form-group-lg">
-							<label class="col-sm-2 control-label">Full Name</label>
-							<div class="col-sm-10 col-md-6">
-								<input type="text" name="full" value="<?php echo $row['full_name'] ?>" class="form-control" required="required" />
-							</div>
-						</div>
-						<!-- End Full Name Field -->
-						<!-- Start Submit Field -->
-						<div class="form-group form-group-lg">
-							<div class="col-sm-offset-2 col-sm-10">
-								<input type="submit" value="Save" class="btn btn-primary btn-lg" />
-							</div>
-						</div>
-						<!-- End Submit Field -->
-					</form>
-				</div>
+                if (strlen($username) > 20) {
+                    $formErrors[] = 'Το Όνομα Χρήστη δεν μπορεί να είναι περισσότερο από <strong>20 χαρακτήρες</strong>.';
+                }
 
-			<?php
+                if (empty($username)) {
+                    $formErrors[] = 'Το Όνομα Χρήστη δεν μπορεί να είναι <strong>Άδειο</strong>.';
+                }
 
-			// If There's No Such ID Show Error Message
+                if (empty($fullname)) {
+                    $formErrors[] = 'Το Πλήρες Όνομα δεν μπορεί να είναι <strong>Άδειο</strong>.';
+                }
 
-			} else {
+                if (empty($email)) {
+                    $formErrors[] = 'Το Email δεν μπορεί να είναι <strong>Άδειο</strong>.';
+                }
 
-				echo "<div class='container'>";
+                // Επανάληψη στον Πίνακα Σφαλμάτων και Εμφάνιση τους
 
-				$theMsg = '<div class="alert alert-danger">Theres No Such ID</div>';
+                foreach($formErrors as $error) {
+                    echo '<div class="alert alert-danger">' . $error . '</div>';
+                }
 
-				redirectHome($theMsg);
+                // Έλεγχος Αν Δεν Υπάρχουν Σφάλματα, Προχωρήστε στην Ενημέρωση
 
-				echo "</div>";
+                if (empty($formErrors)) {
 
-			}
+                    $stmt2 = $con->prepare("SELECT 
+                                                *
+                                            FROM 
+                                                users
+                                            WHERE
+                                                username = ?
+                                            AND 
+                                                user_id != ?");
 
-		} elseif ($do == 'Update') { // Update Page
+                    $stmt2->execute(array($user, $id));
 
-			echo "<h1 class='text-center'>Update Member</h1>";
-			echo "<div class='container'>";
+                    $count = $stmt2->rowCount();
 
-			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    // if ($count == 1) {
 
-				// Get Variables From The Form
+                    //     $theMsg = '<div class="alert alert-danger">Συγγνώμη, αυτό το χρήστης υπάρχει ήδη.</div>';
 
-				$id 	= $_POST['userid'];
-				$user 	= $_POST['username'];
-				$email 	= $_POST['email'];
-				$name 	= $_POST['full'];
+                    //     redirectHome($theMsg, 'back');
 
-				// Password Trick
+                    // } else
+					//  { 
 
-				$pass = empty($_POST['newpassword']) ? $_POST['oldpassword'] : sha1($_POST['newpassword']);
+                        // Ενημέρωση της Βάσης Δεδομένων με αυτές τις πληροφορίες
 
-				// Validate The Form
+                        $stmt = $con->prepare("UPDATE users SET username = ?, email = ?, full_name = ?, password = ? WHERE user_id = ?");
 
-				$formErrors = array();
+                        $stmt->execute(array($username, $email, $fullname, $pass, $id));
 
-				if (strlen($user) < 4) {
-					$formErrors[] = 'Username Cant Be Less Than <strong>4 Characters</strong>';
-				}
+                        // Εμφάνιση Μηνύματος Επιτυχίας
 
-				if (strlen($user) > 20) {
-					$formErrors[] = 'Username Cant Be More Than <strong>20 Characters</strong>';
-				}
+                        $theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Η εγγραφή ενημερώθηκε με επιτυχία.</div>';
 
-				if (empty($user)) {
-					$formErrors[] = 'Username Cant Be <strong>Empty</strong>';
-				}
+                        $seconds = 3;
 
-				if (empty($name)) {
-					$formErrors[] = 'Full Name Cant Be <strong>Empty</strong>';
-				}
+                        echo $theMsg;
 
-				if (empty($email)) {
-					$formErrors[] = 'Email Cant Be <strong>Empty</strong>';
-				}
+                        echo "<div class='alert alert-info'>Θα ανακατευθυνθείτε μετά από $seconds δευτερόλεπτα.</div>";
+            
+                        header("refresh:$seconds;url='customers.php'");
+                    }
 
-				// Loop Into Errors Array And Echo It
+                // }
 
-				foreach($formErrors as $error) {
-					echo '<div class="alert alert-danger">' . $error . '</div>';
-				}
+            } else {
 
-				// Check If There's No Error Proceed The Update Operation
+                $theMsg = '<div class="alert alert-danger">Συγγνώμη, δεν μπορείτε να περιηγηθείτε απευθείας σε αυτή τη σελίδα.</div>';
 
-				if (empty($formErrors)) {
+                redirectHome($theMsg);
 
-					$stmt2 = $con->prepare("SELECT 
-												*
-											FROM 
-												users
-											WHERE
-												username = ?
-											AND 
-												user_id != ?");
+            }
 
-					$stmt2->execute(array($user, $id));
+            echo "</div>";
 
-					$count = $stmt2->rowCount();
+        } elseif ($do == 'Delete') { // Σελίδα Διαγραφής Μέλους
 
-					if ($count == 1) {
+            echo "<h1 class='text-center'>Διαγραφή Μέλους</h1>";
+            echo "<div class='container'>";
 
-						$theMsg = '<div class="alert alert-danger">Sorry This User Is Exist</div>';
+                // Έλεγχος Αν Η Παράμετρος userid Είναι Αριθμητική & Λήψη Της Ακέραιας Τιμής Της
 
-						redirectHome($theMsg, 'back');
+                $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
 
-					} else { 
+                // Έλεγχος Αν Υπάρχει Τέτοιο ID
 
-						// Update The Database With This Info
+                $check = checkItem('user_id', 'users', $userid);
 
-						$stmt = $con->prepare("UPDATE users SET username = ?, email = ?, full_name = ?, password = ? WHERE user_id = ?");
+                // Αν Υπάρχει Τέτοιο ID, Διαγραφή του Μέλους
 
-						$stmt->execute(array($user, $email, $name, $pass, $id));
+                if ($check > 0) {
 
-						// Echo Success Message
+                    $stmt = $con->prepare("DELETE FROM users WHERE user_id = :username");
 
-						$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Updated</div>';
+                    $stmt->bindParam(":username", $userid);
 
-						$seconds = 3;
+                    $stmt->execute();
 
-						echo $theMsg;
+                    $theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Η εγγραφή διαγράφηκε με επιτυχία.</div>';
 
-						echo "<div class='alert alert-info'>You Will Be Redirected After $seconds Seconds.</div>";
-			
-						header("refresh:$seconds;url='members.php'");
-					}
+                    redirectHome($theMsg, 'back');
 
-				}
+                } else {
 
-			} else {
+                    $theMsg = '<div class="alert alert-danger">Αυτό το ID δεν υπάρχει.</div>';
 
-				$theMsg = '<div class="alert alert-danger">Sorry You Cant Browse This Page Directly</div>';
+                    redirectHome($theMsg);
 
-				redirectHome($theMsg);
+                }
 
-			}
+            echo '</div>';
 
-			echo "</div>";
+        } elseif ($do == 'Activate') { // Σελίδα Ενεργοποίησης Μέλους
 
-		} elseif ($do == 'Delete') { // Delete Member Page
+            echo "<h1 class='text-center'>Ενεργοποίηση Μέλους</h1>";
+            echo "<div class='container'>";
 
-			echo "<h1 class='text-center'>Delete Member</h1>";
-			echo "<div class='container'>";
+                // Έλεγχος Αν Η Παράμετρος userid Είναι Αριθμητική & Λήψη Της Ακέραιας Τιμής Της
 
-				// Check If Get Request userid Is Numeric & Get The Integer Value Of It
+                $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
 
-				$userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+                // Έλεγχος Αν Υπάρχει Τέτοιο ID
 
-				// Select All Data Depend On This ID
+                $check = checkItem('user_id', 'users', $userid);
 
-				$check = checkItem('user_id', 'users', $userid);
+                // Αν Υπάρχει Τέτοιο ID, Ενημέρωση της Κατάστασης
 
-				// If There's Such ID Show The Form
+                if ($check > 0) {
 
-				if ($check > 0) {
+                    $stmt = $con->prepare("UPDATE users SET RegStatus = 1 WHERE user_id = ?");
 
-					$stmt = $con->prepare("DELETE FROM users WHERE user_id = :zuser");
+                    $stmt->execute(array($userid));
 
-					$stmt->bindParam(":zuser", $userid);
+                    $theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Η εγγραφή ενεργοποιήθηκε με επιτυχία.</div>';
 
-					$stmt->execute();
+                    redirectHome($theMsg);
 
-					$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Deleted</div>';
+                } else {
 
-					redirectHome($theMsg, 'back');
+                    $theMsg = '<div class="alert alert-danger">Αυτό το ID δεν υπάρχει.</div>';
 
-				} else {
+                    redirectHome($theMsg);
 
-					$theMsg = '<div class="alert alert-danger">This ID is Not Exist</div>';
+                }
 
-					redirectHome($theMsg);
+            echo '</div>';
 
-				}
+        }
 
-			echo '</div>';
+        include $tpl . 'footer.php';
 
-		} elseif ($do == 'Activate') {
+    } else {
 
-			echo "<h1 class='text-center'>Activate Member</h1>";
-			echo "<div class='container'>";
+        header('Location: index.php');
 
-				// Check If Get Request userid Is Numeric & Get The Integer Value Of It
+        exit();
 
-				$userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+    }
 
-				// Select All Data Depend On This ID
-
-				$check = checkItem('userid', 'users', $userid);
-
-				// If There's Such ID Show The Form
-
-				if ($check > 0) {
-
-					$stmt = $con->prepare("UPDATE users SET RegStatus = 1 WHERE user_id = ?");
-
-					$stmt->execute(array($userid));
-
-					$theMsg = "<div class='alert alert-success'>" . $stmt->rowCount() . ' Record Updated</div>';
-
-					redirectHome($theMsg);
-
-				} else {
-
-					$theMsg = '<div class="alert alert-danger">This ID is Not Exist</div>';
-
-					redirectHome($theMsg);
-
-				}
-
-			echo '</div>';
-
-		}
-
-		include $tpl . 'footer.php';
-
-	} else {
-
-		header('Location: index.php');
-
-		exit();
-	}
-
-	ob_end_flush(); // Release The Output
+    ob_end_flush(); // Απελευθέρωση της Εξόδου
 
 ?>
