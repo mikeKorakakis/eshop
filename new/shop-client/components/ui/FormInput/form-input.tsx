@@ -47,7 +47,7 @@ const FormInput = forwardRef<HTMLInputElement, Props & InputHTMLAttributes<HTMLI
                 type={rest?.type === 'password' ? (show ? 'text' : 'password') : rest?.type}
                 disabled={disabled}
                 className={clsx(
-                  'block w-full rounded-md border border-zinc-200 bg-white p-2 font-normal shadow-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm',
+                  'block w-full rounded-md border border-zinc-200 bg-white p-2 font-normal shadow-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm text-black',
                   error && 'ring-2 ring-red-500',
                   disabled &&
                     'disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500',
@@ -84,7 +84,7 @@ const FormInput = forwardRef<HTMLInputElement, Props & InputHTMLAttributes<HTMLI
                   rest?.onChange?.(e); // Call the provided onChange prop if available
                 }}
                 className={clsx(
-                  'block w-full rounded-md border border-zinc-200 bg-white p-2 font-normal shadow-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm',
+                  'block w-full rounded-md border border-zinc-200 bg-white p-2 font-normal shadow-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm ',
                   error && 'ring-2 ring-red-500',
                   disabled &&
                     'disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500',
@@ -106,7 +106,7 @@ const FormInput = forwardRef<HTMLInputElement, Props & InputHTMLAttributes<HTMLI
               ref={ref}
               disabled={disabled}
               className={clsx(
-                'block w-full rounded-md border border-zinc-200 bg-white p-2 font-normal shadow-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm',
+                'block w-full rounded-md border border-zinc-200 bg-white p-2 font-normal shadow-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 sm:text-sm text-black',
                 error && 'ring-2 ring-red-500',
                 disabled &&
                   'disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500',
