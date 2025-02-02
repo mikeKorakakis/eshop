@@ -146,3 +146,14 @@ window.onclick = function (event) {
 		}
 	}
 };
+
+// change price when shipping method is changed
+$(".shipping-option").change(function () {
+	let shippingCost = parseFloat($(this).data("cost"));
+	let productTotal =
+		parseFloat($("#product-total").text().replace(",", ".")) * 1000;
+	let finalTotal = productTotal + shippingCost;
+
+	$("#shipping-total").text(shippingCost.toFixed(2));
+	$("#final-total").text(finalTotal.toFixed(2));
+});

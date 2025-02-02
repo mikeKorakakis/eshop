@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $product_name = $_POST['product_name'];
     $product_price = floatval($_POST['product_price']);
     $product_picture = $_POST['product_picture'];
+	
 
     // Έλεγχος αν το προϊόν υπάρχει ήδη στο καλάθι
     $found = false;

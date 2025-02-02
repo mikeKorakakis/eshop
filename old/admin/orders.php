@@ -18,7 +18,9 @@ if (isset($_SESSION['admin'])) {
     // Λήψη Παραγγελιών με Λεπτομέρειες Χρήστη
     $stmt = $con->prepare("
         SELECT 
-            orders.*, 
+            orders.*,
+			shipping.address as address, shipping.city as city, shipping.postal_code as postal_code,
+			shipping_methods.method_name AS shipping_method,
             users.username AS Customer 
         FROM 
             orders 
@@ -26,6 +28,14 @@ if (isset($_SESSION['admin'])) {
             users 
         ON 
             users.user_id = orders.user_id
+		LEFT JOIN
+			shipping
+		ON
+			orders.shipping_id = shipping.shipping_id
+		LEFT JOIN
+			shipping_methods
+		ON
+			shipping.shipping_method_id = shipping_methods.shipping_method_id
         ORDER BY 
             order_id DESC
     ");
@@ -38,7 +48,7 @@ if (isset($_SESSION['admin'])) {
 
         <h1 class="text-center">Διαχείριση Παραγγελιών</h1>
         <div class="container">
-            <div class="table-responsive">
+            <div class="table-responsive" style="overflow-x: auto; width: 100%;" >
                 <table class="main-table manage-orders text-center table table-bordered">
                     <tr>
                         <td>Κωδικός Παραγγελίας</td>
@@ -46,6 +56,8 @@ if (isset($_SESSION['admin'])) {
                         <td>Ημερομηνία Παραγγελίας</td>
                         <td>Συνολικό Ποσό</td>
                         <td>Κατάσταση</td>
+						<td>Διεύθυνση Αποστολής</td>
+						<td>Τρόπος Αποστολής</td>
                         <td>Προϊόντα</td>
                     </tr>
                     <?php
@@ -56,6 +68,8 @@ if (isset($_SESSION['admin'])) {
                         echo "<td>" . htmlspecialchars($order['order_date']) . "</td>";
                         echo "<td>" . htmlspecialchars(number_format($order['total_amount'], 2)) . " €</td>";
                         echo "<td>" . htmlspecialchars($order['order_status']) . "</td>";
+						echo "<td>" . htmlspecialchars($order['address']) . ", " .   htmlspecialchars($order['city']) . ", " . htmlspecialchars($order['postal_code']) . "</td>";
+						echo "<td>" . htmlspecialchars($order['shipping_method']) . "</td>";
 
                         // Λήψη Προϊόντων για την Τρέχουσα Παραγγελία
                         $productStmt = $con->prepare("
@@ -67,7 +81,7 @@ if (isset($_SESSION['admin'])) {
                                 order_items 
                             INNER JOIN 
                                 products 
-                            ON 
+                            ON
                                 products.product_id = order_items.product_id 
                             WHERE 
                                 order_items.order_id = ?
@@ -76,7 +90,7 @@ if (isset($_SESSION['admin'])) {
                         $productStmt->execute([$order['order_id']]);
                         $products = $productStmt->fetchAll();
 
-                        echo "<td>";
+                        echo "<td style='min-width: 400px;'>";
                         if (!empty($products)) {
                             echo "<ul>";
                             foreach ($products as $product) {

@@ -312,7 +312,11 @@ function printProductCard($product)
 {
 	echo '<div id="box">';
 	echo '<a href="products.php?product_id=' . htmlspecialchars($product['product_id']) . '">';
-	echo '<img src="' . formatImage(htmlspecialchars($product["image_url"])) . '" alt="Προβολή Είδους Ρούχου">';
+	if (!empty($product['image_url'])) {
+		echo '<img src="' . formatImage(htmlspecialchars($product["image_url"])) . '" alt="Προβολή Είδους Ρούχου">';
+	} else {
+		echo '<img src="/uploads/empty_product.png" alt="Προβολή Είδους Ρούχου">';
+	}
 	echo '<div id="details">';
 	echo '<h3>' . htmlspecialchars($product["name"]) . '</h3>';
 	echo '<h4>' . htmlspecialchars($product['description']) . '</h4>';
@@ -331,12 +335,15 @@ function printProductCard($product)
  *
  * @return string Το HTML της ενότητας του προϊόντος στο καλάθι
  */
-function dynamicCartSection($product, $productCounter, $upload)
+function dynamicCartSection($product, $productCounter)
 {
-	// Δημιουργία του HTML για το προϊόν στο καλάθι
-	return '
-   <div id="box">
-        <img style="height: 220px; object-fit: contain;" src="' . htmlspecialchars(formatImage($product['image_url'])) . '" alt="' . htmlspecialchars($product['name']) . '">
+    // Ελέγχουμε αν υπάρχει εικόνα, διαφορετικά χρησιμοποιούμε την προεπιλεγμένη εικόνα
+    $imageUrl = $product['image_url'] == NULL ? formatImage($product['image_url']) : '/uploads/empty_product.png';
+
+    // Δημιουργία του HTML για το προϊόν στο καλάθι
+    return '
+    <div id="box">
+        <img style="height: 220px; object-fit: contain;" src="' . htmlspecialchars($imageUrl) . '" alt="' . htmlspecialchars($product['name']) . '">
         <div>
             <h3>' . htmlspecialchars($product['name']) . ' × ' . htmlspecialchars($productCounter) . '</h3>
             <h4>Ποσό: ' . htmlspecialchars($product['price']) . ' €</h4>
@@ -350,4 +357,4 @@ function dynamicCartSection($product, $productCounter, $upload)
         </div>
     </div>';
 }
-?>
+

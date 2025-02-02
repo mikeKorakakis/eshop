@@ -92,24 +92,23 @@ CREATE TABLE IF NOT EXISTS `credit_cards` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Create the 'shipping_methods' table if it does not already exist
-CREATE TABLE IF NOT EXISTS shipping_methods (
+CREATE TABLE IF NOT EXISTS `shipping_methods` (
     `shipping_method_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Μοναδικό ID για τον τύπο αποστολής',
-    `type_name` VARCHAR(100) NOT NULL COMMENT 'Όνομα τύπου αποστολής (π.χ., Courier, Παραλαβή από κατάστημα)',
+    `method_name` VARCHAR(100) NOT NULL COMMENT 'Όνομα τύπου αποστολής (π.χ., Courier, Παραλαβή από κατάστημα)',
     `cost` DECIMAL(10,2) NOT NULL COMMENT 'Κόστος αποστολής',
     PRIMARY KEY (`shipping_method_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 -- Create the 'shipping' table if it does not already exist
-CREATE TABLE IF NOT EXISTS shipping (
+CREATE TABLE IF NOT EXISTS `shipping` (
     `shipping_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Μοναδικό ID για την αποστολή',
-    `order_id` BIGINT UNSIGNED NOT NULL COMMENT 'ID της παραγγελίας',
     `shipping_method_id` BIGINT UNSIGNED NOT NULL COMMENT 'ID του τύπου αποστολής',
     address VARCHAR(500) NOT NULL COMMENT 'Διεύθυνση αποστολής',
     `city` VARCHAR(255) NOT NULL COMMENT 'Πόλη',
     `postal_code` VARCHAR(20) NOT NULL COMMENT 'Ταχυδρομικός κώδικας',
     PRIMARY KEY (`shipping_id`),
-    FOREIGN KEY (`shipping_method_id`) REFERENCES shipping_methods(`shipping_method_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (`shipping_method_id`) REFERENCES `shipping_methods`(`shipping_method_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -123,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `shipping_id` BIGINT UNSIGNED DEFAULT NULL COMMENT 'ID αποστολής',
   PRIMARY KEY (`order_id`),
   FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (`shipping_id`) REFERENCES shipping(`shipping_id`) ON DELETE SET NULL ON UPDATE CASCADE
+  FOREIGN KEY (`shipping_id`) REFERENCES `shipping`(`shipping_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Table: `order_items`
@@ -211,14 +210,14 @@ INSERT INTO `credit_cards` (`credit_card_id`, `user_id`, `card_number`, `cardhol
 (2, 2, '4242424242424242', 'Γιάννης Γεωργίου', '2024-06-30', '456', 1000.00);
 
 -- Insert data into `shipping_methods`
-INSERT INTO `shipping_methods` (`shipping_method_id`, `type_name`, `cost`) VALUES
+INSERT INTO `shipping_methods` (`shipping_method_id`, `method_name`, `cost`) VALUES
 (1, 'Παραλαβή από το κατάστημα', 0.00),
 (2, 'Ταχυμεταφορική', 10.00);
 
 -- Insert data into `shipping`
-INSERT INTO `shipping` (`shipping_id`, `order_id`, `shipping_method_id`, `address`, `city`, `postal_code`) VALUES
-(1, 1, 2, 'Οδός Παράδειγμα 123', 'Αθήνα', '10552'),
-(2, 2, 1, 'Οδός Πεύκης 456', 'Θεσσαλονίκη', '54632');
+INSERT INTO `shipping` (`shipping_id`, `shipping_method_id`, `address`, `city`, `postal_code`) VALUES
+(1, 1, 'Οδός Παράδειγμα 123', 'Αθήνα', '10552'),
+(2, 2, 'Οδός Πεύκης 456', 'Θεσσαλονίκη', '54632');
 
 -- Insert data into `orders`
 INSERT INTO `orders` (`order_id`, `user_id`, `order_date`, `total_amount`, `order_status`, `shipping_id`) VALUES

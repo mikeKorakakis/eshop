@@ -23,7 +23,7 @@
 
 	<header>
 		<section>
-			<div class="container">
+			<div class="new-shop-container">
 				<div class="admin-collection">
 					<div>
 						<?php

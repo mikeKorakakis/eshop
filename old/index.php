@@ -17,12 +17,12 @@ include 'slider.html';
 			echo '<h1>' . htmlspecialchars($cat['name']) . '</h1>';
 			echo '<div id="categoryContainer">';
 			$allItems = getAll(
-				"SELECT products.product_id, products.name, products.description, price, media.path as image_url FROM products INNER JOIN media ON products.media_id = media.media_id WHERE category_id = :category_id",
+				"SELECT products.product_id, products.name, products.description, price, media.path as image_url FROM products LEFT JOIN media ON products.media_id = media.media_id WHERE category_id = :category_id",
 				[':category_id' => $cat['category_id']]
 			);		
 						
 			foreach ($allItems as $item) {
-				printProductCard($item, $upload);
+				printProductCard($item);
 			}
 			echo '</div>';
 		}

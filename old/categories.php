@@ -27,7 +27,7 @@ include 'init.php';
         $allProducts = getAll(
             "SELECT products.product_id, products.name, products.description, price, media.path as image_url 
              FROM products 
-             INNER JOIN media ON products.media_id = media.media_id 
+             LEFT JOIN media ON products.media_id = media.media_id 
              WHERE category_id = :category_id",
             [':category_id' => $category]
         );

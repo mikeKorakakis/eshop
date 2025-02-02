@@ -25,7 +25,7 @@ $stmt = $con->prepare("SELECT
 								users 
 							ON 
 								users.user_id = products.owner_id 
-							INNER JOIN 
+							LEFT JOIN 
 								media
 							ON
 								media.media_id = products.media_id
@@ -44,7 +44,13 @@ if ($count > 0) {
 ?>
 	<div id="containerD">
 		<div id="imageSection">
-			<img id="imgDetails" src="<?php echo formatImage($product['image_url']) ?>" alt="Κύρια Προβολή Προϊόντος">
+			<?php
+			if (empty($product['image_url'])) {
+				echo '<img id="imgDetails" src="uploads/empty_product.png" alt="Κύρια Προβολή Προϊόντος">';
+			} else {
+				echo '<img id="imgDetails" src="' . htmlspecialchars(formatImage($product['image_url'])) . '" alt="Κύρια Προβολή Προϊόντος">';
+			}
+			?>
 		</div>
 		<div id="productDetails">
 
@@ -70,10 +76,10 @@ if ($count > 0) {
 				<button>Προσθήκη στο Καλάθι</button>
 			</div> -->
 			<form action="" method="POST">
-				<!-- <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['product_id']); ?>">
+				 <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['product_id']); ?>">
 				<input type="hidden" name="product_name" value="<?php echo htmlspecialchars($product['name']); ?>">
 				<input type="hidden" name="product_price" value="<?php echo htmlspecialchars($product['price']); ?>">
-				<input type="hidden" name="product_picture" value="<?php echo htmlspecialchars($product['image_url']); ?>"> -->
+				<input type="hidden" name="product_picture" value="<?php echo htmlspecialchars($product['image_url']); ?>">
 				<button type="submit" name="add_to_cart" class="btn btn-primary">Προσθήκη στο Καλάθι</button>
 				<?php
 				// Εμφάνιση μηνύματος επιβεβαίωσης αν είναι διαθέσιμο
@@ -143,7 +149,7 @@ if ($count > 0) {
 	<?php
 
 	// Επιλογή όλων των σχολίων για αυτό το προϊόν
-	$comments = getAll("SELECT comments.content, media.path as image_url, users.username FROM comments INNER JOIN users ON users.user_id = comments.user_id INNER JOIN media ON media.media_id=users.media_id WHERE product_id = ? ORDER BY comment_id DESC", [$product['product_id']]);
+	$comments = getAll("SELECT comments.content, media.path as image_url, users.username FROM comments INNER JOIN users ON users.user_id = comments.user_id LEFT JOIN media ON media.media_id=users.media_id WHERE product_id = ? ORDER BY comment_id DESC", [$product['product_id']]);
 	?>
 
 	<?php foreach ($comments as $comment) {
