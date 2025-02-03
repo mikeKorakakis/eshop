@@ -566,11 +566,7 @@ a:visited {
     text-align: right;
 }
 
-.container {
-    max-width: 1140px;
-    margin: 0 auto;
-    padding: 15px;
-}
+
 
 .new-shop-container {
     margin: 0 auto;
@@ -603,7 +599,7 @@ h1.text-center {
 
 /* General Layout */
 .container {
-    max-width: 1140px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 15px;
 }

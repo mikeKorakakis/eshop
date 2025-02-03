@@ -49,7 +49,6 @@ if (isset($_SESSION['user'])) {
 					<tr>
 						<td>Ημερομηνία Παραγγελίας</td>
 						<td>Συνολικό Ποσό</td>
-						<td>Κατάσταση</td>
 						<td>Διεύθυνση Αποστολής</td>
 						<td>Τρόπος Αποστολής</td>
 						<td>Προϊόντα</td>
@@ -59,7 +58,6 @@ if (isset($_SESSION['user'])) {
 						echo "<tr>";
 						echo "<td>" . htmlspecialchars($order['order_date']) . "</td>";
 						echo "<td>" . htmlspecialchars($order['total_amount']) . "€</td>";
-						echo "<td>" . htmlspecialchars($order['order_status']) . "</td>";
 						echo "<td>" . htmlspecialchars($order['address']) . ", " .   htmlspecialchars($order['city']) . ", " . htmlspecialchars($order['postal_code']) . "</td>";
 						echo "<td>" . htmlspecialchars($order['shipping_method']) . "</td>";
 

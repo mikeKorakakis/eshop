@@ -85,7 +85,7 @@
                                         foreach ($latestUsers as $user) {
                                             echo '<li>';
                                                 echo htmlspecialchars($user['username']);
-                                                echo '<a href="members.php?do=Edit&userid=' . htmlspecialchars($user['user_id']) . '">';
+                                                echo '<a href="customers.php?do=Edit&userid=' . htmlspecialchars($user['user_id']) . '">';
                                                     echo '<span class="btn btn-success pull-right">';
                                                         echo '<i class="fa fa-edit"></i> Επεξεργασία';
                                                 echo '</span>';
@@ -115,7 +115,7 @@
                                             foreach ($latestProducts as $product) {
                                                 echo '<li>';
                                                     echo htmlspecialchars($product['name']);
-                                                    echo '<a href="products.php?do=Edit&productid=' . htmlspecialchars($product['product_id']) . '">';
+                                                    echo '<a href="products.php?do=Edit&product_id=' . htmlspecialchars($product['product_id']) . '">';
                                                         echo '<span class="btn btn-success pull-right">';
                                                             echo '<i class="fa fa-edit"></i> Επεξεργασία';
                                                         echo '</span>';

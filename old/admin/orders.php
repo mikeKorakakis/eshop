@@ -55,7 +55,6 @@ if (isset($_SESSION['admin'])) {
                         <td>Πελάτης</td>
                         <td>Ημερομηνία Παραγγελίας</td>
                         <td>Συνολικό Ποσό</td>
-                        <td>Κατάσταση</td>
 						<td>Διεύθυνση Αποστολής</td>
 						<td>Τρόπος Αποστολής</td>
                         <td>Προϊόντα</td>
@@ -67,7 +66,6 @@ if (isset($_SESSION['admin'])) {
                         echo "<td>" . htmlspecialchars($order['Customer']) . "</td>";
                         echo "<td>" . htmlspecialchars($order['order_date']) . "</td>";
                         echo "<td>" . htmlspecialchars(number_format($order['total_amount'], 2)) . " €</td>";
-                        echo "<td>" . htmlspecialchars($order['order_status']) . "</td>";
 						echo "<td>" . htmlspecialchars($order['address']) . ", " .   htmlspecialchars($order['city']) . ", " . htmlspecialchars($order['postal_code']) . "</td>";
 						echo "<td>" . htmlspecialchars($order['shipping_method']) . "</td>";
 

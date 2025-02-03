@@ -151,7 +151,7 @@ window.onclick = function (event) {
 $(".shipping-option").change(function () {
 	let shippingCost = parseFloat($(this).data("cost"));
 	let productTotal =
-		parseFloat($("#product-total").text().replace(",", ".")) * 1000;
+		parseFloat($("#product-total").text().replace(",", "")) ;
 	let finalTotal = productTotal + shippingCost;
 
 	$("#shipping-total").text(shippingCost.toFixed(2));
