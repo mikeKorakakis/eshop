@@ -1,6 +1,5 @@
 'use client';
 import Avatar from '@/components/common/Avatar';
-import Searchbar from '@/components/common/Searchbar';
 import {
 	HeartIcon,
 	MagnifyingGlassIcon,
@@ -81,15 +80,7 @@ export default function UserNavClient({ dictionary }: Props) {
 		<div className="flex flex-1 items-center justify-end">
 
 			<>
-				{process.env.NEXT_PUBLIC_COMMERCE_SEARCH_ENABLED && (
-					<div className="pb-4 lg:px-6 ">
-						<Searchbar
-							openSearch={openSearch}
-							setOpenSearch={setOpenSearch}
-							dictionary={dictionary}
-						/>
-					</div>
-				)}
+			
 				<div className="flex items-center lg:ml-8">
 					{/* Help */}
 					{process.env.NEXT_PUBLIC_COMMERCE_SEARCH_ENABLED && (

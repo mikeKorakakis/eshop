@@ -18,7 +18,6 @@ import placeholder from '@/assets/images/placeholder.png';
 import { formatImage } from '@/lib/helpers';
 import { useAuth } from '@/lib/context/auth-context';
 import Loading from '@/components/ui/Loading';
-import SearchBar from '@/components/utils/searchbar/SearchBar';
 const { link_contact, link_search } = LINKS;
 
 interface Props {
@@ -128,7 +127,6 @@ export default function Navigation({ dictionary, search, lng }: Props) {
               </label>
               <I18nWidget />
 
-              <SearchBar lng={lng} dictionary={dictionary} />
             </div>
           </div>
         </div>
@@ -139,7 +137,7 @@ export default function Navigation({ dictionary, search, lng }: Props) {
             <div>
               <div className="flex h-16 items-center justify-between">
                 {/* Logo (lg+) */}
-                <div className="hidden lg:flex lg:flex-1 lg:items-center">
+                <div className="hidden lg:flex lg:items-center">
                   <Logo className={isRoot ? 'text-white' : 'text-black'} />
                 </div>
                 {!isLoading && (
@@ -258,7 +256,6 @@ export default function Navigation({ dictionary, search, lng }: Props) {
                           </Popover>
                         )}
                         {/* ))} */}
-
                         {!isAdmin &&
                           navigation.pages.map((page) => (
                             <Link
@@ -274,16 +271,19 @@ export default function Navigation({ dictionary, search, lng }: Props) {
                             </Link>
                           ))}
                       </div>
-                    </Popover.Group>
+				</Popover.Group>
                   </div>
                 )}
 
                 {/* Mobile menu and search (lg-) SearchBar*/}
-                {search}
-
+				
                 {/* Logo (lg-) */}
                 <Logo className={clsx('lg:hidden', isRoot ? 'text-white' : 'text-black')} />
+				<div className="flex ">
+
+                {search}
                 <UserNav dictionary={dictionary} />
+				</div>
               </div>
             </div>
           </div>
