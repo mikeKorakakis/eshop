@@ -31,6 +31,7 @@
 		"expiration_date": "Expiration date (MM/YY)"
 	},
 	"common": {
+		"visti_old_site": "Visit our old site",
 		"login_to_continue": "Please signin to continue.",
 		"latest_6": "Latest 6",
 		"view_all": "View All",

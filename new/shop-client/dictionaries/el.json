@@ -31,6 +31,7 @@
 		"expiration_date": "Η/Μ λήξης (MM/YY)"
 	},
 	"common": {
+		"visti_old_site": "Επισκεφθείτε το παλιό μας site",
 		"login_to_continue": "Πρέπει να συνδεθείτε για να συνεχίσετε.",
 		"latest_6": "Τελευταία 6",
 		"view_all": "Προβολή Όλων",
