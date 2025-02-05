@@ -47,6 +47,7 @@ services:
     volumes:
       - ./old:/var/www/html 
     environment:
+      PHP_ENV: production
       MINIO_URL: https://minio.mscacs.info
       NEW_SHOP_URL: https://new-shop.mscacs.info
       VIRTUAL_HOST: old-shop.mscacs.info
