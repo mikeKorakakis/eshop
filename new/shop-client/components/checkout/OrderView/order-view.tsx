@@ -13,7 +13,7 @@ interface Props {
 const OrderView: FC<Props> = ({ dictionary }) => {
 	const common_dictionary = dictionary.common;
 	const checkout_dictionary = dictionary.checkout;
-	const { items, totalAmount} = useCart()
+	const { items, totalAmount, shipping } = useCart()
 	const total = totalAmount;
 	const currencyCode = "EUR";
 
@@ -75,18 +75,13 @@ const OrderView: FC<Props> = ({ dictionary }) => {
 												: totalAmount && formatPrice(totalAmount, currencyCode)}
 										</span>
 									</li>
-									{/* <li className="flex justify-between py-1">
-										<span>{common_dictionary.taxes}</span>
-										<span>
-											{calculating
-												? common_dictionary.calculating
-												: taxPrice && formatPrice(taxPrice, currencyCode)}
-										</span>
-									</li> */}
-									{/* <li className="flex justify-between py-1">
+
+									<li className="flex justify-between py-1">
 										<span>{common_dictionary.shipping}</span>
-										<span className="font-bold tracking-wide">{shipping}</span>
-									</li> */}
+										<span className="font-bold tracking-wide">
+											{calculating ? common_dictionary.calculating : shipping.cost && formatPrice(shipping.cost, currencyCode)}
+										</span>
+									</li>
 								</ul>
 								<div className="border-accent-2 flex justify-between border-t pt-3 font-bold">
 									<span>{common_dictionary.total}</span>
@@ -98,69 +93,7 @@ const OrderView: FC<Props> = ({ dictionary }) => {
 								</div>
 							</div>
 
-							<div>
-								{/*<div className="bg-accent-0 sticky bottom-0 left-0 right-0 z-20 w-full flex-shrink-0 border-t px-6 py-6 text-sm sm:px-6">
-									<ul className="pb-2">
-										 {order?.customer?.firstName && (
-											<li className="flex flex-col py-1">
-												<span className="font-bold">{checkout_dictionary.customer_info}</span>
-												<div className="flex justify-between pt-1">
-													<span>
-														{order?.customer?.firstName} {order?.customer?.lastName},{' '}
-														{order?.customer?.emailAddress}
-													</span>
-													<Link className="underline" href={link_checkout_general}>
-														{common_dictionary.change}
-													</Link>
-												</div>
-											</li>
-										)}
-										{order?.shippingAddress?.streetLine1 && (
-											<li className="flex flex-col py-1">
-												<span className="font-bold">{common_dictionary.shipping_address}</span>
-												<div className="flex justify-between pt-1">
-													<span>
-														{order?.shippingAddress?.streetLine1}, {order?.shippingAddress?.city},{' '}
-														{order?.shippingAddress?.postalCode}, {order?.shippingAddress?.countryCode}
-													</span>
-													<Link className="underline" href={link_checkout_addresses}>
-														{common_dictionary.change}
-													</Link>
-												</div>
-											</li>
-										)}
-										{order?.billingAddress?.streetLine1 && (
-											<li className="flex flex-col py-1">
-												<span className="font-bold">{common_dictionary.billing_address}</span>
-												<div className="flex justify-between pt-1">
-													<span>
-														{order?.billingAddress?.streetLine1}, {order?.billingAddress?.city},{' '}
-														{order?.billingAddress?.postalCode}, {order?.billingAddress?.countryCode}
-													</span>
-													<Link className="underline" href={link_checkout_addresses}>
-														{common_dictionary.change}
-													</Link>
-												</div>
-											</li>
-										)}
-										{order?.shippingLines[0] && (
-											<li className="flex flex-col py-1">
-												<span className="font-bold">{checkout_dictionary.shipping_method}</span>
-												<div className="flex justify-between pt-1">
-													<span>
-														{order?.shippingLines[0]?.shippingMethod?.name}
-													</span>
-													<Link className="underline" href={link_checkout_shipping}>
-														{common_dictionary.change}
-													</Link>
-												</div>
-											</li>
-										)}
-									</ul>
-								</div> */}
-							</div>
 
-							{/* <div className="border-t border-gray-200 px-4 py-6 sm:px-6"></div> */}
 						</div>
 					</div>
 				</div>

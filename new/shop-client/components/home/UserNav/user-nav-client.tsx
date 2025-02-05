@@ -64,7 +64,7 @@ export default function UserNavClient({ dictionary }: Props) {
 			icon: ArrowLeftOnRectangleIcon,
 			onClick: async () => {
 				await handleLogout();
-				router.push(pathname);
+				router.push("/");
 			}
 		}
 	];

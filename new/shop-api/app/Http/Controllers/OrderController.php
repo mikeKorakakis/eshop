@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\CreditCard;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\Shipping;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
@@ -161,6 +162,13 @@ class OrderController extends Controller
             'products.*.quantity' => 'required|numeric|min:1'
         ]);
 
+		$shipping = Shipping::create([
+			'shipping_method_id' => $request->shipping_method_id,
+			'address'            => $request->address,
+			'city'               => $request->city,
+			'postal_code'        => $request->postal_code,
+		]);
+
 
         // Extract request data
         $card_number = $request->card_number;
@@ -195,7 +203,8 @@ class OrderController extends Controller
                 'user_id' => $user->user_id,
                 'total_amount' => $total_amount,
                 'order_date' => now(),
-                'order_status' => 'pending'
+                'order_status' => 'pending',
+				'shipping_id' => $shipping->shipping_id,
             ]);
 
             // Add the products to the order

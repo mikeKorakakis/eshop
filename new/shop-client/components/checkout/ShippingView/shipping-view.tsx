@@ -3,206 +3,230 @@ import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { RadioGroup } from '@headlessui/react';
-// import { useShipping } from '@framework/checkout';
-// import { useCart } from '@framework/cart';
 import Button from '@/components/ui/Button';
-// import Loading from '@/components/ui/Loading';
 
 import toast from 'react-hot-toast';
-// import useAddShipping from '@framework/checkout/use-add-shipping';
 import { Dictionary } from '@/lib/get-dictionary';
-import { Order, ShippingMethodQuote } from '@/lib/vendure/generated/graphql-shop';
-import { setOrderShippingMethodMutation } from '@/lib/vendure/shop/orders/order';
 import { useRouter } from 'next/navigation';
 import { LINKS } from '@/lib/constants';
-import { refreshCart } from '../actions';
+import { ShippingMethod } from '@/types';
 
-const { link_checkout_addresses, link_checkout_payment } = LINKS;
+import FormInput from '@/components/ui/FormInput';
+import { useForm } from 'react-hook-form';
+import { useCart } from '@/lib/context/cart-context';
 
-interface Props {
-  dictionary: Dictionary;
-  order: Order;
-  eligibleShippingMethods: ShippingMethodQuote[];
+const { link_checkout_payment, link_checkout_general } = LINKS;
+
+interface ShippingAddress {
+	city: string;
+	address: string;
+	postal_code: string;
 }
 
-export default function ShippingView({ dictionary, order, eligibleShippingMethods }: Props) {
-  const common_dictionary = dictionary.common;
-  const router = useRouter();
+interface Props {
+	dictionary: Dictionary;
+	shippingMethods: ShippingMethod[];
+}
 
-  const [loading, setLoading] = useState(false);
-  //   const addShipping = useAddShipping()
+export default function ShippingView({ dictionary, shippingMethods }: Props) {
+	const common_dictionary = dictionary.common;
+	const router = useRouter();
 
-  //   const { data: eligibleShippingMethods, isLoading: isLoadingShipping } = useShipping();
+	const { shipping, addShipping } = useCart()
 
-  //   const {
-  //     data: cartData,
-  //     mutate: refreshCart,
-  //     isLoading: isLoadingCart,
-  //     isEmpty,
-  //   } = useCart()
+	const [loading, setLoading] = useState(false);
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors, isValid }
+	} = useForm<ShippingAddress>({
+		defaultValues: { city: '', address: '', postal_code: '' },
+		mode: 'onBlur'
+	});
 
-  const [selectedShipping, setSelectedShipping] = useState<string | undefined>(order?.shipping);
+	useEffect(() => {
+		reset(
+			{
+				city: shipping?.city,
+				address: shipping?.address,
+				postal_code: shipping?.postal_code
+			},
+		);
+	}, [reset, shipping]);
 
-  const addShipping = async ({ shippingMethodId }: { shippingMethodId: string }) => {
-    return await setOrderShippingMethodMutation([shippingMethodId]);
-  };
 
-  const shippingMethodId = order?.shippingLines?.[0]?.shippingMethod?.id;
+	const [selectedShipping, setSelectedShipping] = useState<number | undefined>(shippingMethods[0]?.shipping_method_id);
 
-  useEffect(() => {
-    if (shippingMethodId) {
-      setSelectedShipping(shippingMethodId);
-    }
-  }, [shippingMethodId]);
 
-  const handleSave = async () => {
-    if (selectedShipping) {
-      const addShippingFunc = async () => {
-        try {
-          const res = await addShipping({ shippingMethodId: selectedShipping });
-          if (res?.__typename === 'Order') {
-            // setStep(3);
-            await refreshCart();
-            router.push(link_checkout_payment);
-          } else if (
-            res.__typename === 'OrderModificationError' ||
-            res.__typename === 'IneligibleShippingMethodError' ||
-            res.__typename === 'NoActiveOrderError'
-          ) {
-            toast.error(common_dictionary[res.__typename]);
-          } else {
-            toast.error(common_dictionary.error);
-          }
-        } catch (error: unknown) {
-          toast.error(common_dictionary.error);
-        } 
-      };
+	const onSubmit = async (data: ShippingAddress) => {
+		if (selectedShipping) {
+			const { city, address, postal_code } = data;
+			try {
+				setLoading(true);
+				addShipping({
+					shipping_method_id: selectedShipping,
+					city: city,
+					address: address,
+					postal_code: postal_code,
+					cost: shippingMethods.find((method) => method.shipping_method_id === selectedShipping)?.cost ?? 0
+				});
 
-      try {
-        setLoading(true);
-        await addShippingFunc();
-        // refreshCart();
-        // toast.success(t('common:success_save'))
-      } catch (error: unknown) {
-        toast.error(common_dictionary.UNKNOWN_ERROR);
+			} catch (error: unknown) {
+				toast.error(common_dictionary.UNKNOWN_ERROR);
 
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
+				setLoading(false);
+			} finally {
+				setLoading(false);
+			}
+		} else {
+			toast.error(common_dictionary.UNKNOWN_ERROR);
+		}
+	}
 
-  // calculate shipping price with usePrice hook
 
-  //   if (loading) return <Loading />;
+	return (
+		<div >
+			<RadioGroup value={selectedShipping}>
+				<RadioGroup.Label className="text-lg font-medium text-gray-900">
+					{common_dictionary.shipping_method}
+				</RadioGroup.Label>
 
-  return (
-    <div >
-      <RadioGroup value={selectedShipping}>
-        <RadioGroup.Label className="text-lg font-medium text-gray-900">
-          {common_dictionary.shipping_method}
-        </RadioGroup.Label>
+				<div className="mt-8 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+					{shippingMethods &&
+						shippingMethods.map((shippingMethod) => (
+							<RadioGroup.Option
+								key={shippingMethod.shipping_method_id}
+								value={shippingMethod}
+								onClick={() => setSelectedShipping && setSelectedShipping(shippingMethod.shipping_method_id)}
+								className={({ checked, active }) =>
+									clsx(
+										checked ? 'border-transparent' : 'border-gray-300',
+										active ? 'ring-2 ring-red-500' : '',
+										'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none'
+									)
+								}
+							>
+								{({ active }) => {
+									const checked = selectedShipping === shippingMethod.shipping_method_id;
+									return (
+										<>
+											<span className="flex flex-1">
+												<span className="flex flex-col">
+													<RadioGroup.Label
+														as="span"
+														className="block text-sm font-medium text-gray-900"
+													>
+														{shippingMethod.method_name}
+													</RadioGroup.Label>
 
-        <div className="mt-8 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-          {eligibleShippingMethods &&
-            eligibleShippingMethods.map((shippingMethod) => (
-              <RadioGroup.Option
-                key={shippingMethod.id}
-                value={shippingMethod}
-                onClick={() => setSelectedShipping && setSelectedShipping(shippingMethod.id)}
-                className={({ checked, active }) =>
-                  clsx(
-                    checked ? 'border-transparent' : 'border-gray-300',
-                    active ? 'ring-2 ring-red-500' : '',
-                    'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none'
-                  )
-                }
-              >
-                {({ active }) => {
-                  const checked = selectedShipping === shippingMethod.id;
-                  return (
-                    <>
-                      <span className="flex flex-1">
-                        <span className="flex flex-col">
-                          <RadioGroup.Label
-                            as="span"
-                            className="block text-sm font-medium text-gray-900"
-                          >
-                            {shippingMethod.name}
-                          </RadioGroup.Label>
-                          <RadioGroup.Description
-                            as="span"
-                            className="mt-1 flex items-center text-sm text-gray-500"
-                          >
-                            {shippingMethod.description.replace(/(<([^>]+)>)/gi, '')}
-                          </RadioGroup.Description>
-                          <RadioGroup.Description
-                            as="span"
-                            className="mt-6 text-sm font-medium text-gray-900 "
-                          >
-                            {(shippingMethod.price ?? 0) / 100} €
-                          </RadioGroup.Description>
-                        </span>
-                      </span>
+													<RadioGroup.Description
+														as="span"
+														className="mt-6 text-sm font-medium text-gray-900 "
+													>
+														{(shippingMethod.cost ?? 0)} €
+													</RadioGroup.Description>
+												</span>
+											</span>
 
-                      <CheckCircleIcon
-                        className={clsx(
-                          'h-5 w-5 text-red-600',
-                          checked ? 'opacity-1' : 'opacity-0'
-                        )}
-                        aria-hidden="true"
-                      />
+											<CheckCircleIcon
+												className={clsx(
+													'h-5 w-5 text-red-600',
+													checked ? 'opacity-1' : 'opacity-0'
+												)}
+												aria-hidden="true"
+											/>
 
-                      <span
-                        className={clsx(
-                          active ? 'border' : 'border-2',
-                          checked ? 'border-red-500' : 'border-transparent',
-                          'pointer-events-none absolute -inset-px rounded-lg'
-                        )}
-                        aria-hidden="true"
-                      />
-                    </>
-                  );
-                }}
-              </RadioGroup.Option>
-            ))}
-        </div>
-      </RadioGroup>
-      <div className="grid grid-cols-1">
-        {/* <div className="mt-10">
+											<span
+												className={clsx(
+													active ? 'border' : 'border-2',
+													checked ? 'border-red-500' : 'border-transparent',
+													'pointer-events-none absolute -inset-px rounded-lg'
+												)}
+												aria-hidden="true"
+											/>
+										</>
+									);
+								}}
+							</RadioGroup.Option>
+						))}
+				</div>
+			</RadioGroup>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className={clsx('h-full')}>
+					<div className="mt-8">
+						<h2 className="text-lg font-medium text-gray-900">{common_dictionary.shipping_address}</h2>
+
+						<div>
+							<hr className="my-6 border-accent-2" />
+							<div className="flex flex-col space-y-4">
+
+								<FormInput
+									{...register('address', {
+										required: common_dictionary.not_empty!
+									})}
+									error={errors?.address?.message}
+									label={common_dictionary.street_number!}
+								/>
+									<FormInput
+										{...register('postal_code', {
+											required: common_dictionary.not_empty!
+										})}
+										error={errors?.postal_code?.message}
+										label={common_dictionary.postal_code!}
+									/>
+									<FormInput
+										{...register('city', {
+											required: common_dictionary.not_empty!
+										})}
+										error={errors?.city?.message}
+										label={common_dictionary.city!}
+									/>
+								</div>
+						</div>
+					</div>
+					{/* <div className="sticky z-20 bottom-0 w-full right-0 left-0 py-12 bg-accent-0 border-t border-accent-2 px-6">
+        <Button type="submit" width="100%">
+          Continue
+        </Button>
+      </div> */}
+				</div>
+				<div className="grid grid-cols-1">
+					{/* <div className="mt-10">
           <Button loading={loading} disabled={loading} type="submit" onClick={handleSave}>
             {t('common:save')}
           </Button>
         </div> */}
-        <div className="mt-10 grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <Button
-            //   className="mt-4"
-            className="h-10"
-            variant="slim"
-            type="button"
-            // disabled={loading}
-            // loading={loading}D
-            // disabled={!customer && !orderCustomer}
-            // onClick={() => setStep(1)}
-            onClick={() => router.push(link_checkout_addresses)}
-          >
-            {common_dictionary.back}
-          </Button>
-          <Button
-            className="h-10 w-full"
-            variant="slim"
-            type="submit"
-            loading={loading}
-            // disabled={!customer && !orderCustomer}
-            disabled={!selectedShipping}
-            onClick={handleSave}
-            // onClick={() => setStep(3)}
-          >
-            {common_dictionary.next}
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
+					<div className="mt-10 grid grid-cols-1 gap-2 sm:grid-cols-2">
+						<Button
+							//   className="mt-4"
+							className="h-10"
+							variant="slim"
+							type="button"
+							// disabled={loading}
+							// loading={loading}D
+							// disabled={!customer && !orderCustomer}
+							// onClick={() => setStep(1)}
+							onClick={() => router.push(link_checkout_general)}
+						>
+							{common_dictionary.back}
+						</Button>
+						<Button
+							className="h-10 w-full"
+							variant="slim"
+							type="submit"
+							loading={loading}
+
+							// disabled={!customer && !orderCustomer}
+							disabled={!selectedShipping || !isValid}
+							onClick={() => router.push(link_checkout_payment)}
+						// onClick={() => setStep(3)}
+						>
+							{common_dictionary.next}
+						</Button>
+					</div>
+				</div>
+			</form>
+		</div>
+	);
 }

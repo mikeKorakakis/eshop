@@ -40,25 +40,13 @@
 	overflow: hidden;
 }
 
-.categories .cat:hover {
-	background-color: #EEE;
-
-}
-
-.categories .cat:hover .hidden-buttons {
-	right: 10px;
-}
-
-.categories .cat .hidden-buttons {
-	-webkit-transition: all .5s ease-in-out;
-	-moz-transition: all .5s ease-in-out;
-	transition: all .5s ease-in-out;
+.categories .cat  .cat-buttons {
 	position: absolute;
 	top: 15px;
 	right: 10px;
 }
 
-.categories .cat .hidden-buttons a {
+.categories .cat  div a {
 	margin-right: 5px;
 }
 

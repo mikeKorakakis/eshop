@@ -22,17 +22,8 @@
 
         if ($do == 'Manage') {
 
-            $sort = 'asc';
-
-            $sort_array = array('asc', 'desc');
-
-            if (isset($_GET['sort']) && in_array($_GET['sort'], $sort_array)) {
-
-                $sort = $_GET['sort'];
-
-            }
-
-            $cats = getAll("SELECT * FROM categories WHERE parent_id = 0 ORDER BY ordering $sort");
+        
+            $cats = getAll("SELECT * FROM categories WHERE parent_id = 0");
 
             if (!empty($cats)) {
 
@@ -43,20 +34,13 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="fa fa-edit"></i> Διαχείριση Κατηγοριών
-                        <div class="option pull-right">
-                            <i class="fa fa-sort"></i> Ταξινόμηση: [
-                            <a class="<?php if ($sort == 'asc') { echo 'active'; } ?>" href="?sort=asc">Αύξουσα</a> | 
-                            <a class="<?php if ($sort == 'desc') { echo 'active'; } ?>" href="?sort=desc">Φθίνουσα</a> ]
-                            <i class="fa fa-eye"></i> Προβολή: [
-                            <span class="active" data-view="full">Πλήρης</span> |
-                            <span data-view="classic">Κλασική</span> ]
-                        </div>
+                      
                     </div>
                     <div class="panel-body">
                         <?php
                             foreach($cats as $cat) {
                                 echo "<div class='cat'>";
-                                    echo "<div class='hidden-buttons'>";
+                                    echo "<div class='cat-buttons'>";
                                         echo "<a href='categories.php?do=Edit&catid=" . htmlspecialchars($cat['category_id']) . "' class='btn btn-xs btn-primary'><i class='fa fa-edit'></i> Επεξεργασία</a>";
                                         echo "<a href='categories.php?do=Delete&catid=" . htmlspecialchars($cat['category_id']) . "' class='confirm btn btn-xs btn-danger'><i class='fa fa-close'></i> Διαγραφή</a>";
                                     echo "</div>";

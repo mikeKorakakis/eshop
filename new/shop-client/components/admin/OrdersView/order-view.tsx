@@ -37,7 +37,8 @@ const OrdersView: FC<Props> = ({ dictionary }) => {
 				// user_id: order.user_id,
 				order_date: order.order_date,
 				total_amount: order.total_amount,
-				order_status: order.order_status,
+				shipping: `${order?.shipping?.method?.method_name}, ${order?.shipping?.method?.cost}€, 
+				 ${order?.shipping?.city}, ${order?.shipping?.address}, ${order?.shipping?.postal_code}`,
 				// order_id: order.order_id,
 				items: order.items.map((item) => ({
 					id: item.product_id,
@@ -63,7 +64,7 @@ const OrdersView: FC<Props> = ({ dictionary }) => {
 		admin_dictionary.customer,
 		admin_dictionary.order_date,
 		admin_dictionary.total_amount,
-		admin_dictionary.status,
+		admin_dictionary.shipping,
 		admin_dictionary.products
 	];
 

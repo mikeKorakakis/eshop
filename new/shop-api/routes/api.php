@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CreditCardController;
+use App\Http\Controllers\ShippingMethodController;
 
 //Authentication
 Route::post('/login', [AuthController::class, 'login']);
@@ -29,6 +30,8 @@ Route::get('media/{media_id}', [MediaController::class, 'show']);
 Route::post('media/product/assign', [MediaController::class, 'assignToProduct']);
 Route::post('media/category/assign', [MediaController::class, 'assignToCategory']);
 Route::post('media/user/assign', [MediaController::class, 'assignToUser']);
+Route::get('/shipping-methods', [ShippingMethodController::class, "index"]);
+
 Route::middleware('jwt.auth')->group(function () {
 	Route::get('/users/{user_id}/orders', [OrderController::class, 'showByUser']);
 

@@ -1,159 +1,143 @@
 $(function () {
-	"use strict";
+    "use strict";
 
-	// Switch Between Login & Signup
+    // Εναλλαγή μεταξύ Εισόδου & Εγγραφής
+    $(".login-page h1 span").click(function () {
+        $(this).addClass("selected").siblings().removeClass("selected");
+        $(".login-page form").hide();
+        $("." + $(this).data("class")).fadeIn(100);
+    });
 
-	$(".login-page h1 span").click(function () {
-		$(this).addClass("selected").siblings().removeClass("selected");
+    // Απόκρυψη του Placeholder κατά την εστίαση (Focus) στη Φόρμα
+    $("[placeholder]")
+        .focus(function () {
+            $(this).attr("data-text", $(this).attr("placeholder"));
+            $(this).attr("placeholder", "");
+        })
+        .blur(function () {
+            $(this).attr("placeholder", $(this).attr("data-text"));
+        });
 
-		$(".login-page form").hide();
+    // Προσθήκη αστερίσκου σε υποχρεωτικά πεδία
+    $("input").each(function () {
+        if ($(this).attr("required") === "required") {
+            $(this).after('<span class="asterisk">*</span>');
+        }
+    });
 
-		$("." + $(this).data("class")).fadeIn(100);
-	});
-	// Hide Placeholder On Form Focus
+    // Μήνυμα επιβεβαίωσης στο κουμπί
+    $(".confirm").click(function () {
+        return confirm("Είστε σίγουροι;");
+    });
 
-	$("[placeholder]")
-		.focus(function () {
-			$(this).attr("data-text", $(this).attr("placeholder"));
+    $(".live").keyup(function () {
+        $($(this).data("class")).text($(this).val());
+    });
 
-			$(this).attr("placeholder", "");
-		})
-		.blur(function () {
-			$(this).attr("placeholder", $(this).attr("data-text"));
-		});
+    $(".toggle-info").click(function () {
+        $(this)
+            .toggleClass("selected")
+            .parent()
+            .next(".panel-body")
+            .fadeToggle(100);
 
-	// Add Asterisk On Required Field
+        if ($(this).hasClass("selected")) {
+            $(this).html('<i class="fa fa-minus fa-lg"></i>');
+        } else {
+            $(this).html('<i class="fa fa-plus fa-lg"></i>');
+        }
+    });
 
-	$("input").each(function () {
-		if ($(this).attr("required") === "required") {
-			$(this).after('<span class="asterisk">*</span>');
-		}
-	});
+    // // Αν θέλετε να ενεργοποιήσετε SelectBoxIt
+    // $("select").selectBoxIt({
+    //     autoWidth: false
+    // });
 
-	// Confirmation Message On Button
+    // Απόκρυψη του Placeholder κατά την εστίαση (Focus) στη Φόρμα
+    $("[placeholder]")
+        .focus(function () {
+            $(this).attr("data-text", $(this).attr("placeholder"));
+            $(this).attr("placeholder", "");
+        })
+        .blur(function () {
+            $(this).attr("placeholder", $(this).attr("data-text"));
+        });
 
-	$(".confirm").click(function () {
-		return confirm("Are You Sure?");
-	});
+    // Προσθήκη αστερίσκου σε υποχρεωτικά πεδία (ξανά αν χρειάζεται)
+    $("input").each(function () {
+        if ($(this).attr("required") === "required") {
+            $(this).after('<span class="asterisk">*</span>');
+        }
+    });
 
-	$(".live").keyup(function () {
-		$($(this).data("class")).text($(this).val());
-	});
+    // Μετατροπή πεδίου κωδικού σε πεδίο κειμένου κατά το hover
+    var passField = $(".password");
 
-	$(".toggle-info").click(function () {
-		$(this)
-			.toggleClass("selected")
-			.parent()
-			.next(".panel-body")
-			.fadeToggle(100);
+    $(".show-pass").hover(
+        function () {
+            passField.attr("type", "text");
+        },
+        function () {
+            passField.attr("type", "password");
+        }
+    );
 
-		if ($(this).hasClass("selected")) {
-			$(this).html('<i class="fa fa-minus fa-lg"></i>');
-		} else {
-			$(this).html('<i class="fa fa-plus fa-lg"></i>');
-		}
-	});
+    // Μήνυμα επιβεβαίωσης στο κουμπί (ξανά αν χρειάζεται)
+    $(".confirm").click(function () {
+        return confirm("Είστε σίγουροι;");
+    });
 
-	// Trigger The Selectboxit
+    // Επιλογή Προβολής Κατηγορίας
+    // $(".cat h3").click(function () {
+    //     $(this).next(".full-view").fadeToggle(200);
+    // });
 
-	// $("select").selectBoxIt({
+    // $(".option span").click(function () {
+    //     $(this).addClass("active").siblings("span").removeClass("active");
 
-	// 	autoWidth: false
+    //     if ($(this).data("view") === "full") {
+    //         $(".cat .full-view").fadeIn(200);
+    //     } else {
+    //         $(".cat .full-view").fadeOut(200);
+    //     }
+    // });
 
-	// });
-
-	// Hide Placeholder On Form Focus
-
-	$("[placeholder]")
-		.focus(function () {
-			$(this).attr("data-text", $(this).attr("placeholder"));
-
-			$(this).attr("placeholder", "");
-		})
-		.blur(function () {
-			$(this).attr("placeholder", $(this).attr("data-text"));
-		});
-
-	// Add Asterisk On Required Field
-
-	$("input").each(function () {
-		if ($(this).attr("required") === "required") {
-			$(this).after('<span class="asterisk">*</span>');
-		}
-	});
-
-	// Convert Password Field To Text Field On Hover
-
-	var passField = $(".password");
-
-	$(".show-pass").hover(
-		function () {
-			passField.attr("type", "text");
-		},
-		function () {
-			passField.attr("type", "password");
-		}
-	);
-
-	// Confirmation Message On Button
-
-	$(".confirm").click(function () {
-		return confirm("Are You Sure?");
-	});
-
-	// Category View Option
-
-	$(".cat h3").click(function () {
-		$(this).next(".full-view").fadeToggle(200);
-	});
-
-	$(".option span").click(function () {
-		$(this).addClass("active").siblings("span").removeClass("active");
-
-		if ($(this).data("view") === "full") {
-			$(".cat .full-view").fadeIn(200);
-		} else {
-			$(".cat .full-view").fadeOut(200);
-		}
-	});
-
-	// Show Delete Button On Child Cats
-
-	$(".child-link").hover(
-		function () {
-			$(this).find(".show-delete").fadeIn(400);
-		},
-		function () {
-			$(this).find(".show-delete").fadeOut(400);
-		}
-	);
+    // Εμφάνιση κουμπιού Διαγραφής στις θυγατρικές κατηγορίες (child cats)
+    $(".child-link").hover(
+        function () {
+            $(this).find(".show-delete").fadeIn(400);
+        },
+        function () {
+            $(this).find(".show-delete").fadeOut(400);
+        }
+    );
 });
 
+// Dropdown για το Προφίλ
 function myFunction() {
-	document.getElementById("myDropdown").classList.toggle("show");
+    document.getElementById("myDropdown").classList.toggle("show");
 }
 
-// Close the dropdown if the user clicks outside of it
+// Κλείσιμο dropdown εάν ο χρήστης κάνει κλικ εκτός από αυτό
 window.onclick = function (event) {
-	if (!event.target.matches(".dropbtn")) {
-		var dropdowns = document.getElementsByClassName("dropdown-content");
-		var i;
-		for (i = 0; i < dropdowns.length; i++) {
-			var openDropdown = dropdowns[i];
-			if (openDropdown.classList.contains("show")) {
-				openDropdown.classList.remove("show");
-			}
-		}
-	}
+    if (!event.target.matches(".dropbtn")) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains("show")) {
+                openDropdown.classList.remove("show");
+            }
+        }
+    }
 };
 
-// change price when shipping method is changed
+// Αλλαγή τιμής όταν αλλάζει ο τρόπος αποστολής
 $(".shipping-option").change(function () {
-	let shippingCost = parseFloat($(this).data("cost"));
-	let productTotal =
-		parseFloat($("#product-total").text().replace(",", "")) ;
-	let finalTotal = productTotal + shippingCost;
+    let shippingCost = parseFloat($(this).data("cost"));
+    let productTotal = parseFloat($("#product-total").text().replace(",", ""));
+    let finalTotal = productTotal + shippingCost;
 
-	$("#shipping-total").text(shippingCost.toFixed(2));
-	$("#final-total").text(finalTotal.toFixed(2));
+    $("#shipping-total").text(shippingCost.toFixed(2));
+    $("#final-total").text(finalTotal.toFixed(2));
 });

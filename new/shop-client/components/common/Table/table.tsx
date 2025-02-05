@@ -108,18 +108,11 @@ const formatValue =  (value: any, key: string, dictionary: Dictionary) => {
 			return admin_dictionary.customer;
 		}
 	}
-	// if (key === "category_id" || key === "parent_id") {
-		
-	// 	return <Category category_id={value} />
-	// }
-	// if (key.includes("image") || key.includes("avatar_url")&& value) {
-	// 	return <Image
-	// 		src={formatImage(value)}
-	// 		width={40}
-	// 		height={40}
-	// 		alt="image"
-	// 		className="w-10" />
-	// }
+
+	if(key === 'shipping'){
+		return  <div className="w-32 break-words whitespace-normal">{value}</div>
+	}
+	
 	if (key.includes("media") || key.includes("avatar_url") && value) {
 		return <Image
 			src={value?.path ? formatImage(value?.path) : placeholderImg}

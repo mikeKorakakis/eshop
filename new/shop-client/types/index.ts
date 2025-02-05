@@ -38,8 +38,17 @@ export interface UpdateCustomerInput {
 }
 
 export interface ChangePasswordInput {
-	currentPassword: string;
-	newPassword: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface Shipping {
+  shipping_method_id: number;
+  address: string;
+  city: string;
+  postal_code: string;
+  cost: number;
+  method?: ShippingMethod;
 }
 
 export interface CartItem {
@@ -54,32 +63,34 @@ export interface CartItem {
 export interface CartState {
   items: CartItem[];
   totalAmount: number;
+  shipping: Shipping;
 }
 
 export interface OrderWithItemsAndUser {
   order_id: number;
   total_amount: number;
   order_date: string;
-  order_status: string;
+//   order_status: string;
+  shipping: Shipping; 
   items: OrderItem[]; // Include items
   user: User; // Include user
 }
 
-export interface  MappedOrderWithItemsAndUser {
-	id: number;
-	total_amount: number;
-	order_date: string;
-	order_status: string;
-	items: { 
-	  id: number;
-	  name: string;
-	  quantity: number;
-	  price: number;
-	  media: Media | null;
-	}[]; // Include items
-	user: User; // Include user
-  }
-
+export interface MappedOrderWithItemsAndUser {
+  id: number;
+  total_amount: number;
+  order_date: string;
+//   order_status: string;
+  shipping: string;
+  items: {
+    id: number;
+    name: string;
+    quantity: number;
+    price: number;
+    media: Media | null;
+  }[]; // Include items
+  user: User; // Include user
+}
 
 export interface OrderItem {
   order_item_id: number;
@@ -165,16 +176,14 @@ export interface Product {
 }
 
 export interface MappedProduct {
-	name: string;
-	description: string;
-	price: number;
-	added_date: string;
-	country_of_origin: string;
-	media: Media | null;
-	category: string;
-
-  }
-  
+  name: string;
+  description: string;
+  price: number;
+  added_date: string;
+  country_of_origin: string;
+  media: Media | null;
+  category: string;
+}
 
 export interface Comment {
   comment_id: number;
@@ -192,6 +201,12 @@ export interface CreditCard {
   expiration_date: string;
   cvv: string;
   balance: number;
+}
+
+export interface ShippingMethod {
+  shipping_method_id: number;
+  method_name: string;
+  cost: number;
 }
 
 export interface Order {

@@ -26,7 +26,7 @@ type PaymentType = {
 export default function PaymentView({ dictionary }: Props) {
 	const common_dictionary = dictionary.common;
 	const checkout_dictionary = dictionary.checkout;
-	const { items, totalAmount, clearCart } = useCart();
+	const { items, totalAmount, shipping } = useCart();
 
 	const {
 		register,
@@ -51,6 +51,10 @@ export default function PaymentView({ dictionary }: Props) {
 				card_number: data.cardNumber,
 				products: items,
 				total_amount: totalAmount,
+				address: shipping.address,
+				city: shipping.city,
+				postal_code: shipping.postal_code,
+				shipping_method_id: shipping.shipping_method_id
 			})
 
 			router.push(`${link_order_confirmation}/${order?.order_id}?redirect_status=succeeded`);
@@ -69,39 +73,11 @@ export default function PaymentView({ dictionary }: Props) {
 			setLoading(false);
 		}
 	}
-	//   const router = useRouter();
-	// const locale = (router.locale as 'en' | 'el') || 'en';
-
-	//   const handlePayInStore = async () => {
-	//     setLoading(true);
-	//     try {
-	//       if (
-	//         selectedPayment === 'pay-in-store' &&
-	//         eligiblePaymentMethods?.some((paymentMethod) => paymentMethod.code)
-	//       ) {
-	//         const res1 = await transitionOrderToStateMutation('ArrangingPayment');
-	//         if (res1?.transitionOrderToState?.__typename === 'Order') {
-	//           const res2 = await addPaymentToOrderMutation({ method: selectedPayment, metadata: {} });
-	//           if (res2.__typename === 'Order') {
-	//             await refreshCart();
-	//             router.push(`${link_order_confirmation}/${res2.code}?redirect_status=succeeded`);
-	//           } else {
-	//             toast.error(common_dictionary.error);
-	//           }
-	//         } else {
-	//           toast.error(common_dictionary.error);
-	//         }
-	//       }
-	//     } catch (e) {
-	//       toast.error(common_dictionary.error);
-	//     } finally {
-	//       setLoading(false);
-	//     }
-	//   };
+	
+	
 	return (
 		<div>
 			<h2 className="text-lg font-medium text-gray-900">{common_dictionary.payment}</h2>
-
 
 
 
@@ -173,17 +149,11 @@ export default function PaymentView({ dictionary }: Props) {
 					</Button>
 					{isValid}
 					<Button
-						//   className="mt-4"
 						className="h-10"
 						variant="slim"
 						type="button"
-						onClick={() => router.push(link_checkout_general)}
-					// loading={loading}D
-					// disabled={!customer && !orderCustomer}
-					//   onClick={() => {
-					// setSelectedPayment(undefined);
-					// setStep(2);
-					//   }}
+						onClick={() => router.push(link_checkout_shipping)}
+					
 					>
 						{common_dictionary.back}
 					</Button>

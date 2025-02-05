@@ -147,15 +147,6 @@ a:active {
 	text-decoration: underline; /* Underline when active */
 }
 
-a:visited {
-	color: rgb(3, 94, 94); /* Visited links retain the default color */
-}
-
-/* .container {
-	max-width: 960px; 
-	margin: 0 auto; 
-	padding: 15px; 
-} */
 
 /* Layout & Grid System */
 .container {

@@ -5,6 +5,7 @@ import {
   ChangePasswordInput,
   OrderWithItemsAndUser,
   SetHttpCookieType,
+  ShippingMethod,
   SignupInput,
   SignupRes,
   UpdateCustomerInput
@@ -427,6 +428,12 @@ export async function createComment({ product_id, content }: Omit<Comment, 'comm
   });
 }
 
+export async function getShippingMethods() {
+	const bearer = await getToken();
+	const res = await client(bearer).get(`shipping-methods`).json<ShippingMethod[]>();
+	return res;
+  }
+
 export async function getOrderItems() {
   const bearer = await getToken();
   const res = await client(bearer).get(`order-items`).json<OrderItem[]>();
@@ -570,11 +577,19 @@ export async function makePurchase2({
 export async function makePurchase({
   card_number,
   total_amount,
-  products
+  products,
+  address,
+  city,
+  postal_code,
+  shipping_method_id
 }: {
   card_number: string;
   total_amount: number;
   products: CartItem[];
+  address: string;
+  city: string;
+  postal_code: string;
+  shipping_method_id: number;
 }) {
   const bearer = await getToken();
   const mappedProducts = products.map((product) => ({
@@ -586,7 +601,11 @@ export async function makePurchase({
       json: {
         card_number,
         total_amount,
-        products: mappedProducts
+        products: mappedProducts,
+		address,
+		city,
+		postal_code,
+		shipping_method_id
       }
     })
     .json<Order>();

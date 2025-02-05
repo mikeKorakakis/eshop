@@ -16,18 +16,13 @@ import { User } from '@/types';
 import LoginView from './login-view';
 import { useUI } from '@/lib/context/ui-context';
 
-const { link_profile_addresses, link_checkout_payment } = LINKS;
+const { link_profile_addresses, link_checkout_payment, link_checkout_shipping } = LINKS;
 
 type Props = {
   dictionary: Dictionary;
   customer: User | null;
 };
 
-interface CustomerBaseInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
-}
 
 const UserInfoView = ({ dictionary, customer }: Props) => {
   const common_dictionary = dictionary.common;
@@ -94,42 +89,7 @@ const UserInfoView = ({ dictionary, customer }: Props) => {
               </div>
             </>
           )}
-		  <FormInput
-            name="Address"
-            maxLength={19} // Max length including spaces (16 digits + 3 spaces)
-            type="text"
-            label={`Address`}
-            placeholder="Enter your address"
-            // error={'Dsa'}
-            onInput={() => {}} // Add formatting handler
-          />
-		  <FormInput
-            name="ZIP"
-            maxLength={19} // Max length including spaces (16 digits + 3 spaces)
-            type="text"
-            label={`ZIP`}
-            placeholder="Enter your ZIP code"
-            // error={'Dsa'}
-            onInput={() => {}} // Add formatting handler
-          />
-          <FormInput
-            name="City"
-            maxLength={19} // Max length including spaces (16 digits + 3 spaces)
-            type="text"
-            label={`City`}
-            placeholder="Enter your city"
-            // error={'Dsa'}
-            onInput={() => {}} // Add formatting handler
-          />
-		  <FormInput
-            name="Phone"
-            maxLength={19} // Max length including spaces (16 digits + 3 spaces)
-            type="text"
-            label={`Phone`}
-            placeholder="Enter your phone number"
-            // error={'Dsa'}
-            onInput={() => {}} // Add formatting handler
-          />
+	
           <>
             <Button
               className="mt-10 h-10 w-full"
@@ -137,24 +97,13 @@ const UserInfoView = ({ dictionary, customer }: Props) => {
               type="submit"
               loading={loading}
               disabled={!customer}
-              onClick={() => router.push(link_checkout_payment)}
+              onClick={() => router.push(link_checkout_shipping)}
               //   onClick={() => setStep(1)}
             >
               {common_dictionary.next}
             </Button>
           </>
         </div>
-        {/* {isGuest && !customer && (
-          <Button
-            className="mt-10"
-            variant="slim"
-            type="submit"
-            disabled={!isDirty || !isValid}
-            // onClick={handleLogin}
-          >
-            {common_dictionary.save}
-          </Button>
-        )} */}
       </div>
     </>
   );
