@@ -79,7 +79,7 @@ const OrderView: FC<Props> = ({ dictionary }) => {
 									<li className="flex justify-between py-1">
 										<span>{common_dictionary.shipping}</span>
 										<span className="font-bold tracking-wide">
-											{calculating ? common_dictionary.calculating : shipping.cost && formatPrice(shipping.cost, currencyCode)}
+											{calculating ? common_dictionary.calculating : shipping?.cost && formatPrice(shipping?.cost, currencyCode)}
 										</span>
 									</li>
 								</ul>

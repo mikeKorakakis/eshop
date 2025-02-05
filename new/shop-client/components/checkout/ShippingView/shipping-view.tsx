@@ -124,7 +124,7 @@ export default function ShippingView({ dictionary, shippingMethods }: Props) {
 														as="span"
 														className="mt-6 text-sm font-medium text-gray-900 "
 													>
-														{(shippingMethod.cost ?? 0)} €
+														{(shippingMethod?.cost ?? 0)} €
 													</RadioGroup.Description>
 												</span>
 											</span>

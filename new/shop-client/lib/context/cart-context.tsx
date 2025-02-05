@@ -42,7 +42,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 				(total, cartItem) => total + cartItem.price * cartItem.quantity,
 				0
 			);
-			const newTotal = previousTotal + action.shipping.cost;
+			const newTotal = previousTotal + action?.shipping?.cost;
 			return {
 				...state,
 				shipping: action.shipping,
