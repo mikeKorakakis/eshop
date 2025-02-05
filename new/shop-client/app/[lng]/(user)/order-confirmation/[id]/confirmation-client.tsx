@@ -47,12 +47,6 @@ export default function ConfirmationClient({ dictionary, id }: Props) {
 							height={120}
 							className="w-24 "
 						/>
-						{/* <div className="flex items-center justify-center h-12 w-12 rounded-md bg-zinc-100">
-                    <ShoppingBagIcon
-                      className="h-6 w-6 text-zinc-600"
-                      aria-hidden="true"
-                    />
-                  </div> */}
 						<div className="mt-3 text-center sm:mt-5">
 							<h3 className="text-lg font-medium leading-6 ">
 								{redirect_status === 'succeeded'

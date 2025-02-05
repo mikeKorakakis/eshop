@@ -26,23 +26,14 @@ export default async function OrderView({ dictionary, order, lng, redirect_statu
 	if (!order.order_id) return;
 	const common_dictionary = dictionary.common;
 	const order_dictionary = dictionary.order;
-	//   const customer = await getActiveCustomerQuery();
 
 	const orderItems = await getOrderItemsByOrder({ order_id: order.order_id })
 	const customer = await me()
-
-
-	const messageArray = [
-		order_dictionary.created_order,
-		order_dictionary.payed_order,
-		order_dictionary.shipped_order,
-		order_dictionary.delivered_order,
-		order_dictionary.delivered_order
-	];
 	if (!order) return redirect(LINKS.link_home)
 	return (
 		<>
 			<div className="bg-white">
+				{JSON.stringify(order)}
 				<div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
 					{redirect_status === 'succeeded' && <div className='py-8'>
 						<h1 className="text-sm font-medium text-red-600">{order_dictionary.payment_successful}</h1>
@@ -131,7 +122,7 @@ export default async function OrderView({ dictionary, order, lng, redirect_statu
 								<div className="flex items-center justify-between py-4">
 									<dt className="text-gray-600">{common_dictionary.shipping}</dt>
 									<dd className="font-medium text-gray-900">
-										{formatPrice(order?.shipping?.cost, "EUR")}
+										{formatPrice(order?.shipping?.method?.cost, "EUR")}
 									</dd>
 								</div>
 
