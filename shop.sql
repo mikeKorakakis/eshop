@@ -220,8 +220,8 @@ INSERT INTO `comments` (`comment_id`, `content`, `created_date`, `product_id`, `
 
 -- Insert data into `credit_cards`
 INSERT INTO `credit_cards` (`credit_card_id`, `user_id`, `card_number`, `cardholder_name`, `expiration_date`, `cvv`, `balance`) VALUES
-(1, 1, '4242424242424242', 'Admin', '2025-12-31', '123', 5000.00),
-(2, 2, '4242424242424242', 'Γιάννης Γεωργίου', '2024-06-30', '456', 1000.00);
+(1, 1, '4242424242424242', 'Admin', '2025-12-31', '123', 5000000.00),
+(2, 2, '4242424242424242', 'Γιάννης Γεωργίου', '2024-06-30', '456', 1000000.00);
 
 -- Insert data into `shipping_methods`
 INSERT INTO `shipping_methods` (`shipping_method_id`, `method_name`, `cost`) VALUES

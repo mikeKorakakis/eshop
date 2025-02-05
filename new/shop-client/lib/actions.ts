@@ -226,7 +226,7 @@ export async function getCustomer({ customer_id }: { customer_id: number }) {
 
 export async function getOrder({ order_id }: { order_id: number }) {
   const bearer = await getToken();
-  const res = await client(bearer).get(`orders/${order_id}`).json<Order>();
+  const res = await client(bearer).get(`orders/${order_id}`).json<OrderWithItemsAndUser>();
   return res;
 }
 

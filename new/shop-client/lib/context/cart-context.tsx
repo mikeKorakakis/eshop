@@ -38,11 +38,12 @@ type CartAction =
 function cartReducer(state: CartState, action: CartAction): CartState {
 	switch (action.type) {
 		case 'ADD_SHIPPING': {
+			const price = typeof action.shipping.cost === 'string' ? parseFloat(action.shipping.cost) : action.shipping.cost;
 			const previousTotal = state.items.reduce(
 				(total, cartItem) => total + cartItem.price * cartItem.quantity,
 				0
 			);
-			const newTotal = previousTotal + action?.shipping?.cost;
+			const newTotal = previousTotal + price;
 			return {
 				...state,
 				shipping: action.shipping,
