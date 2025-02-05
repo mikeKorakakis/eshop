@@ -33,7 +33,6 @@ export default async function OrderView({ dictionary, order, lng, redirect_statu
 	return (
 		<>
 			<div className="bg-white">
-				{JSON.stringify(order)}
 				<div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
 					{redirect_status === 'succeeded' && <div className='py-8'>
 						<h1 className="text-sm font-medium text-red-600">{order_dictionary.payment_successful}</h1>
