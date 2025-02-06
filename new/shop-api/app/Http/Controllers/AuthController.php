@@ -23,7 +23,6 @@ class AuthController extends Controller
 	public function login(Request $request)
 	{
 		$credentials = $request->only("username", "password");
-		$credentials = $request->only("username", "password");
 
 
 		if (!$token = auth()->attempt($credentials)) {
@@ -113,15 +112,18 @@ class AuthController extends Controller
 		}
 
 		$user = auth()->user();
-		if (!Hash::check($request->current_password, $user->password)) {
-			return response()->json(['error' => 'Unauthorized'], 401);
+		
+		// if (!Hash::check($request->current_password, $user->password)) {
+		// 	return response()->json(['error' => 'Unauthorized'], 401);
+		// }
+		if(Hash::check($request->current_password, $user->password)){ {
+			$user->password = $request->new_password;
+			$user->save();
+			return ApiResponseClass::sendResponse('Password changed successfully', '', ApiResponseClass::HTTP_OK);
 		}
+		
+		return response()->json(['error' => 'Unauthorized'], 401);
+	}
 
-		$user->password = $request->new_password;
-		$user->save();
-
-		return ApiResponseClass::sendResponse('Password changed successfully', '', ApiResponseClass::HTTP_OK);
-
-		// return response()->json(['message' => 'Password changed successfully']);
 	}
 }

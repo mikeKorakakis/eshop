@@ -99,7 +99,7 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					name: data?.name,
 					description: data?.description,
 					ordering: data?.ordering,
-					parent_id: data?.parent_id,
+					parent_id: 0,
 					media_id: uploadedMediaId
 				});
 
@@ -109,7 +109,7 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					name: data?.name,
 					description: data?.description,
 					ordering: data?.ordering,
-					parent_id: data?.parent_id,
+					parent_id: 0,
 					media_id: uploadedMediaId
 				});
 
@@ -165,14 +165,7 @@ const CategoryForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 					error={errors.ordering && errors.ordering?.message}
 				/>
 
-				<FormSelect
-					dictionary={dictionary}
-					label={admin_dictionary.parent!}
-					{...register('parent_id')}
-					options={[...options, { value: 0, label: "" }]}
-
-					error={errors.parent_id && errors.parent_id?.message}
-				/>
+				
 				<FormInput
 					name="image"
 					label={common_dictionary.image}

@@ -59,7 +59,7 @@ class User extends Authenticatable implements JWTSubject//Model
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value, [
-			'rounds' => 10
+			'rounds' => 12
 		]);
     }
 

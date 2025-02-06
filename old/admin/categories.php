@@ -116,12 +116,12 @@
                     <div class="form-group form-group-lg">
                         <label class="col-sm-2 control-label">Ταξινόμηση</label>
                         <div class="col-sm-10 col-md-6">
-                            <input type="text" name="ordering" class="form-control" placeholder="Αριθμός για Ταξινόμηση των Κατηγοριών" />
+                            <input type="number" name="ordering" class="form-control" placeholder="Αριθμός για Ταξινόμηση των Κατηγοριών" />
                         </div>
                     </div>
                     <!-- Τέλος Πεδίου Ταξινόμησης -->
                     <!-- Έναρξη Επιλογής Τύπου Κατηγορίας -->
-                    <div class="form-group form-group-lg">
+                    <!-- <div class="form-group form-group-lg">
                         <label class="col-sm-2 control-label">Γονική Κατηγορία?</label>
                         <div class="col-sm-10 col-md-6">
                             <select name="parent">
@@ -134,7 +134,7 @@
                                 ?>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- Τέλος Επιλογής Τύπου Κατηγορίας -->
                     
                     <!-- Έναρξη Πεδίου Υποβολής -->
@@ -160,7 +160,7 @@
 
                 $name        = $_POST['name'];
                 $description        = $_POST['description'];
-                $parent      = $_POST['parent'];
+                $parent      = 0;
                 $ordering       = $_POST['ordering'];
 
                 // Έλεγχος Αν Η Κατηγορία Υπάρχει στη Βάση Δεδομένων
@@ -266,12 +266,13 @@
                         <div class="form-group form-group-lg">
                             <label class="col-sm-2 control-label">Ταξινόμηση</label>
                             <div class="col-sm-10 col-md-6">
-                                <input type="number" name="ordering" class="form-control" placeholder="Αριθμός για Ταξινόμηση των Κατηγοριών" value="<?php echo htmlspecialchars($cat['ordering']) ?>" />
+                                <input type="number" 
+ 								name="ordering" class="form-control" placeholder="Αριθμός για Ταξινόμηση των Κατηγοριών" value="<?php echo htmlspecialchars($cat['ordering']) ?>" />
                             </div>
                         </div>
                         <!-- Τέλος Πεδίου Ταξινόμησης -->
                         <!-- Έναρξη Επιλογής Τύπου Κατηγορίας -->
-                        <div class="form-group form-group-lg">
+                        <!-- <div class="form-group form-group-lg">
                             <label class="col-sm-2 control-label">Γονική Κατηγορία?</label>
                             <div class="col-sm-10 col-md-6">
                                 <select name="parent">
@@ -286,7 +287,7 @@
                                     ?>
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- Τέλος Επιλογής Τύπου Κατηγορίας -->
                         
                         <!-- Έναρξη Πεδίου Υποβολής -->
@@ -328,7 +329,7 @@
                 $name        = $_POST['name'];
                 $desc        = $_POST['description'];
                 $order       = $_POST['ordering'];
-                $parent      = $_POST['parent'];
+                $parent      =  null;
 
 
                 // Ενημέρωση της Βάσης Δεδομένων με αυτές τις πληροφορίες

@@ -149,7 +149,7 @@ function formatImage($path)
 	if ($env === 'production') {
 		$minio = getenv('MINIO_URL');
 		if ($minio) {
-			return $minio . $path;
+			return $minio . "/shop/" . $path;
 		}
 	} else {
 		return 'http://localhost:9000/shop/' . $path;

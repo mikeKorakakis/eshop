@@ -39,7 +39,7 @@ const CategoriesView: FC<Props> = ({ dictionary }) => {
 				name: category.name,
 				description: category.description,
 				ordering: category.ordering,
-				parent_id: category.parent_id,
+				// parent_id: category.parent_id,
 			}));
 			if (!mappedCats) return
 			setCategories(mappedCats);
@@ -56,7 +56,6 @@ const CategoriesView: FC<Props> = ({ dictionary }) => {
 		admin_dictionary.name,
 		admin_dictionary.description,
 		admin_dictionary.ordering,
-		admin_dictionary.parent,
 	];
 
 

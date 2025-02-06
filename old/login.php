@@ -143,12 +143,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($check == 1) {
                     $formErrors[] = 'Συγνώμη, αυτό το όνομα χρήστη υπάρχει ήδη';
                 } else {
-
-					if (empty($avatarFile['name'])) {
+					if (!empty($avatarFile['name'])) {
                     $mediaId = uploadImage($avatarFile, $con, $s3Client, $bucket);
 					} else {
 						$mediaId = null;
 					}
+
 
                     $stmtUser  = $con->prepare("INSERT INTO 
                                                 users(username, password, email, full_name, group_id, registration_date, media_id)

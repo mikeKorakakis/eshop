@@ -41,8 +41,8 @@ const LoginView = ({ dictionary }: Props) => {
 		try {
 			setLoading(true);
 			setMessage('');
-
 			const success = await login(data);
+
 			if (!success) {
 				throw new Error('Error logging in');
 			}
@@ -53,10 +53,6 @@ const LoginView = ({ dictionary }: Props) => {
 			// Save the JWT in a cookie or localStorage
 		} catch (err: any) {
 			toast.error(common_dictionary.wrong_password!);
-
-
-			setLoading(false);
-			setDisabled(false);
 		} finally {
 			setLoading(false);
 			setDisabled(false);

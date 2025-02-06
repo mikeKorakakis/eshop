@@ -36,7 +36,7 @@ class CategoryController extends Controller
         $details = [
             'name' => $request->name,
             'description' => $request->description,
-            'parent_id' => $request->parent_id,
+            'parent_id' => 0,
             'ordering' => $request->ordering,
 			
         ];
@@ -74,7 +74,7 @@ class CategoryController extends Controller
         $updateDetails = [
             'name' => $request->name,
             'description' => $request->description,
-            'parent_id' => $request->parent_id,
+            'parent_id' => 0,
             'ordering' => $request->ordering,
         ];
 

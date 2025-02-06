@@ -165,6 +165,7 @@ const PriceInput = ({
         <input
           value={value}
           type="number"
+		  step="0.01"
           name="price"
           className="block h-8 w-[5rem] rounded-md border-gray-300 pl-4 focus:border-red-500 focus:ring-red-500 sm:text-xs"
           onChange={(e) => {

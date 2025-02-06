@@ -140,6 +140,7 @@ if (isset($_SESSION['admin'])) {
 					<div class="col-sm-10 col-md-6">
 						<input
 							type="number"
+							step="0.01"
 							name="price"
 							class="form-control"
 							required="required"
@@ -367,6 +368,7 @@ if (isset($_SESSION['admin'])) {
 						<div class="col-sm-10 col-md-6">
 							<input
 								type="number"
+								step="0.01"
 								name="price"
 								class="form-control"
 								required="required"

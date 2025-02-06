@@ -10,7 +10,8 @@ import React, {
 	useCallback,
 } from "react";
 import { LoginInput, SignupInput, User } from "@/types"; // Update the import path based on your project structure
-import { me, login, logout, signup } from "../actions"; // Import login, logout, and register actions
+import { me, logout, signup } from "../actions"; // Import login, logout, and register actions
+import { login } from "../actions"; // Import login action
 
 // Initial state
 const initialState = {
@@ -116,8 +117,8 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const loginHandler = useCallback(
 		async ({ username, password }: LoginInput) => {
 			try {
-				dispatch({ type: "SET_LOADING", isLoading: true });
 				const res = await login({ username, password });
+				
 				if(!res) {
 					return false;
 				}
@@ -126,7 +127,6 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				return true;
 			} catch (error) {
 				console.error("Login failed:", error);
-				dispatch({ type: "SET_LOADING", isLoading: false });
 				return false;
 			}
 		},
@@ -136,15 +136,13 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const signupHandler = useCallback(
 		async ({ username, password, email, full_name, group_id, media_id }: SignupInput) => {
 			try {
-				dispatch({ type: "SET_LOADING", isLoading: true });
 				await signup({ username, password, email, full_name, group_id, media_id });
 				await loginHandler({ username, password });
 			} catch (error) {
 				console.error("Registration failed:", error);
-				dispatch({ type: "SET_LOADING", isLoading: false });
 			}
 		},
-		[loginHandler, dispatch]
+		[loginHandler]
 	);
 
 	

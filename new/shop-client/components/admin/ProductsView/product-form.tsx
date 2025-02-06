@@ -163,6 +163,7 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 
 				<FormInput
 					type="number"
+					step="0.01"
 					label={admin_dictionary.price!}
 					{...register('price', {
 						required: common_dictionary.not_empty!
@@ -199,7 +200,7 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 						loading={loading}
 						disabled={disabled}
 					>
-						{id ? common_dictionary.edit : common_dictionary.create}
+						{id ? common_dictionary.save : common_dictionary.create}
 					</Button>
 				</div>
 			</div>
