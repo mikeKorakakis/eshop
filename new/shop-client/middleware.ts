@@ -5,7 +5,6 @@ import { i18n } from './i18n-config';
 
 import { match as matchLocale } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
-import { AUTH_TOKEN } from './lib/constants';
 import { me } from './lib/actions';
 
 const isPrivateUrl = (pathname: string) => {
