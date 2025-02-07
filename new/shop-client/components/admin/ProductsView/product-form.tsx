@@ -12,6 +12,7 @@ import { Product } from '@/types';
 import { createProduct, getCategories, getProduct, updateProduct } from '@/lib/actions';
 import FormSelect, { Options } from '@/components/ui/FormSelect/form-select';
 import { uploadFile } from '@/lib/helpers';
+import { format } from 'path';
 
 
 interface Props {
@@ -41,6 +42,7 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		register,
 		handleSubmit,
 		reset,
+		getValues,
 		formState: { errors }
 	} = useForm<Product>({
 		defaultValues: {
@@ -53,24 +55,6 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		},
 		mode: 'onBlur'
 	});
-
-	useEffect(() => {
-		const getProd = async () => {
-			if (id) {
-				// get category by id
-				const product = await getProduct({ product_id: id });
-				if (!product) return;
-				reset({
-					name: product.name,
-					description: product.description,
-					price: product.price,
-					country_of_origin: product.country_of_origin,
-					category_id: product.category_id,
-				});
-			}
-		}
-		getProd();
-	}, [id, reset]);
 
 	useEffect(() => {
 		const getCats = async () => {
@@ -89,6 +73,26 @@ const ProductForm: FC<Props> = ({ dictionary, id, onSuccess }: Props) => {
 		getCats();
 
 	}, []);
+
+	useEffect(() => {
+		const getProd = async () => {
+			if (id) {
+				// get category by id
+				const product = await getProduct({ product_id: id });
+				if (!product) return;
+				reset({
+					name: product.name,
+					description: product.description,
+					price: product.price,
+					country_of_origin: product.country_of_origin,
+					category_id: product.category_id,
+				});
+			}
+		}
+		getProd();
+	}, [id, reset]);
+	
+
 
 
 	const { closeModal } = useUI();

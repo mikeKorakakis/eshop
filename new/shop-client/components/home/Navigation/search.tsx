@@ -20,6 +20,7 @@ import {
 	Combobox,
 	Dialog,
 } from '@headlessui/react'
+import { formatImage } from '@/lib/helpers';
 
 
 
@@ -185,7 +186,7 @@ export default function Search({ dictionary }: Props) {
 																>
 																	<div className="inline-flex items-center">
 																		<Image
-																			src={product?.media ? product?.media : placeholderImg}
+																			src={product?.media?.path ? formatImage(product?.media?.path) : placeholderImg}
 																			alt="Empty cart"
 																			width={64}
 																			height={64}
