@@ -10,8 +10,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Dictionary } from '@/lib/get-dictionary';
 import { getCategories } from '@/lib/actions';
 import { Category } from '@/types';
-import preparation from '@/assets/images/placeholder.png';
+import placeholder from '@/assets/images/placeholder.png';
 import { useUI } from '@/lib/context/ui-context';
+import { formatImage } from '@/lib/helpers';
 
 
 const {
@@ -54,7 +55,7 @@ const MobileMenu = ({ dictionary, lng }: Props) => {
 					{
 						name: cat.name,
 						href: `/${lng}/categories/${cat.category_id}`,
-						imageSrc: preparation,
+						imageSrc: cat?.media?.path &&  formatImage(cat?.media?.path) ,
 						imageAlt: common_dictionary.menu_services_race_prep
 					}
 				))
@@ -171,9 +172,11 @@ const MobileMenu = ({ dictionary, lng }: Props) => {
 														<div key={item.name} className="group relative cursor-pointer">
 															<div className=" aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-100 group-hover:opacity-75">
 																<Image
-																	src={item.imageSrc}
+																	src={item.imageSrc ? item.imageSrc : placeholder} 
 																	alt={item.imageAlt}
 																	className="object-cover object-center "
+																	width={100}
+																	height={100}
 																/>
 															</div>
 															<div
